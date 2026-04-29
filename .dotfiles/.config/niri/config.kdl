@@ -5,6 +5,10 @@ input {
     }
 }
 
+spawn-at-startup "vesktop"
+spawn-at-startup "spotify"
+spawn-at-startup "bitwarden"
+
 prefer-no-csd
 
 hotkey-overlay {
