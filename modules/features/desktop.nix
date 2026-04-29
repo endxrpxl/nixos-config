@@ -63,6 +63,12 @@
       stateFile = {
         "DankMaterialShell/session.json".source = mkLink "${self.stateDir}/DankMaterialShell/session.json";
       };
+
+      userDirs = {
+        createDirectories = true;
+        music = null;
+        templates = null;
+      };
     };
   };
 }
