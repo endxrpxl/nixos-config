@@ -1,6 +1,9 @@
 { self, ... }: {
 
   flake.nixosModules.desktop = { pkgs, ... }: {
+    imports =[
+      self.nixosModules.zen
+    ];
     services.displayManager.dms-greeter = {
       enable = true;
       compositor.name = "niri";
