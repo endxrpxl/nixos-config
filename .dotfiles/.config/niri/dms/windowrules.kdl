@@ -1,0 +1,14 @@
+// DMS Window Rules - Managed by DankMaterialShell
+// Do not edit manually - changes may be overwritten
+
+// @id=wr_1777405133998381009 @name=spotify
+window-rule {
+    match app-id="^spotify$"
+    open-on-output "HDMI-A-1"
+}
+
+// @id=wr_1777405138702116420 @name=vesktop
+window-rule {
+    match app-id="^vesktop$"
+    open-on-output "HDMI-A-1"
+}
