@@ -48,20 +48,34 @@
   in {
     xdg = {
       configFile = {
-        "kitty/kitty.conf".source = mkConfigLink "kitty/kitty.conf";
-        "DankMaterialShell/settings.json".source = mkConfigLink "DankMaterialShell/settings.json";
-        "vesktop/settings/settings.json".source = mkConfigLink "vesktop/settings/settings.json";
+        "kitty/kitty.conf" = {
+          source = mkConfigLink "kitty/kitty.conf";
+          force = true;
+        };
+        "DankMaterialShell/settings.json" = {
+          source = mkConfigLink "DankMaterialShell/settings.json";
+          force = true;
+        };
+        "vesktop/settings/settings.json" = {
+          source = mkConfigLink "vesktop/settings/settings.json";
+          force = true;
+        };
         "niri" = {
           source = mkConfigLink "niri";
           recursive = true;
+          force = true;
         };
         "matugen" = {
           source = mkConfigLink "matugen";
           recursive = true;
+          force = true;
         };
       };
       stateFile = {
-        "DankMaterialShell/session.json".source = mkLink "${self.stateDir}/DankMaterialShell/session.json";
+        "DankMaterialShell/session.json" = { 
+          source = mkLink "${self.stateDir}/DankMaterialShell/session.json";
+          force = true;
+        };
       };
 
       userDirs = {
