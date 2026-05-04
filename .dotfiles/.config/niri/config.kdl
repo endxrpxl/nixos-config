@@ -59,6 +59,9 @@ binds {
     XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "dms ipc call audio increment 5"; }
     XF86AudioLowerVolume allow-when-locked=true { spawn-sh "dms ipc call audio decrement 5"; }
     XF86AudioMute        allow-when-locked=true { spawn-sh "dms ipc call audio micmute"; }
+    XF86AudioPrev        allow-when-locked=true { spawn-sh "dms ipc call mpris previous"; }
+    XF86AudioPlay        allow-when-locked=true { spawn-sh "dms ipc call mpris playPause"; }
+    XF86AudioNext        allow-when-locked=true { spawn-sh "dms ipc call mpris next"; }
 
     // Open/close the Overview: a zoomed-out view of workspaces and windows.
     // You can also move the mouse into the top-left hot corner,
