@@ -1,7 +1,7 @@
 { self, inputs, ... }: {
 
   flake.nixosModules.desktopHardware = { config, lib, pkgs, modulesPath, ... }: {
-    imports = [ 
+    imports = [
       (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
@@ -10,15 +10,21 @@
     boot.kernelModules = [ "kvm-amd" ];
     boot.extraModulePackages = [ ];
 
-    fileSystems."/" = { 
-      device = "/dev/disk/by-uuid/c22b47fe-e917-44a8-a8ad-59eef815d538";
+    fileSystems."/" = {
+      device = "/dev/disk/by-uuid/9a252bc1-9ece-4b78-adaa-031a8126388d";
       fsType = "ext4";
     };
 
     fileSystems."/boot" = {
-      device = "/dev/disk/by-uuid/96A5-A493";
+      device = "/dev/disk/by-uuid/8F64-C1F1";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
+    };
+
+    fileSystems."/mnt/secondary" = {
+      device = "/dev/disk/by-uuid/f9ccc45a-3f43-42d2-b223-8567d8d2c5f9";
+      fsType = "ext4";
+      options = [ "nofail" ];
     };
 
     swapDevices = [ ];

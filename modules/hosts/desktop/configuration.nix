@@ -44,6 +44,11 @@
 
     boot.kernelPackages = pkgs.linuxPackages_latest; # Fix CVE-2026-31431
 
+    # For mounted drive(s)
+    systemd.tmpfiles.rules = [
+      "d /mnt/secondary 0755 ${self.username} users -"
+    ];
+
     networking = {
       hostName = "nixos";
       networkmanager.enable = true;
@@ -75,9 +80,13 @@
         alsa.support32Bit = true;
         pulse.enable = true;
       };
-      xserver.xkb = {
-        layout = "gb";
-        variant = "";
+      xserver = {
+        enable = true;
+        videoDrivers = [ "amdgpu" ];
+        xkb = {
+          layout = "gb";
+          variant = "";
+        };
       };
     };
 
