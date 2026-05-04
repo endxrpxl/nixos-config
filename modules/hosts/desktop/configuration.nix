@@ -11,13 +11,19 @@
       self.nixosModules.desktopHardware
       inputs.home-manager.nixosModules.default
       self.nixosModules.desktop
+      self.nixosModules.gaming
     ];
+
+    hardware.graphics = {
+      enable = true;
+      enable32Bit = true;
+    };
 
     nix.optimise.automatic = true;
     nix.gc = {
       automatic = true;
       dates = "weekly";
-      options = "--delete-older-than 30d";
+      options = "--delete-older-than 14d";
     };
 
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -30,12 +36,13 @@
         efiSupport = true;
         useOSProber = true;
         configurationLimit = 5;
-        default = "saved";
       };
       efi.canTouchEfiVariables = true;
       timeout = 1;
     };
     time.hardwareClockInLocalTime = true;
+
+    boot.kernelPackages = pkgs.linuxPackages_latest; # Fix CVE-2026-31431
 
     networking = {
       hostName = "nixos";
@@ -87,6 +94,10 @@
     home-manager.users.${self.username} = self.homeModules.${self.username};
 
     programs.starship.enable = true;
+    programs.nh = {
+      enable = true;
+      flake = "${self.homeDir}/nixos-config";
+    };
 
     environment.systemPackages = with pkgs; [
       git
