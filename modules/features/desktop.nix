@@ -1,4 +1,4 @@
-{ self, ... }: {
+{ self, inputs, ... }: {
 
   flake.nixosModules.desktop = { pkgs, ... }: {
     imports =[
@@ -15,6 +15,7 @@
         enable = true;
         restartIfChanged = true;
       };
+      quickshell.package = inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.quickshell;
     };
     programs.niri.enable = true;
     programs.dsearch.enable = true;
@@ -28,6 +29,7 @@
       vscode
       bitwarden-desktop
       
+      xwayland-satellite
 
       bibata-cursors
       whitesur-icon-theme
