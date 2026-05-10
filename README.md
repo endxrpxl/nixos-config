@@ -5,7 +5,7 @@
 #### 1. Clone the Repository
 Clone this configuration into your home directory:
 ```bash
-git clone https://github.com/endxrpxl/nix-config.git ~/nix-config
+git clone https://github.com/endxrpxl/nixos-config.git ~/nixos-config
 cd ~/nixos-config
 ```
 
