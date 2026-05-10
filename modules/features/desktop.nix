@@ -1,8 +1,8 @@
 { self, inputs, ... }: {
-
   flake.nixosModules.desktop = { pkgs, ... }: {
     imports =[
       self.nixosModules.zen
+      inputs.nix-flatpak.nixosModules.nix-flatpak
     ];
     services.displayManager.dms-greeter = {
       enable = true;
@@ -20,6 +20,10 @@
     programs.niri.enable = true;
     programs.dsearch.enable = true;
     programs.firefox.enable = true;
+
+    services.flatpak = {
+      enable = true;
+    };
 
     environment.systemPackages = with pkgs; [
       kitty
