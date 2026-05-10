@@ -9,7 +9,10 @@ git clone https://github.com/endxrpxl/nixos-config.git ~/nixos-config
 cd ~/nixos-config
 ```
 
-#### 2. Configure Your Identity
+#### 2. Update hardware.nix
+Copy the contents of `/etc/nixos/hardware-configuration.nix` into `modules/hosts/<host>/hardware.nix`
+
+#### (Optional) Configure Your Identity
 Before building, you must update the global username to match your desired system user.
 
 *   **File:** `modules/lib/lib.nix` (or your equivalent path)
@@ -18,8 +21,9 @@ Before building, you must update the global username to match your desired syste
 #### 3. Build and Switch
 Apply the configuration to your system.
 
-##### Desktop
+##### Desktop-Host
 
 ```bash
-sudo nixos-rebuild switch --flake .#desktop
+sudo nixos-rebuild boot --flake .#desktop
+systemctl reboot
 ```
