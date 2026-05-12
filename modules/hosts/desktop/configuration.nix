@@ -12,6 +12,7 @@
       inputs.home-manager.nixosModules.default
       self.nixosModules.desktop
       self.nixosModules.gaming
+      self.nixosModules.vm
     ];
 
     hardware.graphics = {
@@ -56,7 +57,6 @@
         "1.1.1.1"
         "1.0.0.1"
       ];
-      enableIPv6 = false;
     };
 
     time.timeZone = "Europe/Berlin";
@@ -90,7 +90,7 @@
         videoDrivers = [ "amdgpu" ];
         xkb = {
           layout = "gb";
-          variant = "";
+          variant = "intl";
         };
       };
     };
