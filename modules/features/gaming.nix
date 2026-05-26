@@ -9,12 +9,20 @@
       dedicatedServer.openFirewall = true;
     };
 
+    nixpkgs.overlays = [
+    (final: prev: {
+      openldap = prev.openldap.overrideAttrs (_: {
+        doCheck = false;
+      });
+    })];
+
     environment.systemPackages = with pkgs; [
       heroic
-      # bottles
+      bottles
       protonup-qt
       mangohud
       prismlauncher
+      lutris
     ];
   };
 }
