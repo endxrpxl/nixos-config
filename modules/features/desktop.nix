@@ -45,11 +45,16 @@
 
     environment.systemPackages = with pkgs; [
       kitty
-      nautilus
       vesktop
       spotify
       vscode
       bitwarden-desktop
+
+      nautilus
+      loupe
+      evince
+      vlc
+      file-roller
       
       xwayland-satellite
 
