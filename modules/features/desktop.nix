@@ -4,6 +4,22 @@
       self.nixosModules.zen
       inputs.nix-flatpak.nixosModules.nix-flatpak
     ];
+
+    services = {
+      printing = {
+        enable = true;
+        drivers = with pkgs; [
+          cups-filters
+          cups-browsed
+        ];
+      };
+      avahi = {
+        enable = true;
+        nssmdns4 = true;
+        openFirewall = true;
+      };
+    };
+
     services.displayManager.dms-greeter = {
       enable = true;
       compositor.name = "niri";
