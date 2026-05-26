@@ -435,18 +435,17 @@
       ],
       "centerWidgets": [
         {
+          "id": "clock",
+          "enabled": true,
+          "clockCompactMode": false
+        }
+      ],
+      "rightWidgets": [
+        {
           "id": "music",
           "enabled": true,
           "mediaSize": 1
         },
-        {
-          "id": "clock",
-          "enabled": true,
-          "clockCompactMode": false
-        },
-        "weather"
-      ],
-      "rightWidgets": [
         {
           "id": "systemTray",
           "enabled": true
