@@ -67,6 +67,8 @@
       roboto
       roboto-mono
       nerd-fonts.roboto-mono
+
+      noto-fonts
     ];
   };
 
