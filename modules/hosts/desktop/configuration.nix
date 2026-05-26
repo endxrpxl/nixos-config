@@ -77,7 +77,6 @@
     };
 
     services = {
-      printing.enable = true;
       pulseaudio.enable = false;
       pipewire = {
         enable = true;
@@ -93,17 +92,20 @@
           variant = "intl";
         };
       };
+      udisks2.enable = true;
+      gvfs.enable = true;
     };
 
     console.keyMap = "uk";
 
 
     security.rtkit.enable = true;
+    security.polkit.enable = true;
 
     users.users.${self.username} = {
       isNormalUser = true;
       description = self.username;
-      extraGroups = [ "networkmanager" "wheel" ];
+      extraGroups = [ "networkmanager" "wheel" "storage" ];
     };
     home-manager.users.${self.username} = self.homeModules.${self.username};
 
