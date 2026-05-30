@@ -1,8 +1,8 @@
 input {
     keyboard {
         xkb {
-            layout "gb"
-            variant ""
+            layout "gb,gb"
+            variant ",intl"
         }
     }
     mouse {
