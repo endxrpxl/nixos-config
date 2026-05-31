@@ -31,12 +31,14 @@
     nixpkgs.config.allowUnfree = true;
 
     boot.loader = {
-      grub ={
+      limine ={
         enable = true;
-        devices = [ "nodev" ];
-        efiSupport = true;
-        useOSProber = true;
-        configurationLimit = 5;
+        maxGenerations = 5;
+        extraEntries = ''
+          /Windows
+            protocol: efi
+            path: boot():/EFI/Microsoft/Boot/bootmgfw.efi
+        '';
       };
       efi.canTouchEfiVariables = true;
       timeout = 1;
