@@ -9,6 +9,8 @@
       dedicatedServer.openFirewall = true;
     };
 
+    programs.gamescope.enable = true;
+
     nixpkgs.overlays = [
     (final: prev: {
       openldap = prev.openldap.overrideAttrs (_: {
