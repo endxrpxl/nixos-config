@@ -91,7 +91,7 @@
         videoDrivers = [ "amdgpu" ];
         xkb = {
           layout = "gb";
-          variant = "intl";
+          variant = "";
         };
       };
       udisks2.enable = true;
