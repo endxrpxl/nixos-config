@@ -9,6 +9,11 @@
       enable = true;
       bashrcExtra = ''
         export SSH_AUTH_SOCK=${self.homeDir}/.bitwarden-ssh-agent.sock
+
+        ip-fix () {
+            sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
+            sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
+        }
       '';
     };
 
