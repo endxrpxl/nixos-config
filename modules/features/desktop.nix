@@ -5,6 +5,11 @@
       inputs.nix-flatpak.nixosModules.nix-flatpak
     ];
 
+    hardware.bluetooth = {
+      enable = true;
+      powerOnBoot = false;
+    };
+
     services = {
       printing = {
         enable = true;
@@ -36,6 +41,15 @@
     programs.niri.enable = true;
     programs.dsearch.enable = true;
     programs.firefox.enable = true;
+
+    programs.obs-studio = {
+      enable = true;
+
+      plugins = with pkgs.obs-studio-plugins; [
+        obs-pipewire-audio-capture
+        obs-vaapi #optional AMD hardware acceleration
+      ];
+    };
 
     services.flatpak = {
       enable = true;
@@ -72,7 +86,7 @@
     ];
   };
 
-  flake.homeModules.desktop = { config, ... }: 
+  flake.homeModules.desktop = { config, pkgs, ... }: 
   let 
     mkLink = config.lib.file.mkOutOfStoreSymlink;
     mkConfigLink = x: mkLink "${self.dotConfig}/${x}";
@@ -114,6 +128,14 @@
         music = null;
         templates = null;
       };
+    };
+
+    home.pointerCursor = {
+      gtk.enable = true;
+      x11.enable = true;
+      package = pkgs.bibata-cursors;
+      name = "Bibata-Modern-Ice";
+      size = 16;
     };
   };
 }
