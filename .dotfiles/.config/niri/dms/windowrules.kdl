@@ -3,7 +3,7 @@
 
 // @id=wr_1777405133998381009 @name=spotify
 window-rule {
-    match app-id="^spotify$"
+    match title="^Spotify$"
     open-on-output "HDMI-A-1"
 }
 
