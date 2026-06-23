@@ -166,7 +166,12 @@
             "enabled": false
         },
         "FakeNitro": {
-            "enabled": true
+            "enabled": true,
+            "enableStickerBypass": true,
+            "enableStreamQualityBypass": true,
+            "enableEmojiBypass": true,
+            "transformEmojis": true,
+            "transformStickers": true
         },
         "FakeProfileThemes": {
             "enabled": false
@@ -537,7 +542,8 @@
         },
         "Settings": {
             "enabled": true,
-            "settingsLocation": "aboveNitro"
+            "settingsLocation": "aboveNitro",
+            "includeVencordInfoWhenCopying": true
         },
         "ConcatenatedComponentExtractor": {
             "enabled": true
@@ -550,6 +556,9 @@
         },
         "WebContextMenus": {
             "enabled": true
+        },
+        "NoMiddleClickPaste": {
+            "enabled": false
         }
     },
     "uiElements": {
@@ -566,6 +575,7 @@
         "authenticated": false,
         "url": "https://api.vencord.dev/",
         "settingsSync": false,
-        "settingsSyncVersion": 1777408681773
-    }
+        "settingsSyncVersion": 1780854674395
+    },
+    "windowsMaterial": "none"
 }
