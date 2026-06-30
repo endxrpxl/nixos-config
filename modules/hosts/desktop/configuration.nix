@@ -28,6 +28,7 @@
     };
 
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
+    nixpkgs.overlays = [ self.overlays.default ];
     nixpkgs.config.allowUnfree = true;
 
     boot.loader = {
