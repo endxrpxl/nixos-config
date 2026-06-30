@@ -87,6 +87,8 @@
       bibata-cursors
       whitesur-icon-theme
       colloid-icon-theme
+      code-cursor
+      zed-editor
     ];
 
     fonts.packages = with pkgs; [
