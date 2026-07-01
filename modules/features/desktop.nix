@@ -1,6 +1,6 @@
 { self, inputs, ... }: {
   flake.nixosModules.desktop = { pkgs, ... }: {
-    imports =[
+    imports = [
       self.nixosModules.zen
       inputs.nix-flatpak.nixosModules.nix-flatpak
     ];
@@ -28,11 +28,11 @@
     services.displayManager.dms-greeter = {
       enable = true;
       compositor.name = "niri";
-      configHome = "/home/ansgar";
+      configHome = "/home/${self.username}";
     };
-    programs.dms-shell= {
+    programs.dms-shell = {
       enable = true;
-        systemd = {
+      systemd = {
         enable = true;
         restartIfChanged = true;
       };
@@ -47,7 +47,7 @@
 
       plugins = with pkgs.obs-studio-plugins; [
         obs-pipewire-audio-capture
-        obs-vaapi #optional AMD hardware acceleration
+        obs-vaapi # optional AMD hardware acceleration
       ];
     };
 
@@ -81,7 +81,7 @@
       evince
       vlc
       file-roller
-      
+
       xwayland-satellite
 
       bibata-cursors
@@ -89,6 +89,7 @@
       colloid-icon-theme
       code-cursor
       zed-editor
+      claude-code
     ];
 
     fonts.packages = with pkgs; [
@@ -100,56 +101,58 @@
     ];
   };
 
-  flake.homeModules.desktop = { config, pkgs, ... }: 
-  let 
-    mkLink = config.lib.file.mkOutOfStoreSymlink;
-    mkConfigLink = x: mkLink "${self.dotConfig}/${x}";
-  in {
-    xdg = {
-      configFile = {
-        "kitty/kitty.conf" = {
-          source = mkConfigLink "kitty/kitty.conf";
-          force = true;
+  flake.homeModules.desktop =
+    { config, pkgs, ... }:
+    let
+      mkLink = config.lib.file.mkOutOfStoreSymlink;
+      mkConfigLink = x: mkLink "${self.dotConfig}/${x}";
+    in
+    {
+      xdg = {
+        configFile = {
+          "kitty/kitty.conf" = {
+            source = mkConfigLink "kitty/kitty.conf";
+            force = true;
+          };
+          "DankMaterialShell/settings.json" = {
+            source = mkConfigLink "DankMaterialShell/settings.json";
+            force = true;
+          };
+          "vesktop/settings/settings.json" = {
+            source = mkConfigLink "vesktop/settings/settings.json";
+            force = true;
+          };
+          "niri" = {
+            source = mkConfigLink "niri";
+            recursive = true;
+            force = true;
+          };
+          "matugen" = {
+            source = mkConfigLink "matugen";
+            recursive = true;
+            force = true;
+          };
         };
-        "DankMaterialShell/settings.json" = {
-          source = mkConfigLink "DankMaterialShell/settings.json";
-          force = true;
+        stateFile = {
+          "DankMaterialShell/session.json" = {
+            source = mkLink "${self.stateDir}/DankMaterialShell/session.json";
+            force = true;
+          };
         };
-        "vesktop/settings/settings.json" = {
-          source = mkConfigLink "vesktop/settings/settings.json";
-          force = true;
-        };
-        "niri" = {
-          source = mkConfigLink "niri";
-          recursive = true;
-          force = true;
-        };
-        "matugen" = {
-          source = mkConfigLink "matugen";
-          recursive = true;
-          force = true;
-        };
-      };
-      stateFile = {
-        "DankMaterialShell/session.json" = { 
-          source = mkLink "${self.stateDir}/DankMaterialShell/session.json";
-          force = true;
+
+        userDirs = {
+          createDirectories = true;
+          music = null;
+          templates = null;
         };
       };
 
-      userDirs = {
-        createDirectories = true;
-        music = null;
-        templates = null;
+      home.pointerCursor = {
+        gtk.enable = true;
+        x11.enable = true;
+        package = pkgs.bibata-cursors;
+        name = "Bibata-Modern-Ice";
+        size = 16;
       };
     };
-
-    home.pointerCursor = {
-      gtk.enable = true;
-      x11.enable = true;
-      package = pkgs.bibata-cursors;
-      name = "Bibata-Modern-Ice";
-      size = 16;
-    };
-  };
 }
