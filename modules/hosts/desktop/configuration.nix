@@ -6,7 +6,7 @@
     ];
   };
 
-  flake.nixosModules.desktopConfiguration = { config, pkgs, ... }: {
+  flake.nixosModules.desktopConfiguration = { pkgs, ... }: {
     imports = [
       self.nixosModules.desktopHardware
       inputs.home-manager.nixosModules.default
@@ -129,6 +129,7 @@
       neovim
 
       nixfmt
+      nixd
       nil
       manix
     ];
