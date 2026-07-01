@@ -27,12 +27,15 @@
       options = "--delete-older-than 14d";
     };
 
-    nix.settings.experimental-features = [ "nix-command" "flakes" ];
+    nix.settings.experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
     nixpkgs.overlays = [ self.overlays.default ];
     nixpkgs.config.allowUnfree = true;
 
     boot.loader = {
-      limine ={
+      limine = {
         enable = true;
         maxGenerations = 5;
         extraEntries = ''
@@ -101,14 +104,17 @@
 
     console.keyMap = "uk";
 
-
     security.rtkit.enable = true;
     security.polkit.enable = true;
 
     users.users.${self.username} = {
       isNormalUser = true;
       description = self.username;
-      extraGroups = [ "networkmanager" "wheel" "storage" ];
+      extraGroups = [
+        "networkmanager"
+        "wheel"
+        "storage"
+      ];
     };
     home-manager.users.${self.username} = self.homeModules.${self.username};
 

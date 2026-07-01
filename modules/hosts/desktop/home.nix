@@ -1,5 +1,5 @@
 { self, ... }: {
-  
+
   flake.homeModules.${self.username} = { ... }: {
     imports = [
       self.homeModules.desktop
