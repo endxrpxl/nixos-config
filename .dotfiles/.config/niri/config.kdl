@@ -11,7 +11,7 @@ input {
     }
 }
 
-spawn-at-startup "vesktop"
+spawn-at-startup "discord"
 spawn-at-startup "spotify"
 spawn-at-startup "bitwarden"
 

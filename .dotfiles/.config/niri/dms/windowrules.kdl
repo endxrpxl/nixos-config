@@ -12,3 +12,9 @@ window-rule {
     match app-id="^vesktop$"
     open-on-output "HDMI-A-1"
 }
+
+// @id=wr_1782911496533361911 @name=discord
+window-rule {
+    match app-id="^discord$"
+    open-on-output "HDMI-A-1"
+}
