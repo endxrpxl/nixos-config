@@ -13,6 +13,7 @@
       self.nixosModules.desktop
       self.nixosModules.gaming
       self.nixosModules.vm
+      self.nixosModules.emacs
     ];
 
     hardware.graphics = {
@@ -52,9 +53,9 @@
     boot.kernelPackages = pkgs.linuxPackages_latest; # Fix CVE-2026-31431
 
     # For mounted drive(s)
-    systemd.tmpfiles.rules = [
-      "d /mnt/secondary 0755 ${self.username} users -"
-    ];
+    # systemd.tmpfiles.rules = [
+    #   "d /mnt/secondary 0755 ${self.username} users -"
+    # ];
 
     networking = {
       hostName = "nixos";
@@ -63,6 +64,7 @@
         "1.1.1.1"
         "1.0.0.1"
       ];
+      useDHCP = false;
     };
 
     time.timeZone = "Europe/Berlin";
