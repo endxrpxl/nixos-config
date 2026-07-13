@@ -64,7 +64,6 @@
         "1.1.1.1"
         "1.0.0.1"
       ];
-      useDHCP = false;
     };
 
     time.timeZone = "Europe/Berlin";
@@ -91,14 +90,6 @@
         alsa.enable = true;
         alsa.support32Bit = true;
         pulse.enable = true;
-      };
-      xserver = {
-        enable = true;
-        videoDrivers = [ "amdgpu" ];
-        xkb = {
-          layout = "gb";
-          variant = "";
-        };
       };
       udisks2.enable = true;
       gvfs.enable = true;
