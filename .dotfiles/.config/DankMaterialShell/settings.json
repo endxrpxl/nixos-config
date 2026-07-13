@@ -117,6 +117,16 @@
       "id": "audioInput",
       "enabled": true,
       "width": 50
+    },
+    {
+      "id": "idleInhibitor",
+      "enabled": true,
+      "width": 50
+    },
+    {
+      "id": "colorPicker",
+      "enabled": true,
+      "width": 50
     }
   ],
   "showWorkspaceIndex": true,
