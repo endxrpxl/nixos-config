@@ -21,6 +21,10 @@
       enable32Bit = true;
     };
 
+    # for scanning
+    hardware.sane.enable = true;
+    hardware.sane.extraBackends = [ pkgs.sane-airscan ];
+
     nix.optimise.automatic = true;
     nix.gc = {
       automatic = true;
@@ -64,6 +68,7 @@
         "1.1.1.1"
         "1.0.0.1"
       ];
+      # useDHCP = false;
     };
 
     time.timeZone = "Europe/Berlin";
@@ -107,6 +112,8 @@
         "networkmanager"
         "wheel"
         "storage"
+        "scanner"
+        "lp"
       ];
     };
     home-manager.users.${self.username} = self.homeModules.${self.username};
@@ -125,6 +132,8 @@
       nixd
       nil
       manix
+
+      devenv
     ];
 
     # This value determines the NixOS release from which the default

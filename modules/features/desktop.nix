@@ -85,9 +85,14 @@
       bibata-cursors
       whitesur-icon-theme
       colloid-icon-theme
+
       code-cursor
       zed-editor
       claude-code
+
+      simple-scan
+
+      libreoffice
     ];
 
     fonts.packages = with pkgs; [
