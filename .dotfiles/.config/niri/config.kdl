@@ -38,12 +38,6 @@ window-rule {
     open-floating true
 }
 
-window-rule {
-    match app-id="^kitty$"
-    default-window-height { proportion 0.5; }
-    default-column-display "tabbed"
-}
-
 
 include "dms/binds.kdl"
 
