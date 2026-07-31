@@ -57,12 +57,12 @@
 
     services.power-profiles-daemon.enable = true;
 
-    # bitwarden-desktop still pins EOL Electron 39 (NixOS/nixpkgs#526914).
-    # Accept the risk window until upstream bumps it; nixpkgs already
-    # Remove this once bitwarden-desktop moves to a supported Electron.
-    nixpkgs.config.permittedInsecurePackages = [
-      "electron-39.8.10"
-    ];
+    # # bitwarden-desktop still pins EOL Electron 39 (NixOS/nixpkgs#526914).
+    # # Accept the risk window until upstream bumps it; nixpkgs already
+    # # Remove this once bitwarden-desktop moves to a supported Electron.
+    # nixpkgs.config.permittedInsecurePackages = [
+    #   "electron-39.8.10"
+    # ];
 
     environment.systemPackages = with pkgs; [
       kitty

@@ -14,6 +14,7 @@
       self.nixosModules.gaming
       self.nixosModules.vm
       self.nixosModules.emacs
+      self.nixosModules.llms
     ];
 
     hardware.graphics = {
@@ -123,6 +124,13 @@
       enable = true;
       flake = "${self.homeDir}/nixos-config";
     };
+
+    programs.nix-ld.enable = true;
+    programs.nix-ld.libraries = with pkgs; [
+      stdenv.cc.cc.lib
+      zlib
+      glibc
+    ];
 
     environment.systemPackages = with pkgs; [
       git
