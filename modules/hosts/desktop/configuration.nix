@@ -11,6 +11,7 @@
       self.nixosModules.desktopHardware
       inputs.home-manager.nixosModules.default
       self.nixosModules.desktop
+      self.nixosModules.printing
       self.nixosModules.gaming
       self.nixosModules.vm
       self.nixosModules.emacs
@@ -21,10 +22,6 @@
       enable = true;
       enable32Bit = true;
     };
-
-    # for scanning
-    hardware.sane.enable = true;
-    hardware.sane.extraBackends = [ pkgs.sane-airscan ];
 
     nix.optimise.automatic = true;
     nix.gc = {
@@ -113,8 +110,6 @@
         "networkmanager"
         "wheel"
         "storage"
-        "scanner"
-        "lp"
       ];
     };
     home-manager.users.${self.lib.username} = self.homeModules.${self.lib.username};
