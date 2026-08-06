@@ -10,21 +10,6 @@
       powerOnBoot = false;
     };
 
-    services = {
-      printing = {
-        enable = true;
-        drivers = with pkgs; [
-          cups-filters
-          cups-browsed
-        ];
-      };
-      avahi = {
-        enable = true;
-        nssmdns4 = true;
-        openFirewall = true;
-      };
-    };
-
     services.displayManager.dms-greeter = {
       enable = true;
       compositor.name = "niri";
@@ -82,6 +67,10 @@
 
       xwayland-satellite
 
+      # Not a duplicate of `home.pointerCursor.package` below: dms-greeter runs
+      # as its own user and reads the system profile, the session reads the
+      # user profile. Dropping this leaves the login screen on the default
+      # cursor — a regression `nix flake check` cannot see.
       bibata-cursors
       whitesur-icon-theme
       colloid-icon-theme
@@ -89,8 +78,6 @@
       code-cursor
       zed-editor
       claude-code
-
-      simple-scan
 
       libreoffice
     ];
