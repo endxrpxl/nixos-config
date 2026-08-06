@@ -28,7 +28,7 @@
     services.displayManager.dms-greeter = {
       enable = true;
       compositor.name = "niri";
-      configHome = "/home/${self.lib.username}";
+      configHome = self.lib.homeDir;
     };
     programs.dms-shell = {
       enable = true;

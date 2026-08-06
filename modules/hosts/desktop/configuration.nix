@@ -122,7 +122,7 @@
     programs.starship.enable = true;
     programs.nh = {
       enable = true;
-      flake = "${self.lib.homeDir}/nixos-config";
+      flake = self.lib.repoDir;
     };
 
     programs.nix-ld.enable = true;

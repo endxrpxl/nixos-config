@@ -15,7 +15,8 @@
   config.flake.lib = {
     username = lib.mkDefault "ansgar";
     homeDir = "/home/${self.lib.username}";
-    dotDir = "${self.lib.homeDir}/nixos-config/.dotfiles";
+    repoDir = "${self.lib.homeDir}/nixos-config";
+    dotDir = "${self.lib.repoDir}/.dotfiles";
     dotConfig = "${self.lib.dotDir}/.config";
     stateDir = "${self.lib.dotDir}/.local/state";
   };
