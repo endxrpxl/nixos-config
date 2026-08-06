@@ -73,7 +73,7 @@
   "appOverrides": {},
   "searchAppActions": true,
   "vpnLastConnected": "",
-  "lastPlayerIdentity": "Spotify",
+  "lastPlayerIdentity": "Mozilla zen",
   "deviceMaxVolumes": {},
   "hiddenOutputDeviceNames": [
     "alsa_output.pci-0000_03_00.1.hdmi-stereo-extra3"
@@ -87,10 +87,21 @@
   "launcherLastMode": "all",
   "launcherLastFileSearchType": "all",
   "launcherLastQuery": "",
-  "launcherQueryHistory": [],
+  "launcherQueryHistory": [
+    "zed",
+    "stea",
+    "pri",
+    "print",
+    "kden",
+    "vlx",
+    "f",
+    "obs",
+    "d",
+    "docum"
+  ],
   "appDrawerLastMode": "apps",
   "niriOverviewLastMode": "apps",
-  "settingsSidebarExpandedIds": ",dock_launcher,displays,applications,system,power_security,",
+  "settingsSidebarExpandedIds": ",dock_launcher,applications,system,power_security,workspaces_widgets,displays,",
   "settingsSidebarCollapsedIds": ",",
   "configVersion": 3
 }

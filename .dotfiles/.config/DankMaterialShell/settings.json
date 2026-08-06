@@ -1,13 +1,13 @@
 {
-  "currentThemeName": "cyan",
+  "currentThemeName": "blue",
   "currentThemeCategory": "generic",
-  "customThemeFile": "",
+  "customThemeFile": "/home/ansgar/.config/DankMaterialShell/themes/steamDeck/theme.json",
   "registryThemeVariants": {},
   "matugenScheme": "scheme-neutral",
   "matugenContrast": 0,
   "runUserMatugenTemplates": true,
   "matugenTargetMonitor": "",
-  "popupTransparency": 1,
+  "popupTransparency": 0.75,
   "dockTransparency": 1,
   "widgetBackgroundColor": "sch",
   "widgetBackgroundCustomColor": "#6750A4",
@@ -57,7 +57,7 @@
   "modalElevationEnabled": true,
   "popoutElevationEnabled": true,
   "barElevationEnabled": true,
-  "blurEnabled": false,
+  "blurEnabled": true,
   "blurForegroundLayers": true,
   "blurLayerOutlineOpacity": 0.12,
   "blurBorderEnabled": true,
@@ -414,7 +414,7 @@
   "gtkThemingEnabled": false,
   "qtThemingEnabled": false,
   "syncModeWithPortal": true,
-  "terminalsAlwaysDark": false,
+  "terminalsAlwaysDark": true,
   "muxType": "tmux",
   "muxUseCustomCommand": false,
   "muxCustomCommand": "",
@@ -610,7 +610,10 @@
   },
   "niriOutputSettings": {
     "DP-3": {
-      "focusAtStartup": true
+      "focusAtStartup": true,
+      "layout": {
+        "alwaysCenterSingleColumn": true
+      }
     }
   },
   "hyprlandOutputSettings": {},
@@ -690,18 +693,18 @@
           "showPrinterIcon": false
         }
       ],
-      "spacing": 0,
+      "spacing": 5,
       "innerPadding": 4,
       "bottomGap": 0,
-      "transparency": 1,
-      "widgetTransparency": 1,
-      "squareCorners": true,
+      "transparency": 0.35,
+      "widgetTransparency": 0.7,
+      "squareCorners": false,
       "noBackground": false,
       "maximizeWidgetIcons": false,
       "maximizeWidgetText": false,
       "removeWidgetPadding": false,
       "widgetPadding": 8,
-      "gothCornersEnabled": true,
+      "gothCornersEnabled": false,
       "gothCornerRadiusOverride": false,
       "gothCornerRadiusValue": 12,
       "borderEnabled": false,
@@ -726,10 +729,13 @@
       "scrollXBehavior": "column",
       "scrollYBehavior": "workspace",
       "shadowIntensity": 8,
-      "shadowOpacity": 60,
+      "shadowOpacity": 35,
       "shadowColorMode": "surface",
       "shadowCustomColor": "#000000",
-      "clickThrough": false
+      "clickThrough": false,
+      "useOverlayLayer": false,
+      "hoverPopouts": false,
+      "barInsetPadding": 4
     }
   ],
   "desktopClockEnabled": false,

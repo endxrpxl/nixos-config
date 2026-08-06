@@ -5,6 +5,9 @@ output "DP-3" {
     scale 1
     position x=0 y=1080
     focus-at-startup
+    layout {
+        always-center-single-column
+    }
 }
 
 output "HDMI-A-1" {
