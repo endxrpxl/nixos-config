@@ -1,6 +1,6 @@
 { self, ... }: {
 
-  flake.homeModules.${self.username} = { ... }: {
+  flake.homeModules.${self.lib.username} = { ... }: {
     imports = [
       self.homeModules.desktop
     ];
@@ -8,7 +8,7 @@
     programs.bash = {
       enable = true;
       bashrcExtra = ''
-        export SSH_AUTH_SOCK=${self.homeDir}/.bitwarden-ssh-agent.sock
+        export SSH_AUTH_SOCK=${self.lib.homeDir}/.bitwarden-ssh-agent.sock
         export PATH="$HOME/.config/emacs/bin:$PATH"
 
         ip-fix () {

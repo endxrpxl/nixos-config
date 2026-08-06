@@ -28,7 +28,7 @@
     services.displayManager.dms-greeter = {
       enable = true;
       compositor.name = "niri";
-      configHome = "/home/${self.username}";
+      configHome = "/home/${self.lib.username}";
     };
     programs.dms-shell = {
       enable = true;
@@ -108,7 +108,7 @@
     { config, pkgs, ... }:
     let
       mkLink = config.lib.file.mkOutOfStoreSymlink;
-      mkConfigLink = x: mkLink "${self.dotConfig}/${x}";
+      mkConfigLink = x: mkLink "${self.lib.dotConfig}/${x}";
     in
     {
       xdg = {
@@ -134,7 +134,7 @@
         };
         stateFile = {
           "DankMaterialShell/session.json" = {
-            source = mkLink "${self.stateDir}/DankMaterialShell/session.json";
+            source = mkLink "${self.lib.stateDir}/DankMaterialShell/session.json";
             force = true;
           };
         };
