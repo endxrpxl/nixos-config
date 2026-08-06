@@ -27,8 +27,9 @@
 
     home-manager.users.${self.lib.username} = self.homeModules.laptop;
 
-    # PLACEHOLDER — set this to the release actually installed on the machine.
-    # See the note on this option in modules/hosts/tower/configuration.nix.
+    # PLACEHOLDER — this must become the NixOS release the machine is actually
+    # first installed from, and then never change. It determines the defaults
+    # for stateful data such as file locations and database versions.
     system.stateVersion = "25.11";
   };
 }

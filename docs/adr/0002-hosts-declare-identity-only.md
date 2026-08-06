@@ -16,6 +16,6 @@ The `desktop` host was renamed to `tower` as part of this. `desktop` named two d
 
 **The seam was cut against a real second host, not a predicted one.** The laptop was added as a full copy of the tower first and both were proven to build; only then was the duplication deleted into `base`. The line falls where the two configurations actually differ.
 
-**A setting earns a place in `base` only if varying it per host would be a bug rather than a preference.** By that test three settings left the shared module: `enable32Bit` to `gaming`, and `hardwareClockInLocalTime` and `console.keyMap` to the hosts.
+**A setting earns a place in `base` by passing two tests: varying it per host would be a bug rather than a legitimate difference, and no feature module honestly owns it.** By those tests five settings left the shared module. `hardwareClockInLocalTime` and `console.keyMap` went to the hosts, failing the first. `hardware.graphics.enable` went to `desktop`, and `enable32Bit` and `pipewire.alsa.support32Bit` to `gaming`, failing the second — a graphical session is what needs the GPU drivers, and the 32-bit paths exist for Steam's 32-bit binaries.
 
 **Home-manager modules are keyed by host, not by username.** `homeModules.${username}` collided with `homeModules.desktop`, the feature. There is still exactly one human, so `self.lib.username` remains a flake-wide constant and the path constants derived from it are unchanged.

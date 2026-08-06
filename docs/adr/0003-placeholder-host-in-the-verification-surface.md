@@ -2,7 +2,11 @@
 
 The `laptop` host was added before the machine existed. Its filesystem UUIDs and console keymap are not real values, so it builds green and cannot boot. This qualifies ADR 0001: a green `nix flake check` proves this configuration evaluates and builds, and for `laptop` it currently proves nothing whatsoever about the machine.
 
-The alternative was to keep the laptop out of `nixosConfigurations` until real hardware arrived. That was rejected because the `base` extraction in ADR 0002 depends on a second host proving it — a seam with one consumer is a guess, and an unbuilt second host verifies nothing. Admitting the placeholder is what makes the extraction real work rather than speculation.
+## Considered Options
+
+**Rejected: keep the laptop out of `nixosConfigurations` until real hardware arrives.** The `base` extraction in ADR 0002 depends on a second host to prove it — a seam with one consumer is a guess, and an unbuilt second host verifies nothing. Admitting the placeholder is what makes the extraction real work rather than speculation.
+
+**Rejected: plausible-looking placeholder values.** Copying UUIDs from another machine, or inventing realistic ones, would build green exactly the same way while looking like finished work. The point of the all-zero values is that nobody, including a future reader in a hurry, can mistake them for real.
 
 ## Consequences
 

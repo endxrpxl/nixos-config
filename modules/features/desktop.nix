@@ -5,6 +5,11 @@
       inputs.nix-flatpak.nixosModules.nix-flatpak
     ];
 
+    # A graphical session is what needs the GPU drivers, so this belongs to
+    # the feature rather than to shared policy — the same reasoning that puts
+    # the 32-bit drivers in `gaming`.
+    hardware.graphics.enable = true;
+
     hardware.bluetooth = {
       enable = true;
       powerOnBoot = false;

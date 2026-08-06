@@ -1,8 +1,13 @@
 { self, lib, ... }:
 {
-  # Build every NixOS host that targets the system being checked. Check names
-  # are prefixed so a host build is distinguishable at a glance from the other
-  # checks in the flake, such as formatting.
+  # Build every NixOS host that targets the system being checked. Hosts are
+  # discovered rather than listed, so a new host enters the verification
+  # surface the moment it is declared, with no change here.
+  #
+  # The prefix once disambiguated a `desktop` host from a `desktop` feature
+  # module; that collision is gone since the host was renamed to `tower`. It
+  # stays because it still separates a host build from the flake's other
+  # checks, such as formatting.
   perSystem =
     { system, ... }:
     let

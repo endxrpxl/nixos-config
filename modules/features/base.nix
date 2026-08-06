@@ -1,9 +1,14 @@
 { self, inputs, ... }: {
 
-  # Policy every host shares. A setting belongs here only if changing it on
-  # one host but not another would be a bug rather than a preference —
-  # anything a machine legitimately differs on stays in the host, and anything
-  # a host opts into is a feature module of its own.
+  # Policy every host shares. Two tests decide what lives here, and a setting
+  # must pass both:
+  #
+  #   1. Varying it per host would be a bug or a fleet-wide preference
+  #      deliberately held constant — not something a machine legitimately
+  #      differs on. Anything that fails this is host identity.
+  #   2. No feature module honestly owns it. Graphics belong to `desktop`,
+  #      32-bit support to `gaming`, mDNS to `printing`. Anything that fails
+  #      this belongs to that feature, not here.
   #
   # `base` is an ordinary feature module: hosts import it explicitly, exactly
   # as they import `desktop` or `gaming`. It carries no options. When a host
@@ -16,8 +21,6 @@
       imports = [
         inputs.home-manager.nixosModules.default
       ];
-
-      hardware.graphics.enable = true;
 
       nix.optimise.automatic = true;
       nix.gc = {
@@ -76,21 +79,32 @@
         };
       };
 
+      # PipeWire replaces PulseAudio outright, so the latter is switched off
+      # rather than left to the NixOS default. `pulse.enable` keeps the
+      # PulseAudio client API for applications that still speak it. The
+      # 32-bit ALSA half of this lives in `gaming`, alongside the 32-bit
+      # graphics drivers it exists to serve.
       services = {
         pulseaudio.enable = false;
         pipewire = {
           enable = true;
           alsa.enable = true;
-          alsa.support32Bit = true;
           pulse.enable = true;
         };
         udisks2.enable = true;
         gvfs.enable = true;
       };
 
+      # rtkit is what lets PipeWire acquire realtime scheduling; without it
+      # audio glitches under load. polkit is required by the desktop session
+      # and by udisks2 for unprivileged mounting.
       security.rtkit.enable = true;
       security.polkit.enable = true;
 
+      # The fleet has exactly one human, so the account is shared policy
+      # rather than host identity. Only groups every host needs live here:
+      # groups a single concern requires belong to that concern's module, the
+      # way `printing` declares `scanner` and `lp` for itself.
       users.users.${self.lib.username} = {
         isNormalUser = true;
         description = self.lib.username;
@@ -107,6 +121,9 @@
         flake = self.lib.repoDir;
       };
 
+      # nix-ld lets unpatched dynamically-linked binaries run — language
+      # toolchain downloads, `devenv` shells, editor-installed LSP servers.
+      # The library list is the minimum such binaries reliably expect.
       programs.nix-ld.enable = true;
       programs.nix-ld.libraries = with pkgs; [
         stdenv.cc.cc.lib
