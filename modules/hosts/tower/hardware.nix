@@ -1,6 +1,6 @@
 { self, inputs, ... }: {
 
-  flake.nixosModules.desktopHardware =
+  flake.nixosModules.towerHardware =
     {
       config,
       lib,

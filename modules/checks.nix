@@ -1,8 +1,8 @@
 { self, lib, ... }:
 {
   # Build every NixOS host that targets the system being checked. Check names
-  # are prefixed because the repo has both a `desktop` host and a `desktop`
-  # feature module, and a bare `desktop` check would not say which one it is.
+  # are prefixed so a host build is distinguishable at a glance from the other
+  # checks in the flake, such as formatting.
   perSystem =
     { system, ... }:
     let

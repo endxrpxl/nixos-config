@@ -21,9 +21,13 @@ Before building, you must update the global username to match your desired syste
 #### 3. Build and Switch
 Apply the configuration to your system.
 
-##### Desktop-Host
+##### Tower-Host
 
 ```bash
-sudo nixos-rebuild boot --flake .#desktop
+sudo nixos-rebuild boot --flake .#tower
 systemctl reboot
 ```
+
+The flake also defines a `laptop` host. It is a placeholder until the machine
+exists — its filesystem UUIDs and keymap are not real values, so it builds but
+does not boot. See `docs/adr/0003-placeholder-host-in-the-verification-surface.md`.
