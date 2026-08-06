@@ -134,6 +134,7 @@
 
     environment.systemPackages = with pkgs; [
       git
+      gh
       neovim
 
       nixfmt
