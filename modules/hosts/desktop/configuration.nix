@@ -59,7 +59,7 @@
 
     # For mounted drive(s)
     # systemd.tmpfiles.rules = [
-    #   "d /mnt/secondary 0755 ${self.username} users -"
+    #   "d /mnt/secondary 0755 ${self.lib.username} users -"
     # ];
 
     networking = {
@@ -106,9 +106,9 @@
     security.rtkit.enable = true;
     security.polkit.enable = true;
 
-    users.users.${self.username} = {
+    users.users.${self.lib.username} = {
       isNormalUser = true;
-      description = self.username;
+      description = self.lib.username;
       extraGroups = [
         "networkmanager"
         "wheel"
@@ -117,12 +117,12 @@
         "lp"
       ];
     };
-    home-manager.users.${self.username} = self.homeModules.${self.username};
+    home-manager.users.${self.lib.username} = self.homeModules.${self.lib.username};
 
     programs.starship.enable = true;
     programs.nh = {
       enable = true;
-      flake = "${self.homeDir}/nixos-config";
+      flake = self.lib.repoDir;
     };
 
     programs.nix-ld.enable = true;
@@ -134,6 +134,7 @@
 
     environment.systemPackages = with pkgs; [
       git
+      gh
       neovim
 
       nixfmt
