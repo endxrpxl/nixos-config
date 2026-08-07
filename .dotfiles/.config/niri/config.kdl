@@ -23,7 +23,7 @@ hotkey-overlay {
 // You can change the path where screenshots are saved.
 // A ~ at the front will be expanded to the home directory.
 // The path is formatted with strftime(3) to give you the screenshot date and time.
-screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+screenshot-path "~/Pictures/Screenshots/%Y-%m-%d %H-%M-%S.png"
 
 
 window-rule {
@@ -31,9 +31,12 @@ window-rule {
     open-floating true
 }
 
+// Floating Noctalia settings window.
 window-rule {
-    match app-id=r#"^zen$"# title="Bitwarden"
-    open-floating true
+  match app-id="dev.noctalia.Noctalia"
+  open-floating true
+  default-column-width { fixed 1080; }
+  default-window-height { fixed 920; }
 }
 
 
@@ -282,6 +285,38 @@ window-rule {
     draw-border-with-background false
 }
 
+window-rule {
+  background-effect {
+    blur true
+    xray false
+  }
+}
+
+layer-rule {
+  match namespace="^noctalia-(bar-[^\"]+|notification|dock|panel|attached-panel|osd)$"
+  background-effect {
+    xray false
+    // blur false
+  }
+}
+
+/* Enable blur on noctalia's window switcher and disable xray. */
+layer-rule {
+    match namespace="noctalia-window-switcher"
+    background-effect {
+        blur true
+        xray false
+    }
+}
+
+/* You can also fine-tune the blur effect globally. */
+blur {
+  passes 2        // more passes = stronger blur (default: 3)
+  offset 3.0      // sample distance per pass (default: 3.0)
+  noise 0.02      // grain overlay (default: 0.02)
+  saturation 1.0  // color saturation boost (default: 1.5)
+}
+
 recent-windows {
     highlight {
         corner-radius 12
@@ -291,6 +326,11 @@ recent-windows {
 cursor {
     xcursor-theme "Bibata-Modern-Ice"
     xcursor-size 20
+}
+
+debug {
+  // Allows notification actions and window activation from Noctalia.
+  honor-xdg-activation-with-invalid-serial
 }
 
 // noctalia regenerates this on every theme change, and its templates/niri/apply.sh

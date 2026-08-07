@@ -15,14 +15,68 @@
 #
 # `noctalia config validate` checks this file.
 
-[theme.templates]
-# Noctalia themes these four by running templates/<id>/apply.sh whenever the
-# colours change. Every entry here is a script that rewrites a file outside the
-# store, so this list is a liability surface — keep it to what would be missed.
-builtin_ids = [ "niri", "kitty", "starship", "gtk3", "gtk4" ]
+[bar.default]
+background_opacity = 0.5
+capsule_opacity = 0.5
+center = [ "clock", "control-center" ]
+end = [
+    "media",
+    "tray",
+    "notifications",
+    "clipboard",
+    "network",
+    "bluetooth",
+    "volume",
+    "brightness",
+    "battery",
+    "session"
+]
+margin_edge = 8
+margin_ends = 8
+start = [ "workspaces" ]
+widget_spacing = 8
+
+[desktop_widgets]
+enabled = false
+
+[location]
+auto_locate = true
+
+[nightlight]
+enabled = true
+
+[theme]
+builtin = "Nord"
+mode = "dark"
+source = "builtin"
+wallpaper_scheme = "m3-content"
+
+    [theme.templates]
+    # Noctalia themes these four by running templates/<id>/apply.sh whenever the
+    # colours change. Every entry here is a script that rewrites a file outside the
+    # store, so this list is a liability surface — keep it to what would be missed.
+    builtin_ids = [ "gtk3", "gtk4", "kitty", "niri", "starship" ]
 
 [wallpaper]
 directory = "~/nixos-config/.dotfiles/wallpapers"
 
+    [wallpaper.default]
+    path = "/home/ansgar/nixos-config/.dotfiles/wallpapers/mage.png"
+
 [shell]
 avatar_path = "~/nixos-config/.dotfiles/avatar.png"
+font_family = "Roboto"
+niri_overview_type_to_launch_enabled = true
+polkit_agent = true
+
+    [shell.panel]
+    clipboard_placement = "attached"
+    clipboard_position = "auto"
+    open_near_click_clipboard = true
+    open_near_click_control_center = true
+    open_near_click_session = true
+    open_near_click_wallpaper = true
+    transparency_mode = "glass"
+
+[widget.control-center]
+glyph = "home"
