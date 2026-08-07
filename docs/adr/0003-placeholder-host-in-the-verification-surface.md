@@ -1,5 +1,7 @@
 # A placeholder host may sit inside the verification surface
 
+**Resolved.** The laptop was installed on 2026-08-07: `_hardware-generated.nix` holds a real scan, the `warnings` entry is gone, and the host boots. What follows describes the placeholder period and is kept for the practice it argues for, not as a description of the repo today.
+
 The `laptop` host was added before the machine existed. Its filesystem UUIDs and console keymap are not real values, so it builds green and cannot boot. This qualifies ADR 0001: a green `nix flake check` proves this configuration evaluates and builds, and for `laptop` it currently proves nothing whatsoever about the machine.
 
 ## Considered Options
