@@ -18,7 +18,7 @@
 
     programs.noctalia = {
       enable = true;
-      recommendedServices = true;
+      recommendedServices.enable = true;
     };
 
     # Read by noctalia's battery, power-profile and lid widgets. Nothing else
