@@ -14,10 +14,7 @@ files = [ "shared/base.toml" ]
 #
 # setsid detaches each app from noctalia's process group, so restarting the
 # shell does not take them down with it.
-started = [
-    "setsid -f bitwarden",
-    "setsid -f discord --start-minimized",
-]
+started = "setsid -f bitwarden; setsid -f discord --start-minimized"
 
 # No per-surface `monitors` lists: this machine's connectors have never been
 # enumerated, and an empty list means "every monitor", which is the right

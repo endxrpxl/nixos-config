@@ -17,11 +17,7 @@ files = [ "shared/base.toml" ]
 #
 # setsid detaches each app from noctalia's process group, so restarting the
 # shell does not take them down with it.
-started = [
-    "setsid -f bitwarden",
-    "setsid -f discord",
-    "setsid -f spotify"
-]
+started = "setsid -f bitwarden; setsid -f discord; setsid -f spotify"
 
 # Surfaces that name a connector, and so can only be set per machine.
 [dock]
