@@ -115,10 +115,7 @@
         ];
       };
 
-      # Enabled fleet-wide, but the prompt itself is themed by the shell: the
-      # `desktop` module links ~/.config/starship.toml, and this module only
-      # exports STARSHIP_CONFIG when that file is absent. A host without
-      # `desktop` therefore gets starship with its stock prompt.
+      # Enabled fleet-wide
       programs.starship.enable = true;
       programs.nh = {
         enable = true;
@@ -155,11 +152,6 @@
       bashrcExtra = ''
         export SSH_AUTH_SOCK=${self.lib.homeDir}/.bitwarden-ssh-agent.sock
         export PATH="$HOME/.config/emacs/bin:$PATH"
-
-        ip-fix () {
-            sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
-            sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
-        }
       '';
     };
   };

@@ -161,12 +161,6 @@
           # autoloads the root of its config directory but not subdirectories.
           "noctalia/config.toml" = authored "noctalia/hosts/${host}.toml";
           "noctalia/shared/base.toml" = authored "noctalia/shared/base.toml";
-
-          # Tracked and edited by hand for the prompt format, but noctalia's
-          # starship template also splices its palette block into it at runtime,
-          # writing through this symlink. That churn in the working tree is the
-          # accepted price of a prompt that follows the theme.
-          "starship.toml" = authored "starship.toml";
         };
 
         userDirs = {
