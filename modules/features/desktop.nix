@@ -20,10 +20,7 @@
       enable = true;
       systemd.enable = true;
 
-      # `recommendedServices` is deliberately off. It claims NetworkManager,
-      # bluetooth and power profiles, which `base` and this module already own —
-      # a shell should not be the thing that turns the radio on. Only the part
-      # that exists for the shell's sake is taken, below.
+      recommendedServices = true;
     };
 
     # Read by noctalia's battery, power-profile and lid widgets. Nothing else
