@@ -1,5 +1,7 @@
 # No hibernation while a secretmem user runs
 
+> **Superseded by ADR-0007.** The laptop hibernates to the swapfile again. Two things this document gets wrong are recorded there: the attribution of the closed gate to Bitwarden was inferred rather than observed (Electron is non-dumpable, so the `/proc/*/fd/*` scan recommended below cannot see its descriptors), and the "known, small diff" for restoring hibernation is missing `resume_offset`, without which a swapfile image is written and never found. What remains true and load-bearing is the logind behaviour: a configured action the kernel refuses is a silent no-op, not a fallback.
+
 The laptop does not hibernate. A closed lid suspends, on battery and on mains alike; critical battery powers off. There is a 20 GiB swapfile at `/swapfile`, declared in the host's `hardware.nix`, but it is paging swap and nothing more — no `boot.resumeDevice`, no `resume_offset`, no hibernation image.
 
 This is not a preference. The kernel refuses:

@@ -72,38 +72,45 @@
       # and this is one line to revert.
       powerManagement.powertop.enable = true;
 
-      # Nothing below hibernates, and that is not an oversight — this machine
-      # cannot. The kernel gates hibernation on `hibernation_available()`, which
-      # is false while any process holds a `memfd_secret`, because writing an
-      # image would put secret memory on disk and defeat the point of it.
-      # Bitwarden holds one from autostart, with the vault still locked, so
-      # `/sys/power/disk` reads `[disabled]` in every session and logind reports
-      # `CanHibernate = na`.
+      # Everything below hibernates to the swapfile declared in the laptop's
+      # `hardware.nix`, which also supplies the `resume=` and `resume_offset=`
+      # the kernel needs to find the image before anything is mounted.
       #
-      # This matters more than a missing feature, which is why it is stated
-      # here rather than left to the ADR: logind does *not* fall back when a
-      # configured action is unavailable. It logs "operation not supported" and
-      # does nothing. A lid set to `suspend-then-hibernate` on this machine is
-      # therefore a lid that does nothing at all — a laptop left running in a
-      # bag — and `criticalPowerAction = "Hibernate"` is a battery that runs
-      # flat in silence. Every verb below is one the kernel will accept.
+      # Read the warning attached to it before changing any verb here. The
+      # kernel gates hibernation on `hibernation_available()`, which is false
+      # while any process holds a `memfd_secret` — and logind does *not* fall
+      # back when a configured action turns out to be unavailable. It logs
+      # "operation not supported" and does nothing. So a lid set to
+      # `suspend-then-hibernate` on a machine that cannot hibernate is a lid
+      # that does nothing at all, and `criticalPowerAction = "Hibernate"` is a
+      # battery that runs flat in silence. `cat /sys/power/disk` is the check:
+      # if it reads `[disabled]` rather than offering `platform shutdown`, none
+      # of this works and the lid is inert.
       #
-      # See docs/adr/0006-no-hibernation-while-a-secretmem-user-runs.md, which
-      # records what would have to change to get hibernation back.
+      # docs/adr/0006-no-hibernation-while-a-secretmem-user-runs.md records the
+      # session in which that gate was closed, and why it is worth re-checking
+      # rather than assuming.
 
-      # Critical battery. Powering off loses unsaved work, and is still the
-      # right action: the alternative is not hibernation, it is running the
-      # cell flat and losing the same work with a deep discharge on top.
-      # `HybridSleep`, the upstream default, is doubly wrong here — it needs the
-      # hibernation this machine lacks, and it is a lid strategy rather than a
-      # critical-battery one, staying in RAM on a cell that is about to die.
-      services.upower.criticalPowerAction = "PowerOff";
+      # Critical battery. Hibernating keeps unsaved work across a cell that is
+      # about to die, which powering off cannot. `HybridSleep`, the upstream
+      # default, stays rejected: it is a lid strategy rather than a
+      # critical-battery one, keeping a RAM copy alive on a battery with
+      # nothing left to hold it.
+      services.upower.criticalPowerAction = "Hibernate";
+
+      # How long `suspend-then-hibernate` stays in RAM before writing the image.
+      # 30 minutes covers the walk between desks — the case suspend exists for —
+      # while a lid closed for an afternoon lands in hibernation with hours of
+      # charge still in the cell. This machine has no S3, only suspend-to-idle,
+      # so the RAM half of that pair is expensive and the timer is what keeps
+      # the bill small.
+      systemd.sleep.settings.Sleep.HibernateDelaySec = "30min";
 
       services.logind.settings.Login = {
-        # A closed lid suspends, on battery and on mains alike. There is no
-        # power-source distinction left to draw: `suspend-then-hibernate` was
-        # the reason to have one, and it is unavailable.
-        HandleLidSwitch = "suspend";
+        # On battery a closed lid suspends and then hibernates, so a laptop shut
+        # in a bag lands on disk rather than draining. On mains there is nothing
+        # to save: it suspends and stays there, resuming instantly.
+        HandleLidSwitch = "suspend-then-hibernate";
         HandleLidSwitchExternalPower = "suspend";
 
         # Docked to an external display, a closed lid means "use the other
