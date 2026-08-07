@@ -29,11 +29,6 @@
     # "uk" is not an XKB layout.
     programs.noctalia-greeter.settings.keyboard.layout = "gb";
 
-    # For mounted drive(s)
-    # systemd.tmpfiles.rules = [
-    #   "d /mnt/secondary 0755 ${self.lib.username} users -"
-    # ];
-
     # This machine dual-boots Windows: the extra entry points at its
     # bootloader, and Windows expects the RTC in local time.
     boot.loader.limine.extraEntries = ''

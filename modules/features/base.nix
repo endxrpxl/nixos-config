@@ -11,10 +11,8 @@
   #      this belongs to that feature, not here.
   #
   # `base` is an ordinary feature module: hosts import it explicitly, exactly
-  # as they import `desktop` or `gaming`. It carries no options. When a host
-  # eventually needs to diverge on something declared here, the fix is
-  # `mkDefault` on this side, not a new option — the module system already is
-  # the configuration language.
+  # as they import `desktop` or `gaming`, and it carries no options of its own.
+  # See docs/adr/0002-hosts-declare-identity-only.md.
   flake.nixosModules.base =
     { pkgs, ... }:
     {
@@ -49,8 +47,7 @@
       };
 
       # Tracks the newest kernel for hardware support — laptop-era hardware in
-      # particular is usually supported before it reaches the LTS series. This
-      # also carried the fix for CVE-2026-31431.
+      # particular is usually supported before it reaches the LTS series.
       boot.kernelPackages = pkgs.linuxPackages_latest;
 
       networking = {
@@ -59,7 +56,6 @@
           "1.1.1.1"
           "1.0.0.1"
         ];
-        # useDHCP = false;
       };
 
       time.timeZone = "Europe/Berlin";

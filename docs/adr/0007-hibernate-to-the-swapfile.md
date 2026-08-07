@@ -1,6 +1,10 @@
 # Hibernate to the swapfile
 
-Supersedes ADR-0006. The laptop hibernates again: a closed lid on battery suspends and then hibernates after 30 minutes, critical battery hibernates rather than powering off, and the 20 GiB `/swapfile` that ADR-0006 kept "in case hibernation ever becomes possible" now holds the image.
+> **Reverted. ADR-0006 stands.** This decision was an experiment with a stated exit test — configure hibernation, then read `/sys/power/disk` on the machine — and the machine failed it. Everything it added is gone: `boot.resumeDevice`, `resume_offset`, `check-resume-offset.service`, the `suspend-then-hibernate` lid and `criticalPowerAction = "Hibernate"`. The laptop suspends on battery and on mains, and critical battery powers off, exactly as ADR-0006 describes.
+>
+> The document is kept because the experiment produced findings that outlive it, and the next person to reach for hibernation on this host will want them: the two corrections to ADR-0006 below, and the two alternatives in *Considered Options* that were rejected on scope rather than merit.
+
+What follows is the decision as it was written. It is no longer in force.
 
 Two things changed, and only one of them is a decision.
 
@@ -34,8 +38,10 @@ Root is ext4 and swap is a *file*. `resume=` names the block device holding the 
 
 ## Consequences
 
-**If the gate is still closed, the lid is a no-op again.** This is the failure ADR-0006 exists to describe, and it is being re-entered deliberately with eyes open: logind does not fall back, so `suspend-then-hibernate` on a machine that cannot hibernate leaves a laptop awake in a bag. `cat /sys/power/disk` is the whole check — `[disabled]` means this decision failed and ADR-0006 was right. The change is committed but not deployed anywhere until that has been read on the machine.
+**The gate was still closed, and the lid was a no-op again.** This was the anticipated failure, entered deliberately, and it is what happened: logind does not fall back, so `suspend-then-hibernate` on a machine that cannot hibernate is a laptop left awake in a bag. That is why the revert is a revert and not a smaller adjustment — there is no version of these settings that degrades gracefully. Which of the four terms of `hibernation_available()` holds the gate shut is still unknown; the experiment settled that hibernation does not work here, not why.
 
-**A hibernation image is RAM in the clear on an unencrypted root.** ADR-0006 raises this as the reason the kernel's refusal is *correct*, and nothing about it has changed: `/swapfile` sits on an unencrypted ext4 root, so everything in memory at hibernate time — keys, unlocked vault contents, whatever a browser was holding — is readable by anyone with the disk. Accepted here as the price of the feature. Encrypting the root filesystem is the fix, and it is a separate piece of work.
+**A hibernation image would have been RAM in the clear on an unencrypted root.** ADR-0006 raises this as the reason the kernel's refusal is *correct*, and it never stopped applying: `/swapfile` sits on an unencrypted ext4 root, so everything in memory at hibernate time — keys, unlocked vault contents, whatever a browser was holding — would be readable by anyone with the disk. This was accepted as the price of a feature that turned out not to exist. Encrypting the root filesystem would remove the objection but not the kernel's gate, which does not ask whether the disk is encrypted.
 
-**`nix flake check` still says nothing about any of this.** The check proves these options evaluate. It proved the ADR-0006 configuration evaluated too, and that one was green while being both refused by the kernel and unable to resume. ADR-0001's point, for the third time.
+**The swapfile stays at 20 GiB**, for ADR-0006's reasons unchanged: already allocated, right-sized if hibernation ever becomes possible, and worth ~5% of free space on a disk with 400 GB spare.
+
+**`nix flake check` said nothing about any of this.** The check proved these options evaluate, and they did — green while the kernel refused every verb in them. ADR-0001's point, for the third time, and the reason this was framed as an experiment to run on the machine rather than a change to merge on a passing build.

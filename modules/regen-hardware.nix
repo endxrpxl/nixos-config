@@ -4,12 +4,9 @@
   # on and rewrite that host's `_hardware-generated.nix`. The host defaults to
   # the running machine's hostname.
   #
-  # This is the pure half of "read the hardware the installer generated". The
-  # scan happens when a human asks for it, on the machine being described, and
-  # lands in git where the flake can see it; the alternative — importing
-  # /etc/nixos/hardware-configuration.nix at eval time — needs `--impure`,
-  # takes every host out of `nix flake check`, and makes a host buildable only
-  # from itself.
+  # The scan happens when a human asks for it, on the machine being described,
+  # and lands in git where the flake can see it — so every host stays buildable
+  # from anywhere and inside `nix flake check`.
   perSystem =
     { config, pkgs, ... }:
     let

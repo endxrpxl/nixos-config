@@ -3,12 +3,9 @@
   # Noctalia's authored TOML, checked by noctalia itself.
   #
   # Noctalia ignores settings it does not recognise, so a renamed key is
-  # invisible: the shell starts, the flake check passes, and the setting simply
-  # stops doing anything. That is not hypothetical — `autoStartAuth` and
-  # `allowPasswordWithFprintd` became `lockscreen.fingerprint` between noctalia
-  # 4 and 5, and nothing anywhere would have reported it. The package is
-  # unpinned and currently a 5.0.0 beta, so this is the live risk on every
-  # nixpkgs bump.
+  # otherwise invisible: the shell starts, the flake check passes, and the
+  # setting simply stops doing anything. The package is unpinned and currently
+  # a 5.0.0 beta, so that is the live risk on every nixpkgs bump.
   perSystem =
     { pkgs, ... }:
     {

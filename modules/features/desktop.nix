@@ -66,20 +66,13 @@
 
     services.power-profiles-daemon.enable = true;
 
-    # # bitwarden-desktop still pins EOL Electron 39 (NixOS/nixpkgs#526914).
-    # # Accept the risk window until upstream bumps it; nixpkgs already
-    # # Remove this once bitwarden-desktop moves to a supported Electron.
-    # nixpkgs.config.permittedInsecurePackages = [
-    #   "electron-39.8.10"
-    # ];
-
     environment.systemPackages = with pkgs; [
       kitty
       spotify
       vscode
       bitwarden-desktop
       (discord.override {
-        withOpenASAR = true; # can do this here too
+        withOpenASAR = true;
         withVencord = true;
       })
 
@@ -175,10 +168,8 @@
         ".config/kitty/themes/noctalia.conf"
       ];
 
-      # Sizes disagree on purpose, for now: niri and the greeter say 20, this
-      # says 16, and that split predates the shell swap — DMS generated the 20
-      # from its own settings while this stayed at 16. Carried across unchanged
-      # so the swap alters only the shell; reconcile as its own change.
+      # Size 16 here against the 20 niri and the greeter use; the two are not
+      # reconciled.
       home.pointerCursor = {
         enable = true;
         gtk.enable = true;

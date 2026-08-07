@@ -4,10 +4,8 @@
   # discovered rather than listed, so a new host enters the verification
   # surface the moment it is declared, with no change here.
   #
-  # The prefix once disambiguated a `desktop` host from a `desktop` feature
-  # module; that collision is gone since the host was renamed to `tower`. It
-  # stays because it still separates a host build from the flake's other
-  # checks, such as formatting.
+  # The `nixos-` prefix separates a host build from the flake's other checks,
+  # such as formatting.
   perSystem =
     { system, ... }:
     let
