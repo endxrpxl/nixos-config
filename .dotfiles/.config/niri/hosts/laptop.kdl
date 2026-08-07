@@ -12,7 +12,20 @@ input {
             layout "de"
         }
     }
+
+    touchpad {
+        tap
+        natural-scroll
+    }
 }
 
-// No `output` blocks: this machine's displays have never been enumerated, and
-// guessing connector names would be worse than letting niri autodetect them.
+binds {
+    XF86AudioMute        allow-when-locked=true { spawn-sh "noctalia msg volume-mute"; }
+}
+
+output "eDP-1" {
+    focus-at-startup
+    layout {
+        always-center-single-column
+    }
+}

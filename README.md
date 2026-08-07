@@ -107,19 +107,14 @@ and overwrites `modules/hosts/laptop/_hardware-generated.nix` with the result �
 UUIDs, kernel modules and all. It prints the diff; read it before moving on.
 
 Nothing else in the repo is touched. The decisions that sit beside the scan —
-the `nixos-hardware` modules, the placeholder warning — live in
-`modules/hosts/laptop/hardware.nix` and survive the refresh.
+the `nixos-hardware` modules — live in `modules/hosts/laptop/hardware.nix` and
+survive the refresh.
 
-### 5. Clear the placeholder
-
-Edit `modules/hosts/laptop/hardware.nix`:
-
-- Delete the `warnings = [ ... ];` block and the comment above it. The values it
-  warned about were replaced by the scan in the previous step.
+### 5. Set what the scan cannot know
 
 Edit `modules/hosts/laptop/configuration.nix`:
 
-- Set `console.keyMap` to the real layout and delete its `PLACEHOLDER` comment.
+- Set `console.keyMap` to the machine's real layout.
 - Set `programs.noctalia-greeter.settings.keyboard.layout` to the same layout,
   and keep `.dotfiles/.config/niri/hosts/laptop.kdl` in step with it.
 - Set `system.stateVersion` to the release actually being installed
@@ -163,18 +158,16 @@ cd ~/nixos-config
 nix flake check
 ```
 
-### 8. Publish the cleared placeholder
+### 8. Publish the result
 
 ```bash
 cd ~/nixos-config
 git config user.email <mail>
-git commit -am "Replace laptop placeholder with real hardware values"
+git commit -am "Add real hardware values for laptop"
 git push
 ```
 
-Also update the host table at the top of this file, and note in
-`docs/adr/0003-placeholder-host-in-the-verification-surface.md` that the
-placeholder is cleared.
+Also update the host table at the top of this file if the machine is new.
 
 ---
 

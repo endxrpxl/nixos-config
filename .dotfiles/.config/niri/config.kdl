@@ -29,14 +29,6 @@ window-rule {
     open-floating true
 }
 
-// Floating Noctalia settings window.
-window-rule {
-  match app-id="dev.noctalia.Noctalia"
-  open-floating true
-  default-column-width { fixed 1080; }
-  default-window-height { fixed 920; }
-}
-
 
 binds {
     // Keys consist of modifiers separated by + signs, followed by an XKB key name
@@ -71,7 +63,6 @@ binds {
     // the shell.
     XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "noctalia msg volume-up 5"; }
     XF86AudioLowerVolume allow-when-locked=true { spawn-sh "noctalia msg volume-down 5"; }
-    XF86AudioMute        allow-when-locked=true { spawn-sh "noctalia msg mic-mute"; }
     XF86AudioPrev        allow-when-locked=true { spawn-sh "noctalia msg media previous"; }
     XF86AudioPlay        allow-when-locked=true { spawn-sh "noctalia msg media toggle"; }
     XF86AudioNext        allow-when-locked=true { spawn-sh "noctalia msg media next"; }

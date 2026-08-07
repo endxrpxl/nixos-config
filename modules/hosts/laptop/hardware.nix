@@ -18,25 +18,5 @@
       inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t14
       inputs.nixos-hardware.nixosModules.common-cpu-intel
     ];
-
-    # This machine has not been installed yet: the values in
-    # `_hardware-generated.nix` are placeholders, not a real scan.
-    #
-    # `nix flake check` builds this host green regardless — the build never
-    # touches a disk — so the check proves this configuration evaluates and
-    # builds, and proves nothing at all about whether it boots. See
-    # docs/adr/0003-placeholder-host-in-the-verification-surface.md.
-    #
-    # On arrival, run `nix run .#regen-hardware laptop` on the machine, set
-    # `console.keyMap` in configuration.nix to the real layout, confirm
-    # `system.stateVersion` matches the release actually installed, and delete
-    # this warning.
-    warnings = [
-      ''
-        The `laptop` host is a placeholder: its filesystem UUIDs and console
-        keymap are not real values and it will not boot as configured. See
-        modules/hosts/laptop/hardware.nix.
-      ''
-    ];
   };
 }
