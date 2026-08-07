@@ -9,9 +9,9 @@
   # directly — so the whole of that surface is `services.fprintd.enable` plus
   # one key in the host's noctalia dotfile.
   #
-  # The greeter is left out, and cannot be added on its own terms: see the note
-  # on `greetd` below. Its fingerprint is available only by giving `login` one,
-  # which is a trade this host has not made.
+  # The greeter is left out, and the reason is the gnome-keyring rather than
+  # anything about fingerprints. It was wired up, worked, and was reverted: see
+  # the note on `greetd` below.
   #
   # A fingerprint is an alternative to the password, never a second factor.
   # `pam_fprintd` is `sufficient` and runs before `pam_unix`, so any surface
@@ -21,7 +21,7 @@
   # unencrypted, so anyone holding the machine reads it from a USB stick no
   # matter what any of this says.
   flake.nixosModules.fingerprint =
-    { config, lib, ... }:
+    { lib, ... }:
     {
       # `services.fprintd.enable` does not wire PAM — the fprintd module ships
       # only the daemon. PAM comes from `security.pam.services.<name>.fprintAuth`,
@@ -62,49 +62,31 @@
         # uses, so opting it in would put a blocking sensor prompt in front of
         # every TTY login — the same reason `sudo` is not here.
         #
+        # `greetd` is absent for a reason worth writing down, because the
+        # mechanism works and the obstacle is somewhere else entirely.
+        #
+        # `fprintAuth` on `greetd` is inert to begin with: the greetd module
+        # sets `useDefaultRules = false` and replaces the whole auth stack with
+        # `auth substack login`, and `fprintAuth` acts only through the default
+        # rules that disables. Adding a `pam_fprintd` rule to greetd's own
+        # stack ahead of the substack does work, and leaves `login` untouched
+        # so TTY logins keep their password.
+        #
+        # What kills it is the keyring. `pam_gnome_keyring` sits inside the
+        # `login` substack, and unlocks the keyring with the password
+        # `pam_unix` just took. A `sufficient` fingerprint rule short-circuits
+        # PAM before the substack runs, so neither module ever sees a password
+        # — and the keyring is encrypted with that password, so a fingerprint
+        # cannot derive its key even in principle. Logging in with a finger
+        # therefore lands in a session that immediately asks for the password
+        # anyway, which is worse than typing it once. The only ways round it
+        # blank the keyring password or store it on disk, and both give away
+        # more than the keystroke they save.
+        #
+        # None of this touches the lock screen: the session's keyring is
+        # already unlocked by then, which is why a finger is worth having there
+        # and not here.
         security.pam.services.polkit-1.fprintAuth = true;
-
-        # The greeter cannot use `fprintAuth`, and setting it would silently do
-        # nothing: the greetd module sets `useDefaultRules = false` and replaces
-        # greetd's whole auth stack with `auth substack login`, while
-        # `fprintAuth` only ever acts through the default rules that disables.
-        #
-        # Following the substack to its source and giving `login` the
-        # fingerprint would work, but arms every TTY login with it too — the
-        # blocking sensor prompt this host rejected when it left out `sudo` —
-        # and would put `pam_fprintd` in the stack noctalia's lock screen uses
-        # for its *password* path, where it would contend with the shell's own
-        # D-Bus grab of the same sensor.
-        #
-        # So the rule is added to greetd's own stack instead, ahead of the
-        # substack, leaving `login` untouched. Restoring `useDefaultRules` is
-        # the other way to do this and is not worth it: that option is marked
-        # experimental and "subject to breaking changes without notice", and
-        # flipping it would regenerate the account, password and session stacks
-        # alongside the substacks that already cover them.
-        #
-        # The order is relative because the built-in values are documented as
-        # liable to change; a constant here could silently reorder into the
-        # wrong place on an update.
-        security.pam.services.greetd.rules.auth.fprintd = {
-          enable = true;
-          control = "sufficient";
-          modulePath = "${config.services.fprintd.package}/lib/security/pam_fprintd.so";
-          order = config.security.pam.services.greetd.rules.auth.login.order - 10;
-        };
-
-        # The greeter refuses to start PAM at all while its password box is
-        # empty, which leaves the rule above unreachable: PAM is what asks for
-        # the finger, so something has to start it. This is upstream's switch
-        # for exactly that, described in its own config template as enabling
-        # "fprintd / smartcard PAM" auth.
-        #
-        # It weakens nothing by itself — an empty submission still has to
-        # satisfy PAM, and `pam_unix` rejects an empty password.
-        #
-        # This reaches into `desktop`'s option, which is why this module says
-        # up front that it assumes `desktop`.
-        programs.noctalia-greeter.settings.auth.allow_empty_password = true;
       };
     };
 }
