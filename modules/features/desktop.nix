@@ -168,15 +168,14 @@
         ".config/kitty/themes/noctalia.conf"
       ];
 
-      # Size 16 here against the 20 niri and the greeter use; the two are not
-      # reconciled.
+      # 20 to match niri's `xcursor-size` and the greeter's `cursor.size`.
       home.pointerCursor = {
         enable = true;
         gtk.enable = true;
         x11.enable = true;
         package = pkgs.bibata-cursors;
         name = "Bibata-Modern-Ice";
-        size = 16;
+        size = 20;
       };
     };
 }
