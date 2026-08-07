@@ -1,0 +1,29 @@
+// Everything in niri's configuration that only this machine can know.
+//
+// Linked to ~/.config/niri/host.kdl, which the shared config.kdl includes at
+// the end. See docs/adr/0005-per-host-dotfiles-through-native-includes.md.
+
+input {
+    keyboard {
+        xkb {
+            layout "gb,gb"
+            variant ",intl"
+        }
+    }
+}
+
+output "DP-3" {
+    mode "3440x1440@165.001"
+    scale 1
+    position x=0 y=1080
+    focus-at-startup
+    layout {
+        always-center-single-column
+    }
+}
+
+output "HDMI-A-1" {
+    mode "1920x1080@120.000"
+    scale 1
+    position x=771 y=0
+}

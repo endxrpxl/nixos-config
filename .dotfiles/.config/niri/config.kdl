@@ -1,10 +1,8 @@
+// The shared half of the niri configuration. Everything only one machine can
+// know — keyboard layout, outputs — lives in the per-host file included at the
+// bottom of this file.
+
 input {
-    keyboard {
-        xkb {
-            layout "gb,gb"
-            variant ",intl"
-        }
-    }
     mouse {
         accel-speed 0.0
         accel-profile "flat"
@@ -265,8 +263,9 @@ include "dms/colors.kdl"
 
 include "dms/cursor.kdl"
 
-include "dms/outputs.kdl"
-
 include "dms/layout.kdl"
 
 include "dms/windowrules.kdl"
+
+// Last, so a host can override anything above it.
+include "host.kdl"

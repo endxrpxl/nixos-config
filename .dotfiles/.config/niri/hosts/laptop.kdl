@@ -1,0 +1,18 @@
+// Everything in niri's configuration that only this machine can know.
+//
+// Linked to ~/.config/niri/host.kdl, which the shared config.kdl includes at
+// the end. See docs/adr/0005-per-host-dotfiles-through-native-includes.md.
+
+// PLACEHOLDER — matches the `console.keyMap = "de"` in this host's
+// configuration.nix, which is itself unconfirmed. See
+// docs/adr/0003-placeholder-host-in-the-verification-surface.md.
+input {
+    keyboard {
+        xkb {
+            layout "de"
+        }
+    }
+}
+
+// No `output` blocks: this machine's displays have never been enumerated, and
+// guessing connector names would be worse than letting niri autodetect them.

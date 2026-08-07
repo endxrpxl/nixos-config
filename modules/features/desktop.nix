@@ -97,36 +97,40 @@
   };
 
   flake.homeModules.desktop =
-    { config, pkgs, ... }:
+    {
+      config,
+      lib,
+      osConfig,
+      pkgs,
+      ...
+    }:
     let
-      mkLink = config.lib.file.mkOutOfStoreSymlink;
-      mkConfigLink = x: mkLink "${self.lib.dotConfig}/${x}";
+      authored = self.lib.authoredDotfile config;
+
+      # The per-host half of each config is selected by hostname rather than
+      # named in the host's home module: ADR-0002 makes the hostname the host's
+      # identity, and restating it here would be a second place to get it wrong.
+      host = osConfig.networking.hostName;
     in
     {
       xdg = {
         configFile = {
-          "kitty/kitty.conf" = {
-            source = mkConfigLink "kitty/kitty.conf";
-            force = true;
-          };
-          "DankMaterialShell/settings.json" = {
-            source = mkConfigLink "DankMaterialShell/settings.json";
-            force = true;
-          };
-          "niri" = {
-            source = mkConfigLink "niri";
+          "kitty/kitty.conf" = authored "kitty/kitty.conf";
+          "DankMaterialShell/settings.json" = authored "DankMaterialShell/settings.json";
+
+          # config.kdl is shared and ends with `include "host.kdl"`; the
+          # indirection lives in this symlink rather than in the file's text, so
+          # every host reads the same config.kdl.
+          "niri/config.kdl" = authored "niri/config.kdl";
+          "niri/host.kdl" = authored "niri/hosts/${host}.kdl";
+
+          "matugen" = (authored "matugen") // {
             recursive = true;
-            force = true;
-          };
-          "matugen" = {
-            source = mkConfigLink "matugen";
-            recursive = true;
-            force = true;
           };
         };
         stateFile = {
           "DankMaterialShell/session.json" = {
-            source = mkLink "${self.lib.stateDir}/DankMaterialShell/session.json";
+            source = config.lib.file.mkOutOfStoreSymlink "${self.lib.stateDir}/DankMaterialShell/session.json";
             force = true;
           };
         };
@@ -137,6 +141,22 @@
           templates = null;
         };
       };
+
+      # `niri` is no longer linked as a whole directory, so the snippets DMS
+      # regenerates under ~/.config/niri/dms/ are now unmanaged — which is the
+      # point, they are runtime output and do not belong in the repo. But
+      # config.kdl still includes them, and niri refuses to start on a missing
+      # include, so they have to exist before DMS has ever run.
+      # Keep in sync with the `include "dms/..."` lines in niri/config.kdl.
+      home.activation.seedNiriDmsIncludes = self.lib.seedFiles lib (
+        map (f: ".config/niri/dms/${f}.kdl") [
+          "binds"
+          "colors"
+          "cursor"
+          "layout"
+          "windowrules"
+        ]
+      );
 
       home.pointerCursor = {
         enable = true;
