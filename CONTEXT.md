@@ -24,6 +24,10 @@ _Avoid_: config, settings file
 A place the system can ask a human to prove who they are — the greeter, the lock screen, a privilege prompt, a console login. Each is opted into a given authentication method by name: teaching one surface to accept a fingerprint says nothing about any of the others. Distinct from the method itself, which is a capability the machine either has or lacks.
 _Avoid_: login, PAM service, auth target
 
+**Power policy**:
+The decisions about how a host spends energy and how it stops — when the battery charges, what a closed lid means, when the machine sleeps or writes itself to disk. Bounded against the shell by what the decision acts on: power policy powers the machine down, the shell blanks and locks the screen. Both read the same battery, which belongs to neither.
+_Avoid_: power management, energy saving, suspend settings
+
 **Verification surface**:
 The flake's checks, run as one command, that answer whether a change is valid.
 _Avoid_: CI, test suite
