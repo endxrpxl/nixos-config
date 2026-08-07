@@ -5,6 +5,20 @@
 [include]
 files = [ "shared/base.toml" ]
 
+[hooks]
+# Tray apps autostart here rather than from niri's spawn-at-startup, which fires
+# every entry at once — including noctalia itself. All three of these register a
+# tray icon and start minimised, so racing the shell's StatusNotifierWatcher
+# leaves them running with no icon and no window. `started` fires after noctalia
+# has initialised, which orders them behind the tray host.
+#
+# setsid detaches each app from noctalia's process group, so restarting the
+# shell does not take them down with it.
+started = [
+    "setsid -f bitwarden",
+    "setsid -f discord --start-minimized",
+]
+
 # No per-surface `monitors` lists: this machine's connectors have never been
 # enumerated, and an empty list means "every monitor", which is the right
 # default for a single-display machine anyway.
