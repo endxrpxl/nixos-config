@@ -9,9 +9,7 @@ input {
     }
 }
 
-spawn-at-startup "discord"
-spawn-at-startup "spotify"
-spawn-at-startup "bitwarden"
+spawn-at-startup "noctalia"
 
 prefer-no-csd
 
