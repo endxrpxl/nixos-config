@@ -158,6 +158,19 @@ cd ~/nixos-config
 nix flake check
 ```
 
+On `laptop`, enrol a fingerprint. Nothing declarative can do this — the
+templates live on the sensor, so a fresh install has a green `nix flake check`
+and a lock screen that ignores your finger until this is run:
+
+```bash
+fprintd-enroll          # repeat with -f for further fingers
+fprintd-verify          # confirm the reader matches what was enrolled
+```
+
+If `fprintd-enroll` reports no device, the reader may still be holding
+enrolments from a previous Windows install, or want newer firmware
+(`fwupdmgr get-updates`). Nothing downstream works until this command does.
+
 ### 8. Publish the result
 
 ```bash

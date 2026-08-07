@@ -20,6 +20,10 @@ _Avoid_: desktop environment, bar, panel
 A configuration file a human writes, linked out of the store so an edit takes effect without a rebuild. Only authored dotfiles live in `.dotfiles`. Anything a running program writes — regenerated theme snippets, settings a UI panel saves — is runtime output, is not linked, and does not belong in this repo.
 _Avoid_: config, settings file
 
+**Authentication surface**:
+A place the system can ask a human to prove who they are — the greeter, the lock screen, a privilege prompt, a console login. Each is opted into a given authentication method by name: teaching one surface to accept a fingerprint says nothing about any of the others. Distinct from the method itself, which is a capability the machine either has or lacks.
+_Avoid_: login, PAM service, auth target
+
 **Verification surface**:
 The flake's checks, run as one command, that answer whether a change is valid.
 _Avoid_: CI, test suite

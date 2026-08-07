@@ -8,3 +8,13 @@ files = [ "shared/base.toml" ]
 # No per-surface `monitors` lists: this machine's connectors have never been
 # enumerated, and an empty list means "every monitor", which is the right
 # default for a single-display machine anyway.
+
+# This machine has a fingerprint reader and tower does not, so this sits here
+# rather than in the shared half — on tower it would start a scan for a device
+# that will never answer.
+#
+# Noctalia talks to fprintd over D-Bus directly rather than through PAM, so the
+# lock screen needs nothing from `security.pam.services`; the fingerprint half
+# of the `fingerprint` feature module is just the daemon.
+[lockscreen]
+fingerprint = true

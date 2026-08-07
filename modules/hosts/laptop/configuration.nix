@@ -13,6 +13,7 @@
       self.nixosModules.laptopHardware
       self.nixosModules.base
       self.nixosModules.desktop
+      self.nixosModules.fingerprint
       self.nixosModules.printing
       self.nixosModules.vm
       self.nixosModules.emacs
