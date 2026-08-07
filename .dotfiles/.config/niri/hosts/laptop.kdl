@@ -19,8 +19,13 @@ input {
     }
 }
 
+// Host-specific because they name a backlight: only a machine with an internal
+// panel has one to dim. Both take noctalia's default monitor selector, which on
+// this host can only ever mean eDP-1.
 binds {
-    XF86AudioMute        allow-when-locked=true { spawn-sh "noctalia msg volume-mute"; }
+    XF86AudioMute         allow-when-locked=true { spawn-sh "noctalia msg volume-mute"; }
+    XF86MonBrightnessUp   allow-when-locked=true { spawn-sh "noctalia msg brightness-up 5"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn-sh "noctalia msg brightness-down 5"; }
 }
 
 output "eDP-1" {
