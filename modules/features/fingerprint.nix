@@ -4,12 +4,14 @@
   # this targets is noctalia's, so a host importing this without it gets a
   # daemon and nothing to use it.
   #
-  # Only the lock screen is wired up so far. It needs nothing from PAM —
-  # noctalia 5 talks to fprintd over D-Bus directly — so the whole of that
-  # surface is `services.fprintd.enable` plus one key in the host's noctalia
-  # dotfile. The greeter and polkit prompts are PAM surfaces and follow once a
-  # finger has actually been enrolled and verified on this machine; the sensor
-  # is a Synaptics 06cb:00f9, whose libfprint support is reported both ways.
+  # Two surfaces are wired up: the lock screen and polkit prompts. The lock
+  # screen needs nothing from PAM — noctalia 5 talks to fprintd over D-Bus
+  # directly — so the whole of that surface is `services.fprintd.enable` plus
+  # one key in the host's noctalia dotfile.
+  #
+  # The greeter is left out, and cannot be added on its own terms: see the note
+  # on `greetd` below. Its fingerprint is available only by giving `login` one,
+  # which is a trade this host has not made.
   #
   # A fingerprint is an alternative to the password, never a second factor.
   # `pam_fprintd` is `sufficient` and runs before `pam_unix`, so any surface
@@ -54,6 +56,19 @@
 
       config = {
         services.fprintd.enable = true;
+
+        # The one PAM surface. `login` is deliberately absent: the lock screen
+        # does not reach PAM for a fingerprint, and `login` is also what agetty
+        # uses, so opting it in would put a blocking sensor prompt in front of
+        # every TTY login — the same reason `sudo` is not here.
+        #
+        # `greetd` is absent for a less obvious reason. Setting `fprintAuth` on
+        # it does nothing at all: the greetd module sets `useDefaultRules =
+        # false` and replaces its whole auth stack with `auth substack login`,
+        # and `fprintAuth` only ever acts through those default rules. The
+        # greeter authenticates against `login`'s stack, so the greeter cannot
+        # have a fingerprint unless TTY login does too.
+        security.pam.services.polkit-1.fprintAuth = true;
       };
     };
 }
