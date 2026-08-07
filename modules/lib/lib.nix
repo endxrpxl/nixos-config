@@ -18,7 +18,6 @@
     repoDir = "${self.lib.homeDir}/nixos-config";
     dotDir = "${self.lib.repoDir}/.dotfiles";
     dotConfig = "${self.lib.dotDir}/.config";
-    stateDir = "${self.lib.dotDir}/.local/state";
 
     # Authored dotfiles only: files a human edits, linked out of the store so an
     # edit takes effect without a rebuild. Anything a running program writes is

@@ -1,0 +1,28 @@
+# Noctalia settings that hold on every machine. Pulled in by each host's entry
+# file; see .dotfiles/.config/noctalia/hosts/.
+#
+# This lives in a subdirectory on purpose. Noctalia autoloads every *.toml in
+# the root of its config directory, so a shared file sitting next to the entry
+# file would load twice — and, being alphabetically later, would override the
+# host's values rather than the other way round. Subdirectories are not
+# autoloaded, so the only way in is the explicit include, which loads first.
+#
+# This is the declarative half of noctalia's config. Noctalia never writes back
+# here — everything the settings UI changes lands in
+# ~/.local/state/noctalia/settings.toml, which is runtime state and stays out of
+# this repo. To keep a setting, copy it across with
+# `noctalia config export merged`.
+#
+# `noctalia config validate` checks this file.
+
+[theme.templates]
+# Noctalia themes these four by running templates/<id>/apply.sh whenever the
+# colours change. Every entry here is a script that rewrites a file outside the
+# store, so this list is a liability surface — keep it to what would be missed.
+builtin_ids = [ "niri", "kitty", "starship", "gtk3", "gtk4" ]
+
+[wallpaper]
+directory = "~/nixos-config/.dotfiles/wallpapers"
+
+[shell]
+avatar_path = "~/nixos-config/.dotfiles/avatar.png"

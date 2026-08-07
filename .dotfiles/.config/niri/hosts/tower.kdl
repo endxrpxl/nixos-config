@@ -27,3 +27,15 @@ output "HDMI-A-1" {
     scale 1
     position x=771 y=0
 }
+
+// Host-specific because they name a connector: these only mean anything on a
+// machine that has an HDMI-A-1.
+window-rule {
+    match title="^Spotify$"
+    open-on-output "HDMI-A-1"
+}
+
+window-rule {
+    match app-id="^discord$"
+    open-on-output "HDMI-A-1"
+}

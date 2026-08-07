@@ -1,0 +1,14 @@
+# The prompt format, which used to live in a matugen template. Matugen is gone
+# with DMS; noctalia's starship template replaces only the colours.
+#
+# That template splices a `# >>> NOCTALIA STARSHIP PALETTE >>>` block into this
+# file at runtime, writing through the symlink, so expect this file to show up
+# as modified after a theme change. That churn is the price of a prompt that
+# follows the theme; the alternative was a fixed palette in
+# `programs.starship.settings`.
+#
+# Do not hand-edit anything between the palette markers — it is regenerated.
+
+format = '''
+$directory$git_branch
+$character'''

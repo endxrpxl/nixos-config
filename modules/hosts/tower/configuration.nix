@@ -24,6 +24,11 @@
 
     console.keyMap = "uk";
 
+    # The XKB name for the same layout, for the login screen. It cannot be
+    # derived from `console.keyMap` above — that is a kbd keymap name, and
+    # "uk" is not an XKB layout.
+    programs.noctalia-greeter.settings.keyboard.layout = "gb";
+
     # For mounted drive(s)
     # systemd.tmpfiles.rules = [
     #   "d /mnt/secondary 0755 ${self.lib.username} users -"

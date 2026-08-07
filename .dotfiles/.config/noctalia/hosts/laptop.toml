@@ -1,0 +1,10 @@
+# This machine's entry point into noctalia's config, linked to
+# ~/.config/noctalia/config.toml. See hosts/tower.toml for why the shared half is
+# included rather than autoloaded.
+
+[include]
+files = [ "shared/base.toml" ]
+
+# No per-surface `monitors` lists: this machine's connectors have never been
+# enumerated, and an empty list means "every monitor", which is the right
+# default for a single-display machine anyway.

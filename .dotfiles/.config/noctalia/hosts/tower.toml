@@ -1,0 +1,22 @@
+# This machine's entry point into noctalia's config, linked to
+# ~/.config/noctalia/config.toml.
+#
+# The shared half is included rather than autoloaded, so load order is written
+# down instead of following from the alphabetical order of two filenames. The
+# include loads first; anything set in this file overrides it.
+
+[include]
+files = [ "shared/base.toml" ]
+
+# Surfaces that name a connector, and so can only be set per machine.
+[dock]
+monitors = [ "DP-3" ]
+
+[lockscreen]
+monitors = [ "DP-3", "HDMI-A-1" ]
+
+[notification]
+monitors = [ "DP-3" ]
+
+[osd]
+monitors = [ "DP-3" ]
