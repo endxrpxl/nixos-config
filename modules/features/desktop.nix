@@ -38,10 +38,9 @@
       settings = {
         session.default = "niri";
 
-        # The greeter runs as its own user and reads the system profile, so it
-        # cannot see `home.pointerCursor` below — hence the explicit path. This
-        # replaces keeping `bibata-cursors` in systemPackages purely so the
-        # login screen would not fall back to the default cursor.
+        # The greeter runs as its own user and cannot see `home.pointerCursor`
+        # below, so it is given the store path outright rather than relying on
+        # the theme being installed somewhere it happens to look.
         cursor = {
           theme = "Bibata-Modern-Ice";
           size = 20;
@@ -177,12 +176,20 @@
         };
       };
 
-      # noctalia rewrites ~/.config/niri/noctalia.kdl whenever the theme changes,
-      # so it is runtime output and is not linked. config.kdl includes it
-      # unconditionally and niri refuses to start on a missing include, so it has
-      # to exist before noctalia has ever run.
-      home.activation.seedNiriShellIncludes = self.lib.seedFiles lib [ ".config/niri/noctalia.kdl" ];
+      # noctalia rewrites both of these whenever the theme changes, so they are
+      # runtime output and are not linked. Their includes are authored into
+      # config.kdl and kitty.conf, which read them before noctalia has ever run:
+      # niri refuses to start on a missing include, kitty only complains.
+      # Keep in step with those two include lines.
+      home.activation.seedNoctaliaTemplateTargets = self.lib.seedFiles lib [
+        ".config/niri/noctalia.kdl"
+        ".config/kitty/themes/noctalia.conf"
+      ];
 
+      # Sizes disagree on purpose, for now: niri and the greeter say 20, this
+      # says 16, and that split predates the shell swap — DMS generated the 20
+      # from its own settings while this stayed at 16. Carried across unchanged
+      # so the swap alters only the shell; reconcile as its own change.
       home.pointerCursor = {
         enable = true;
         gtk.enable = true;

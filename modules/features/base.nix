@@ -115,6 +115,10 @@
         ];
       };
 
+      # Enabled fleet-wide, but the prompt itself is themed by the shell: the
+      # `desktop` module links ~/.config/starship.toml, and this module only
+      # exports STARSHIP_CONFIG when that file is absent. A host without
+      # `desktop` therefore gets starship with its stock prompt.
       programs.starship.enable = true;
       programs.nh = {
         enable = true;

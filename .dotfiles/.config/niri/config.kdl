@@ -60,7 +60,6 @@ binds {
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
     Mod+Alt+L hotkey-overlay-title="Lock the Screen" { spawn-sh "noctalia msg session lock"; }
     Mod+Space hotkey-overlay-title="Open Launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
-    Mod+S hotkey-overlay-title="Open Control Center" { spawn-sh "noctalia msg panel-toggle control-center"; }
 
     // Example volume keys mappings for PipeWire & WirePlumber.
     // The allow-when-locked=true property makes them work even when the session is locked.

@@ -28,6 +28,11 @@
     # matters most for the per-host files, whose name comes from the hostname
     # and so is never written out literally at the call site.
     #
+    # The check and the link do not read the same thing: the assertion looks in
+    # the flake source, the link points at `dotConfig` on disk. It therefore
+    # catches a wrong path, not a checkout in the wrong place — clone the repo
+    # anywhere but `repoDir` and every link dangles with the check still green.
+    #
     # `config` is the home-manager configuration.
     authoredDotfile =
       config: path:
