@@ -24,6 +24,14 @@ _Avoid_: config, settings file
 A place the system can ask a human to prove who they are — the greeter, the lock screen, a privilege prompt, a console login. Each is opted into a given authentication method by name: teaching one surface to accept a fingerprint says nothing about any of the others. Distinct from the method itself, which is a capability the machine either has or lacks.
 _Avoid_: login, PAM service, auth target
 
+**At-rest protection**:
+The property that a powered-off machine's storage cannot be read without a decryption secret. The mechanism is LUKS on the root filesystem. Distinct from the decryption gate, which is the boot-time act; at-rest protection is the property that gate serves.
+_Avoid_: disk encryption, full disk encryption, LUKS
+
+**Decryption gate**:
+The boot-time check where the machine must prove it may decrypt its own root. Satisfiable by a human secret (a passphrase), a hardware secret (a TPM), or a human-chosen PIN — and, notably, by no biometric at all. Distinct from an authentication surface: that asks a human to prove identity, this authorizes a machine to decrypt, and a TPM can answer it with no human present. Fingerprints live on the authentication side of the line, never here.
+_Avoid_: unlock, encryption password, LUKS passphrase
+
 **Power policy**:
 The decisions about how a host spends energy and how it stops — when the battery charges, what a closed lid means, when the machine sleeps or writes itself to disk. Bounded against the shell by what the decision acts on: power policy powers the machine down, the shell blanks and locks the screen. Both read the same battery, which belongs to neither.
 _Avoid_: power management, energy saving, suspend settings

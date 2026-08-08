@@ -1,10 +1,12 @@
 # Fingerprint surfaces are an allowlist
 
+> **Amended by ADR-0009.** This document's closing justification — "the root filesystem is unencrypted, so anyone holding the machine reads it from a USB stick regardless" — is superseded. The root filesystem is now LUKS-encrypted (ADR-0009), so the at-rest rationale is gone. The *conclusion* survives on a corrected premise: a fingerprint is still a convenience control, not a security one, because it can only ever act after the disk is open — it produces no key material and cannot unlock at-rest protection. The decryption gate (CONTEXT.md) is the line that keeps the fingerprint off it.
+
 The `fingerprint` module enables `fprintd` and then opts individual authentication surfaces in by name. Two are opted in: the lock screen, which needs no PAM at all because noctalia 5 talks to fprintd over D-Bus directly, and polkit prompts, which get `security.pam.services.polkit-1.fprintAuth = true`. Everything else — `login`, `sudo`, `su`, `passwd`, `chsh`, the greeter — is not.
 
 The allowlist is not the NixOS default, and making it one is the module's only non-obvious piece of code. `security.pam.services.<name>.fprintAuth` *defaults* to `services.fprintd.enable`, so switching the daemon on arms a fingerprint across every PAM service at once. The module redeclares the option with `config.fprintAuth = lib.mkDefault false` so the submodule gains one more `config` fragment, which lands on every service; `mkDefault` still loses to the per-surface opt-ins, so those read as plain assignments.
 
-A fingerprint here is an alternative to the password, never a second factor: `pam_fprintd` is `sufficient` and runs before `pam_unix`, so every opted-in surface still accepts a password. And this is a convenience control rather than a security one — the root filesystem is unencrypted, so anyone holding the machine reads it from a USB stick regardless.
+A fingerprint here is an alternative to the password, never a second factor: `pam_fprintd` is `sufficient` and runs before `pam_unix`, so every opted-in surface still accepts a password. And this is a convenience control rather than a security one — a fingerprint produces no key material, so it can never unlock at-rest protection, and only ever acts on surfaces the machine is already running, with the disk open (ADR-0009).
 
 ## Considered Options
 

@@ -13,6 +13,7 @@
       self.nixosModules.laptopHardware
       self.nixosModules.base
       self.nixosModules.desktop
+      self.nixosModules.disk-encryption
       self.nixosModules.fingerprint
       self.nixosModules.power
       self.nixosModules.printing

@@ -13,6 +13,7 @@
       self.nixosModules.towerHardware
       self.nixosModules.base
       self.nixosModules.desktop
+      self.nixosModules.disk-encryption
       self.nixosModules.printing
       self.nixosModules.gaming
       self.nixosModules.vm
