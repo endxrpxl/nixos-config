@@ -69,7 +69,7 @@
     environment.systemPackages = with pkgs; [
       kitty
       spotify
-      vscode
+      zed-editor
       bitwarden-desktop
       (discord.override {
         withOpenASAR = true;
@@ -93,10 +93,6 @@
       # GTK4 apps and leaves default Adwaita around them, which reads as a bug
       # rather than as a missing package.
       adw-gtk3
-
-      code-cursor
-      zed-editor
-      claude-code
 
       libreoffice
     ];
