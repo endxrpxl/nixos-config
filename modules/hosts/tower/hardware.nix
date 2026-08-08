@@ -1,47 +1,12 @@
-{ self, inputs, ... }: {
-
-  flake.nixosModules.towerHardware =
-    {
-      config,
-      lib,
-      pkgs,
-      modulesPath,
-      ...
-    }:
-    {
-      imports = [
-        (modulesPath + "/installer/scan/not-detected.nix")
-      ];
-
-      boot.initrd.availableKernelModules = [
-        "nvme"
-        "xhci_pci"
-        "ahci"
-        "usbhid"
-        "usb_storage"
-        "sd_mod"
-      ];
-      boot.initrd.kernelModules = [ ];
-      boot.kernelModules = [ "kvm-amd" ];
-      boot.extraModulePackages = [ ];
-
-      fileSystems."/" = {
-        device = "/dev/disk/by-uuid/234a6888-5571-4dee-84e6-0c1c1843ba6b";
-        fsType = "ext4";
-      };
-
-      fileSystems."/boot" = {
-        device = "/dev/disk/by-uuid/767D-9F1E";
-        fsType = "vfat";
-        options = [
-          "fmask=0077"
-          "dmask=0077"
-        ];
-      };
-
-      swapDevices = [ ];
-
-      nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-      hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-    };
+{ ... }:
+{
+  # Hardware in two halves. `_hardware-generated.nix` is machine truth, written
+  # by `nix run .#regen-hardware` on the machine itself and never edited by
+  # hand; this wrapper holds everything a human decided. Rescanning hardware
+  # therefore overwrites exactly one file and leaves the decisions alone.
+  flake.nixosModules.towerHardware = {
+    imports = [
+      ./_hardware-generated.nix
+    ];
+  };
 }

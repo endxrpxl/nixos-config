@@ -24,10 +24,10 @@
 
     console.keyMap = "uk";
 
-    # For mounted drive(s)
-    # systemd.tmpfiles.rules = [
-    #   "d /mnt/secondary 0755 ${self.lib.username} users -"
-    # ];
+    # The XKB name for the same layout, for the login screen. It cannot be
+    # derived from `console.keyMap` above — that is a kbd keymap name, and
+    # "uk" is not an XKB layout.
+    programs.noctalia-greeter.settings.keyboard.layout = "gb";
 
     # This machine dual-boots Windows: the extra entry points at its
     # bootloader, and Windows expects the RTC in local time.

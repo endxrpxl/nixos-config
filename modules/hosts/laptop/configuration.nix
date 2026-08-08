@@ -13,6 +13,8 @@
       self.nixosModules.laptopHardware
       self.nixosModules.base
       self.nixosModules.desktop
+      self.nixosModules.fingerprint
+      self.nixosModules.power
       self.nixosModules.printing
       self.nixosModules.vm
       self.nixosModules.emacs
@@ -21,15 +23,12 @@
 
     networking.hostName = "laptop";
 
-    # PLACEHOLDER — this machine's keyboard layout has not been confirmed.
-    # `de` matches the LC_* settings in `base`. See hardware.nix.
     console.keyMap = "de";
+
+    programs.noctalia-greeter.settings.keyboard.layout = "de";
 
     home-manager.users.${self.lib.username} = self.homeModules.laptop;
 
-    # PLACEHOLDER — this must become the NixOS release the machine is actually
-    # first installed from, and then never change. It determines the defaults
-    # for stateful data such as file locations and database versions.
-    system.stateVersion = "25.11";
+    system.stateVersion = "26.05";
   };
 }
