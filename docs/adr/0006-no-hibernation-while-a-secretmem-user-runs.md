@@ -1,5 +1,7 @@
 # No hibernation while a secretmem user runs
 
+> **Amended by ADR-0009.** The root filesystem is now LUKS-encrypted (ADR-0009), so the hibernation image — written to the swapfile inside the LUKS container — is no longer plaintext. The *decision* is unchanged: `hibernation_available()` does not ask whether the disk is encrypted, `secretmem_active()` still reads true while Bitwarden is open, and this machine still cannot hibernate.
+
 > **Live again; ADR-0007 tried to supersede this and was reverted.** Hibernation was configured and did not work on the machine, so the laptop is back to the decision below. Two corrections from that attempt stand: the attribution of the closed gate to Bitwarden is inferred, not observed (Electron is non-dumpable, so the `/proc/*/fd/*` scan recommended below cannot see its descriptors), and the "known, small diff" in *Consequences* is incomplete — it is missing `resume_offset`, without which a swapfile image is written and never found.
 
 The laptop does not hibernate. A closed lid suspends, on battery and on mains alike; critical battery powers off. There is a 20 GiB swapfile at `/swapfile`, declared in the host's `hardware.nix`, but it is paging swap and nothing more — no `boot.resumeDevice`, no `resume_offset`, no hibernation image.
@@ -17,7 +19,7 @@ bool hibernation_available(void)
 
 `secretmem_active()` is true while any process holds a file created by `memfd_secret(2)`, and the count is incremented when the file is created, not when it is mapped. Bitwarden holds one from autostart, with the vault still locked. So `/sys/power/disk` reads `[disabled]` in every session, `/sys/power/state` omits `disk`, and logind reports `CanHibernate = na`.
 
-The kernel is right to refuse. Secret memory exists so that a key is unreadable outside the process that owns it; hibernating would write it to disk in the clear. On this machine the root filesystem is unencrypted, so that image would sit in plaintext next to everything else — exactly the exposure the password manager is avoiding.
+The kernel is right to refuse. Secret memory exists so that a key is unreadable outside the process that owns it; hibernating would write it to disk in the clear. When this was written, the root filesystem was unencrypted, so that image would have sat in plaintext next to everything else — exactly the exposure the password manager is avoiding. The root is now LUKS-encrypted (ADR-0009), so the image would be encrypted too — but the kernel's gate does not ask whether the disk is encrypted, and the objection dies only in principle, not in practice.
 
 ## Considered Options
 
@@ -37,7 +39,7 @@ The kernel is right to refuse. Secret memory exists so that a key is unreadable 
 
 **`nix flake check` could not have caught any of this.** It proved the module evaluated, and it evaluated identically whether or not the kernel would accept a single one of the verbs in it. Hibernation was configured, green, and impossible at the same time. The check is a statement about the configuration, never about the machine — the point ADR-0001 makes about host builds, here with teeth.
 
-**Restoring hibernation is a known, small diff, and needs one thing that is not in this repo.** Put back `boot.resumeDevice` with the root UUID from `_hardware-generated.nix`, set the lid to `suspend-then-hibernate` with a `HibernateDelaySec`, and set `criticalPowerAction = "Hibernate"`. None of it works until nothing on the system holds a `memfd_secret` — check with `cat /sys/power/disk` before trusting it, and find the holder with a scan of `/proc/*/fd/*` for `secretmem`. Encrypting the root filesystem would remove the objection in principle but not the kernel's gate, which does not ask whether the disk is encrypted.
+**Restoring hibernation is a known, small diff, and needs one thing that is not in this repo.** Put back `boot.resumeDevice` with the root UUID from `_hardware-generated.nix`, set the lid to `suspend-then-hibernate` with a `HibernateDelaySec`, and set `criticalPowerAction = "Hibernate"`. None of it works until nothing on the system holds a `memfd_secret` — check with `cat /sys/power/disk` before trusting it, and find the holder with a scan of `/proc/*/fd/*` for `secretmem`. The root filesystem is now encrypted (ADR-0009), which removes the plaintext-image objection; the swapfile sits inside the LUKS container, so a hibernation image would be encrypted. The kernel's gate still does not ask whether the disk is encrypted — see ADR-0007's experiment for what happened when this was tried.
 
 **The swapfile stays at 20 GiB** even though nothing now needs it to hold a 16 GiB image. It is already allocated, it is the right size if hibernation ever returns, and shrinking it reclaims ~5% of free space on a disk with 400 GB spare.
 

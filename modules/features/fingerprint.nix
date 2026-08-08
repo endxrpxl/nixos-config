@@ -13,9 +13,11 @@
   # `pam_fprintd` is `sufficient` and runs before `pam_unix`, so any surface
   # opted in below accepts a password too.
   #
-  # This is a convenience control, not a security one: the root filesystem is
-  # unencrypted, so anyone holding the machine reads it from a USB stick no
-  # matter what any of this says.
+  # This is a convenience control, not a security one: a fingerprint produces
+  # no key material, so it can never unlock at-rest protection and only ever
+  # acts on surfaces the machine is already running with the disk open. The
+  # decryption gate is the line that keeps it off the boot prompt — see
+  # docs/adr/0009-at-rest-protection-with-a-passphrase.md.
   #
   # Which surfaces are opted in, and why the greeter is not among them:
   # docs/adr/0008-fingerprint-surfaces-are-an-allowlist.md.
