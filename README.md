@@ -61,11 +61,18 @@ lsblk
 
 Everything below assumes `/dev/nvme0n1`. **This erases the disk.**
 
+The commands from here through the install run as root: `sudo -i` opens an
+interactive root shell (`#` prompt) so every command below drops its `sudo`
+prefix. Type `exit` when the install session is done.
+
 ```bash
-sudo parted /dev/nvme0n1 -- mklabel gpt
-sudo parted /dev/nvme0n1 -- mkpart ESP fat32 1MiB 1GiB
-sudo parted /dev/nvme0n1 -- set 1 esp on
-sudo parted /dev/nvme0n1 -- mkpart root ext4 1GiB 100%
+sudo -i
+parted /dev/nvme0n1
+# (parted) mklabel gpt
+# (parted) mkpart ESP fat32 1MiB 1GiB
+# (parted) set 1 esp on
+# (parted) mkpart root ext4 1GiB 100%
+# (parted) quit
 ```
 
 The 1 GiB ESP is deliberate: the bootloader is Limine keeping 5 generations, on
@@ -75,16 +82,16 @@ so the ESP must be vfat. The root partition is what gets encrypted; see
 `docs/adr/0009-at-rest-protection-with-a-passphrase.md`.
 
 ```bash
-sudo mkfs.fat -F 32 -n BOOT /dev/nvme0n1p1
+mkfs.fat -F 32 -n BOOT /dev/nvme0n1p1
 ```
 
 The root partition is LUKS-encrypted. Format it, unlock it as `cryptroot`, then
 put the filesystem *inside* the mapper device:
 
 ```bash
-sudo cryptsetup luksFormat /dev/nvme0n1p2
-sudo cryptsetup open /dev/nvme0n1p2 cryptroot
-sudo mkfs.ext4 -L nixos /dev/mapper/cryptroot
+cryptsetup luksFormat /dev/nvme0n1p2
+cryptsetup open /dev/nvme0n1p2 cryptroot
+mkfs.ext4 -L nixos /dev/mapper/cryptroot
 ```
 
 Add a recovery key in a second keyslot and store it in the Bitwarden vault —
@@ -92,23 +99,23 @@ reachable from the tower, the phone, or any device, and unreachable from a
 stolen, powered-off laptop (the vault is on the protected disk):
 
 ```bash
-sudo systemd-cryptenroll --recovery-key /dev/nvme0n1p2
+systemd-cryptenroll --recovery-key /dev/nvme0n1p2
 ```
 
 Mount them the way `hardware.nix` declares them — `/` ext4 behind LUKS, `/boot`
 vfat, no swap:
 
 ```bash
-sudo mount /dev/mapper/cryptroot /mnt
-sudo mkdir -p /mnt/boot
-sudo mount -o umask=077 /dev/disk/by-label/BOOT /mnt/boot
+mount /dev/mapper/cryptroot /mnt
+mkdir -p /mnt/boot
+mount -o umask=077 /dev/disk/by-label/BOOT /mnt/boot
 ```
 
 ### 3. Clone the repo to its expected path
 
 ```bash
-sudo mkdir -p /mnt/home/ansgar
-sudo nix --extra-experimental-features 'nix-command flakes' \
+mkdir -p /mnt/home/ansgar
+nix --extra-experimental-features 'nix-command flakes' \
   shell nixpkgs#git -c \
   git clone https://github.com/endxrpxl/nixos-config /mnt/home/ansgar/nixos-config
 cd /mnt/home/ansgar/nixos-config
@@ -117,7 +124,7 @@ cd /mnt/home/ansgar/nixos-config
 ### 4. Read the real hardware values
 
 ```bash
-sudo nix --extra-experimental-features 'nix-command flakes' \
+nix --extra-experimental-features 'nix-command flakes' \
   run .#regen-hardware -- --root /mnt laptop
 ```
 
@@ -154,7 +161,7 @@ git add -A
 ### 6. Install
 
 ```bash
-sudo nixos-install --root /mnt --flake /mnt/home/ansgar/nixos-config#laptop
+nixos-install --root /mnt --flake /mnt/home/ansgar/nixos-config#laptop
 ```
 
 The build pulls a full desktop closure and takes a while. `nixos-install`
@@ -163,8 +170,8 @@ prompts for the root password at the end.
 ### 7. First boot
 
 ```bash
-sudo umount -R /mnt
-sudo reboot
+umount -R /mnt
+reboot
 ```
 
 Remove the USB stick. Once booted, log in as root on a TTY and set up the user
