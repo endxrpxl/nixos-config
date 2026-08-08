@@ -1,0 +1,33 @@
+# This machine's entry point into noctalia's config, linked to
+# ~/.config/noctalia/config.toml.
+#
+# The shared half is included rather than autoloaded, so load order is written
+# down instead of following from the alphabetical order of two filenames. The
+# include loads first; anything set in this file overrides it.
+
+[include]
+files = [ "shared/base.toml" ]
+
+[hooks]
+# Tray apps autostart here rather than from niri's spawn-at-startup, which fires
+# every entry at once — including noctalia itself. All three of these register a
+# tray icon and start minimised, so racing the shell's StatusNotifierWatcher
+# leaves them running with no icon and no window. `started` fires after noctalia
+# has initialised, which orders them behind the tray host.
+#
+# setsid detaches each app from noctalia's process group, so restarting the
+# shell does not take them down with it.
+started = "setsid -f bitwarden; setsid -f discord; setsid -f spotify"
+
+# Surfaces that name a connector, and so can only be set per machine.
+[dock]
+monitors = [ "DP-3" ]
+
+[lockscreen]
+monitors = [ "DP-3", "HDMI-A-1" ]
+
+[notification]
+monitors = [ "DP-3" ]
+
+[osd]
+monitors = [ "DP-3" ]

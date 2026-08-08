@@ -1,0 +1,36 @@
+// Everything in niri's configuration that only this machine can know.
+//
+// Linked to ~/.config/niri/host.kdl, which the shared config.kdl includes at
+// the end. See docs/adr/0005-per-host-dotfiles-through-native-includes.md.
+
+// The XKB spelling of the `console.keyMap = "de"` in this host's
+// configuration.nix. Keep the two in step — neither can be derived from the
+// other. See docs/adr/0005-per-host-dotfiles-through-native-includes.md.
+input {
+    keyboard {
+        xkb {
+            layout "de"
+        }
+    }
+
+    touchpad {
+        tap
+        natural-scroll
+    }
+}
+
+// Host-specific because they name a backlight: only a machine with an internal
+// panel has one to dim. Both take noctalia's default monitor selector, which on
+// this host can only ever mean eDP-1.
+binds {
+    XF86AudioMute         allow-when-locked=true { spawn-sh "noctalia msg volume-mute"; }
+    XF86MonBrightnessUp   allow-when-locked=true { spawn-sh "noctalia msg brightness-up 5"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn-sh "noctalia msg brightness-down 5"; }
+}
+
+output "eDP-1" {
+    focus-at-startup
+    layout {
+        always-center-single-column
+    }
+}
