@@ -4,7 +4,7 @@ let
   # is the last step of migration; from then on, `nix flake check` fails if
   # the root filesystem stops being a LUKS mapper device. See
   # docs/adr/0009-at-rest-protection-with-a-passphrase.md.
-  luksExpected = false;
+  luksExpected = true;
 in
 {
   # Hardware in two halves. `_hardware-generated.nix` is machine truth, written
