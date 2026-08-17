@@ -31,13 +31,31 @@ end = [
     "battery",
     "session"
 ]
-margin_edge = 8
-margin_ends = 8
+margin_edge = 0
+margin_ends = 3
 start = [ "workspaces" ]
 widget_spacing = 8
 
 [desktop_widgets]
 enabled = false
+
+[idle]
+behavior_order = [ "screen-off", "lock", "lock-and-suspend" ]
+
+    [idle.behavior.lock]
+    action = "lock"
+    enabled = true
+    timeout = 600.0
+
+    [idle.behavior.lock-and-suspend]
+    action = "lock_and_suspend"
+    enabled = true
+    timeout = 900.0
+
+    [idle.behavior.screen-off]
+    action = "screen_off"
+    enabled = true
+    timeout = 300.0
 
 [location]
 auto_locate = true
@@ -48,26 +66,28 @@ enabled = true
 [theme]
 builtin = "Nord"
 mode = "dark"
-source = "builtin"
+source = "wallpaper"
 wallpaper_scheme = "m3-content"
 
-    [theme.templates]
-    # Noctalia themes these four by running templates/<id>/apply.sh whenever the
-    # colours change. Every entry here is a script that rewrites a file outside the
-    # store, so this list is a liability surface — keep it to what would be missed.
-    builtin_ids = [ "gtk3", "gtk4", "kitty", "niri", "starship" ]
+[theme.templates]
+builtin_ids = [ "gtk3", "gtk4", "kitty", "niri", "starship" ]
+community_ids = [ "opencode", "pi-agent", "zen-browser", "discord", "zed", "fastfetch", "zathura", "yazi" ]
 
 [wallpaper]
 directory = "~/nixos-config/.dotfiles/wallpapers"
 
     [wallpaper.default]
-    path = "/home/ansgar/nixos-config/.dotfiles/wallpapers/mage.png"
+    path = "/home/ansgar/nixos-config/.dotfiles/wallpapers/daniel-leone.jpg"
 
 [shell]
 avatar_path = "~/nixos-config/.dotfiles/avatar.png"
 font_family = "Roboto"
+launch_apps_as_systemd_services = true
 niri_overview_type_to_launch_enabled = true
 polkit_agent = true
+
+    [shell.greeter_sync]
+    auto_sync = true
 
     [shell.panel]
     clipboard_placement = "attached"
