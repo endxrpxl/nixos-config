@@ -15,6 +15,9 @@
 #
 # `noctalia config validate` checks this file.
 
+[audio]
+enable_sounds = true
+
 [bar.default]
 background_opacity = 0.5
 capsule_opacity = 0.5
