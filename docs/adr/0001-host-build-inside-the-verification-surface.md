@@ -10,6 +10,6 @@ Evaluation was never the gap. Before this work, `nix flake check` already evalua
 
 ## Consequences
 
-**A green check is not a working system.** This is a build gate, not a behavioural test. It proves the configuration produces a system: that every package referenced exists, that the overlays apply, that home-manager's files do not conflict. It does not prove the system boots, or that a single service starts.
+**A green check is not a working system.** This is a build gate, not a behavioral test. It proves the configuration produces a system: that every package referenced exists, that the overlays apply, that home-manager's files do not conflict. It does not prove the system boots, or that a single service starts.
 
 **The slowness is a cold-store cost only.** A second run on an unchanged tree is served from the store and rebuilds nothing, so the expensive case is the first build after a dependency moves — not everyday use.

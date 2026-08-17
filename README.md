@@ -203,7 +203,7 @@ Then rebuild and re-check. Once the flag is on, `nix flake check` fails if the
 root ever stops being a LUKS mapper device — wipe back to plaintext and re-run
 `regen-hardware` and the build catches it.
 
-On `laptop`, enrol the TPM so the disk unlocks without a passphrase. The
+On `laptop`, enroll the TPM so the disk unlocks without a passphrase. The
 sealed key lives in the TPM plus a keyslot in the LUKS header, so nothing
 declarative can do this — a fresh install prompts for the passphrase at every
 boot until this is run:
@@ -216,13 +216,13 @@ sudo systemd-cryptenroll --wipe-slot=tpm2 --tpm2-device=auto \
 The UUID is the one `regen-hardware` wrote into
 `boot.initrd.luks.devices."cryptroot".device` in
 `modules/hosts/laptop/_hardware-generated.nix`. The command asks for the
-existing passphrase, wipes any previous TPM enrolment and seals a fresh key
+existing passphrase, wipes any previous TPM enrollment and seals a fresh key
 against PCRs 4+9+12, so re-running it is always safe — and it is the fix when
 the TPM stops unsealing (a Limine package update moves PCR 4), which shows up
 as an unexpected passphrase prompt at boot. The passphrase and recovery
 keyslots stay enrolled as the fallback for exactly that case.
 
-On `laptop`, enrol a fingerprint. Nothing declarative can do this — the
+On `laptop`, enroll a fingerprint. Nothing declarative can do this — the
 templates live on the sensor, so a fresh install has a green `nix flake check`
 and a lock screen that ignores your finger until this is run:
 
@@ -232,7 +232,7 @@ fprintd-verify          # confirm the reader matches what was enrolled
 ```
 
 If `fprintd-enroll` reports no device, the reader may still be holding
-enrolments from a previous Windows install, or want newer firmware
+enrollments from a previous Windows install, or want newer firmware
 (`fwupdmgr get-updates`). Nothing downstream works until this command does.
 
 ### 8. Publish the result

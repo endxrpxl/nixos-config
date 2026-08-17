@@ -89,7 +89,7 @@
       colloid-icon-theme
 
       # noctalia's GTK template sets gtk-theme to adw-gtk3/adw-gtk3-dark, but
-      # only `if theme_exists` — without this it silently applies its colours to
+      # only `if theme_exists` — without this it silently applies its colors to
       # GTK4 apps and leaves default Adwaita around them, which reads as a bug
       # rather than as a missing package.
       adw-gtk3

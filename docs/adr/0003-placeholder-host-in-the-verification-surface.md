@@ -16,4 +16,4 @@ The `laptop` host was added before the machine existed. Its filesystem UUIDs and
 
 **Clearing it is one commit.** Paste the real values from `nixos-generate-config`, set the real keymap and state version, delete the warning. The warning text lists exactly these steps.
 
-**This is not a licence for more placeholders.** The practice is sound only because the fake values are unmistakable, self-announcing, and short-lived. A placeholder that outlives the wait for hardware, or one whose values look real, degrades the signal ADR 0001 rests on.
+**This is not a license for more placeholders.** The practice is sound only because the fake values are unmistakable, self-announcing, and short-lived. A placeholder that outlives the wait for hardware, or one whose values look real, degrades the signal ADR 0001 rests on.

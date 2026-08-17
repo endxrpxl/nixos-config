@@ -24,7 +24,7 @@ This repo is **single-context**:
 └── modules/
 ```
 
-Multi-context repos (signalled by a `CONTEXT-MAP.md` at the root) instead look like:
+Multi-context repos (signaled by a `CONTEXT-MAP.md` at the root) instead look like:
 
 ```
 /

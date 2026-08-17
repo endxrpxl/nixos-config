@@ -26,6 +26,6 @@ What kills it is the keyring. `pam_gnome_keyring` sits inside the `login` substa
 
 **The lock screen is where a fingerprint is actually worth having.** By the time it appears the session's keyring is already unlocked, which is exactly what the greeter cannot assume. That asymmetry is the whole reason one surface is in and the other is out.
 
-**Enrolment is not declarative.** `fprintd-enroll` has to be run on the machine; see the README. A host can build this module green and have no fingerprint stored.
+**Enrollment is not declarative.** `fprintd-enroll` has to be run on the machine; see the README. A host can build this module green and have no fingerprint stored.
 
 **Adding a surface is one line, and should be argued here first.** The allowlist makes the addition trivial to write, which is precisely why the reasoning belongs in this document rather than in the diff.

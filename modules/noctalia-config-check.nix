@@ -2,7 +2,7 @@
 {
   # Noctalia's authored TOML, checked by noctalia itself.
   #
-  # Noctalia ignores settings it does not recognise, so a renamed key is
+  # Noctalia ignores settings it does not recognize, so a renamed key is
   # otherwise invisible: the shell starts, the flake check passes, and the
   # setting simply stops doing anything. The package is unpinned and currently
   # a 5.0.0 beta, so that is the live risk on every nixpkgs bump.

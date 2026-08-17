@@ -1,7 +1,7 @@
 { self, lib, ... }: {
   # Nested under `lib` because Nix recognises only a fixed set of flake
   # outputs and warns about anything else on every `nix flake check`; `lib` is
-  # the recognised output that permits arbitrary contents.
+  # the recognized output that permits arbitrary contents.
   #
   # Declared as an option so each constant stays its own definition. Left
   # undeclared, flake-parts takes the whole attrset as one opaque value and
