@@ -11,20 +11,10 @@
     # the 32-bit drivers in `gaming`.
     hardware.graphics.enable = true;
 
-    hardware.bluetooth = {
-      enable = true;
-      powerOnBoot = false;
-    };
-
     programs.noctalia = {
       enable = true;
       recommendedServices.enable = true;
     };
-
-    # Read by noctalia's battery, power-profile and lid widgets. Nothing else
-    # here needs it, which is why it sits next to the shell rather than in
-    # `base`.
-    services.upower.enable = true;
 
     # The login screen. Only the settings no machine can differ on live here;
     # `keyboard.layout` is host identity and each host adds its own.
@@ -63,8 +53,6 @@
     services.flatpak = {
       enable = true;
     };
-
-    services.power-profiles-daemon.enable = true;
 
     environment.systemPackages = with pkgs; [
       kitty
