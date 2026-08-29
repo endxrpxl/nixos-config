@@ -9,7 +9,7 @@
       ./_hardware-generated.nix
 
       # ThinkPad T14 Gen 3, Intel (12th gen). nixos-hardware has no
-      # `intel-gen3` module — the Intel line jumps gen1 to gen6 — so the
+      # `intel-gen3` module. The Intel line jumps gen1 to gen6, so the
       # generic T14 module (backlight and touchpad quirks, SSD and laptop
       # defaults) is paired with the Intel CPU module, which also brings in
       # the integrated graphics configuration.

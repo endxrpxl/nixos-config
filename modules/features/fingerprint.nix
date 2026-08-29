@@ -5,8 +5,8 @@
   # daemon and nothing to use it.
   #
   # Two surfaces are wired up: the lock screen and polkit prompts. The lock
-  # screen needs nothing from PAM — noctalia 5 talks to fprintd over D-Bus
-  # directly — so the whole of that surface is `services.fprintd.enable` plus
+  # screen needs nothing from PAM. noctalia 5 talks to fprintd over D-Bus
+  # directly, so the whole of that surface is `services.fprintd.enable` plus
   # one key in the host's noctalia dotfile.
   #
   # A fingerprint is an alternative to the password, never a second factor.
@@ -22,7 +22,7 @@
   flake.nixosModules.fingerprint =
     { lib, ... }:
     {
-      # `services.fprintd.enable` does not wire PAM — the fprintd module ships
+      # `services.fprintd.enable` does not wire PAM. The fprintd module ships
       # only the daemon. PAM comes from `security.pam.services.<name>.fprintAuth`,
       # which *defaults* to `services.fprintd.enable`, so switching the daemon on
       # would otherwise arm a fingerprint across every PAM service at once: `su`,
@@ -51,7 +51,7 @@
       config = {
         services.fprintd.enable = true;
 
-        # The one PAM surface. Everything else — `login`, `sudo`, the greeter —
+        # The one PAM surface. Everything else (`login`, `sudo`, the greeter)
         # is left on the `mkDefault false` above.
         security.pam.services.polkit-1.fprintAuth = true;
       };

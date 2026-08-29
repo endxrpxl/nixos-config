@@ -4,7 +4,7 @@
   # must pass both:
   #
   #   1. Varying it per host would be a bug or a fleet-wide preference
-  #      deliberately held constant — not something a machine legitimately
+  #      deliberately held constant, not something a machine legitimately
   #      differs on. Anything that fails this is host identity.
   #   2. No feature module honestly owns it. Graphics belong to `desktop`,
   #      32-bit support to `gaming`, mDNS to `printing`. Anything that fails
@@ -46,7 +46,7 @@
         timeout = 1;
       };
 
-      # Tracks the newest kernel for hardware support — laptop-era hardware in
+      # Tracks the newest kernel for hardware support. Laptop-era hardware in
       # particular is usually supported before it reaches the LTS series.
       boot.kernelPackages = pkgs.linuxPackages_latest;
 
@@ -118,7 +118,7 @@
         flake = self.lib.repoDir;
       };
 
-      # nix-ld lets unpatched dynamically-linked binaries run — language
+      # nix-ld lets unpatched dynamically-linked binaries run. Language
       # toolchain downloads, `devenv` shells, editor-installed LSP servers.
       # The library list is the minimum such binaries reliably expect.
       programs.nix-ld.enable = true;
