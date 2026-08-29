@@ -92,6 +92,9 @@
 
       noto-fonts
     ];
+
+    # Needed for easy effects
+    programs.dconf.enable = true;
   };
 
   flake.homeModules.desktop =
@@ -161,5 +164,8 @@
         name = "Bibata-Modern-Ice";
         size = 20;
       };
+
+      # Enable easy effects
+      services.easyeffects.enable = true;
     };
 }
