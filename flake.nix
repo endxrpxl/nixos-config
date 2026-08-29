@@ -14,7 +14,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # noctalia itself is in nixpkgs, module included. The greeter is in nixpkgs
-    # too, but its NixOS module is not — that lives only here, so the greeter
+    # too, but its NixOS module is not. That lives only here, so the greeter
     # comes from upstream to keep package and module on one version.
     noctalia-greeter = {
       url = "github:noctalia-dev/noctalia-greeter";

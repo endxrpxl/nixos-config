@@ -1,4 +1,4 @@
-# GENERATED — do not edit. Written by `nix run .#regen-hardware`, which
+# GENERATED. Do not edit. Written by `nix run .#regen-hardware`, which
 # reruns `nixos-generate-config --show-hardware-config` on the machine this
 # host describes. Hand-written hardware configuration belongs next door in
 # hardware.nix; anything added here is lost on the next refresh.

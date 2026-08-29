@@ -41,7 +41,7 @@ sudo dd if=nixos-minimal-*.iso of=/dev/sdX bs=4M status=progress conv=fsync
 ```
 
 Boot it on the new machine. The installer's own version does not affect what
-gets installed — this flake tracks `nixos-unstable` regardless.
+gets installed. This flake tracks `nixos-unstable` regardless.
 
 If you need wifi in the installer:
 
@@ -83,7 +83,7 @@ mkfs.fat -F 32 -n BOOT /dev/nvme0n1p1
 mkfs.ext4 -L nixos /dev/nvme0n1p2
 ```
 
-Mount them the way `hardware.nix` declares them — `/` ext4, `/boot` vfat, no
+Mount them the way `hardware.nix` declares them: `/` ext4, `/boot` vfat, no
 swap:
 
 ```bash
@@ -110,11 +110,11 @@ nix --extra-experimental-features 'nix-command flakes' \
 ```
 
 This runs `nixos-generate-config` against the filesystems mounted under `/mnt`
-and overwrites `modules/hosts/laptop/_hardware-generated.nix` with the result —
+and overwrites `modules/hosts/laptop/_hardware-generated.nix` with the result:
 UUIDs, kernel modules and all. It prints the diff; read it before moving on.
 
-Nothing else in the repo is touched. The decisions that sit beside the scan —
-the `nixos-hardware` modules — live in `modules/hosts/laptop/hardware.nix` and
+Nothing else in the repo is touched. The decisions that sit beside the scan,
+the `nixos-hardware` modules, live in `modules/hosts/laptop/hardware.nix` and
 survive the refresh.
 
 ### 5. Set what the scan cannot know
@@ -127,7 +127,7 @@ Edit `modules/hosts/laptop/configuration.nix`:
 - Set `system.stateVersion` to the release actually being installed
   (`nixos-version` inside the installer), then never change it.
 
-Then stage everything — the flake source is the git index, and an untracked
+Then stage everything. The flake source is the git index, and an untracked
 file is invisible to evaluation:
 
 ```bash
@@ -151,7 +151,7 @@ reboot
 ```
 
 Remove the USB stick. Once booted, log in as root on a TTY and set up the user
-account — no password is declared in the configuration:
+account. No password is declared in the configuration:
 
 ```bash
 passwd ansgar
@@ -165,7 +165,7 @@ cd ~/nixos-config
 nix flake check
 ```
 
-On `laptop`, enrol a fingerprint. Nothing declarative can do this — the
+On `laptop`, enrol a fingerprint. Nothing declarative can do this. The
 templates live on the sensor, so a fresh install has a green `nix flake check`
 and a lock screen that ignores your finger until this is run:
 
@@ -202,7 +202,7 @@ git clone https://github.com/endxrpxl/nixos-config.git ~/nixos-config
 cd ~/nixos-config
 ```
 
-The path matters — see the note under *Before you start*.
+The path matters. See the note under *Before you start*.
 
 ### 2. Record the machine's hardware
 
@@ -236,7 +236,7 @@ systemctl reboot
 
 ## Day to day
 
-`nix flake check` is the success criterion — it builds every host's whole
+`nix flake check` is the success criterion. It builds every host's whole
 closure, so a cold run is slow by design. `nix fmt` fixes a formatting failure.
 
 ```bash

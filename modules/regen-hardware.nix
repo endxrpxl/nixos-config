@@ -1,11 +1,11 @@
 { lib, ... }:
 {
-  # `nix run .#regen-hardware [--root DIR] [host]` — rescan the machine it runs
+  # `nix run .#regen-hardware [--root DIR] [host]`. Rescan the machine it runs
   # on and rewrite that host's `_hardware-generated.nix`. The host defaults to
   # the running machine's hostname.
   #
   # The scan happens when a human asks for it, on the machine being described,
-  # and lands in git where the flake can see it — so every host stays buildable
+  # and lands in git where the flake can see it, so every host stays buildable
   # from anywhere and inside `nix flake check`.
   perSystem =
     { config, pkgs, ... }:
@@ -48,7 +48,7 @@
           trap 'rm -f "$scratch"' EXIT
 
           {
-            echo "# GENERATED — do not edit. Written by \`nix run .#regen-hardware\`, which"
+            echo "# GENERATED. Do not edit. Written by \`nix run .#regen-hardware\`, which"
             echo "# reruns \`nixos-generate-config --show-hardware-config\` on the machine this"
             echo "# host describes. Hand-written hardware configuration belongs next door in"
             echo "# hardware.nix; anything added here is lost on the next refresh."
