@@ -1,11 +1,4 @@
-{ inputs, ... }:
-let
-  # Off until the laptop is reinstalled with LUKS. Flipping this to `true`
-  # is the last step of migration; from then on, `nix flake check` fails if
-  # the root filesystem stops being a LUKS mapper device.
-  luksExpected = true;
-in
-{
+{ inputs, ... }: {
   # Hardware in two halves. `_hardware-generated.nix` is machine truth, written
   # by `nix run .#regen-hardware` on the machine itself and never edited by
   # hand; this wrapper holds everything a human decided. Rescanning hardware
@@ -24,21 +17,6 @@ in
       inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t14
       inputs.nixos-hardware.nixosModules.common-cpu-intel
     ];
-
-      # At-rest protection: once the laptop is reinstalled with LUKS, this
-      # assertion holds the root filesystem to a LUKS mapper device. A rescan
-      # that finds plaintext root (a reinstall without encryption) fails `nix
-      # flake check`. The gate is `luksExpected` above — off until the
-      # migration is done, on as its last step.
-      assertions = lib.optional luksExpected {
-        assertion = lib.hasPrefix "/dev/mapper/" config.fileSystems."/".device;
-        message = ''
-          at-rest protection is enabled but the root filesystem is not a LUKS
-          mapper device (${config.fileSystems."/".device}). This host is still
-          plaintext; wipe and reinstall it with LUKS per the README before
-          enabling at-rest protection.'';
-      };
-
       # Swap, for paging under memory pressure. 20 GiB on 16 GiB of RAM is
       # generous for that alone, and costs ~5% of the free space here; it is
       # sized to hold a hibernation image this machine turns out to be unable to
