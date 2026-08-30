@@ -1,18 +1,4 @@
 { self, inputs, ... }: {
-
-  # Policy every host shares. Two tests decide what lives here, and a setting
-  # must pass both:
-  #
-  #   1. Varying it per host would be a bug or a fleet-wide preference
-  #      deliberately held constant, not something a machine legitimately
-  #      differs on. Anything that fails this is host identity.
-  #   2. No feature module honestly owns it. Graphics belong to `desktop`,
-  #      32-bit support to `gaming`, mDNS to `printing`. Anything that fails
-  #      this belongs to that feature, not here.
-  #
-  # `base` is an ordinary feature module: hosts import it explicitly, exactly
-  # as they import `desktop` or `gaming`, and it carries no options of its own.
-  # See docs/adr/0002-hosts-declare-identity-only.md.
   flake.nixosModules.base =
     { pkgs, ... }:
     {
