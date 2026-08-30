@@ -110,8 +110,8 @@
       authored = self.lib.authoredDotfile config;
 
       # The per-host half of each config is selected by hostname rather than
-      # named in the host's home module: ADR-0002 makes the hostname the host's
-      # identity, and restating it here would be a second place to get it wrong.
+      # named in the host's home module: the hostname is the host's identity,
+      # and restating it here would be a second place to get it wrong.
       host = osConfig.networking.hostName;
     in
     {
@@ -141,8 +141,7 @@
           # EasyEffects writes these itself, so this re-authors its runtime
           # dumps. easyeffectsrc names the audio devices, which only the host
           # knows; the rc format has no include, so the host half is selected
-          # by this symlink, noctalia-style. The plugin files are shared. See
-          # docs/adr/0005-per-host-dotfiles-through-native-includes.md.
+          # by this symlink, noctalia-style. The plugin files are shared.
           "easyeffects/db/easyeffectsrc" = authored "easyeffects/db/hosts/${host}rc";
           "easyeffects/db/bassEnhancerrc" = authored "easyeffects/db/bassEnhancerrc";
           "easyeffects/db/deepfilternetrc" = authored "easyeffects/db/deepfilternetrc";

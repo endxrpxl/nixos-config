@@ -12,7 +12,6 @@
   #
   # `base` is an ordinary feature module: hosts import it explicitly, exactly
   # as they import `desktop` or `gaming`, and it carries no options of its own.
-  # See docs/adr/0002-hosts-declare-identity-only.md.
   flake.nixosModules.base =
     { pkgs, ... }:
     {

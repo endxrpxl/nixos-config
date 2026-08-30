@@ -2,8 +2,7 @@
 let
   # Off until the laptop is reinstalled with LUKS. Flipping this to `true`
   # is the last step of migration; from then on, `nix flake check` fails if
-  # the root filesystem stops being a LUKS mapper device. See
-  # docs/adr/0009-at-rest-protection-with-a-passphrase.md.
+  # the root filesystem stops being a LUKS mapper device.
   luksExpected = true;
 in
 {
@@ -43,7 +42,7 @@ in
       # Swap, for paging under memory pressure. 20 GiB on 16 GiB of RAM is
       # generous for that alone, and costs ~5% of the free space here; it is
       # sized to hold a hibernation image this machine turns out to be unable to
-      # write. See docs/adr/0006-no-hibernation-while-a-secretmem-user-runs.md.
+      # write.
       #
       # This sits in the hand-written half rather than in `power` because it is a
       # fact about this machine's RAM and disk, and it has to be read alongside

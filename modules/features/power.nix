@@ -11,7 +11,7 @@
   # machine: a second battery-powered host would import this unchanged.
   #
   # This machine cannot hibernate, so every verb below is one the kernel will
-  # accept. See docs/adr/0006-no-hibernation-while-a-secretmem-user-runs.md.
+  # accept.
   flake.nixosModules.power =
     { ... }:
     {

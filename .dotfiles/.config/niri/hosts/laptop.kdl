@@ -1,11 +1,11 @@
 // Everything in niri's configuration that only this machine can know.
 //
 // Linked to ~/.config/niri/host.kdl, which the shared config.kdl includes at
-// the end. See docs/adr/0005-per-host-dotfiles-through-native-includes.md.
+// the end.
 
 // The XKB spelling of the `console.keyMap = "de"` in this host's
 // configuration.nix. Keep the two in step — neither can be derived from the
-// other. See docs/adr/0005-per-host-dotfiles-through-native-includes.md.
+// other.
 input {
     keyboard {
         xkb {

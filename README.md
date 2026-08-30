@@ -1,8 +1,7 @@
 ## NixOS Configuration
 
 A single Nix flake that builds and verifies every host in this repo, together with
-its dotfiles. See `CONTEXT.md` for the vocabulary and `docs/adr/` for the
-decisions behind it.
+its dotfiles. See `CONTEXT.md` for the vocabulary.
 
 Hosts:
 
@@ -78,8 +77,7 @@ parted /dev/nvme0n1
 The 1 GiB ESP is deliberate: the bootloader is Limine keeping 5 generations, on
 `linuxPackages_latest`, so kernels and initrds add up. The ESP stays plaintext —
 Limine cannot decrypt, and UEFI firmware loads `BOOTX64.EFI` from a FAT volume,
-so the ESP must be vfat. The root partition is what gets encrypted; see
-`docs/adr/0009-at-rest-protection-with-a-passphrase.md`.
+so the ESP must be vfat. The root partition is what gets encrypted.
 
 ```bash
 mkfs.fat -F 32 -n BOOT /dev/nvme0n1p1
