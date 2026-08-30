@@ -15,6 +15,7 @@
       enable = true;
       recommendedServices.enable = true;
     };
+    hardware.bluetooth.powerOnBoot = false;
 
     # The login screen. Only the settings no machine can differ on live here;
     # `keyboard.layout` is host identity and each host adds its own.
