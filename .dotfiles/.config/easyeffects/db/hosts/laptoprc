@@ -1,8 +1,7 @@
 [StreamInputs]
 plugins=rnnoise#0,deepfilternet#0
+visiblePage=pluginsPage
 visiblePlugin=deepfilternet#0
 
 [StreamOutputs]
-plugins=bass_enhancer#0
 visiblePage=pluginsPage
-visiblePlugin=bass_enhancer#0
