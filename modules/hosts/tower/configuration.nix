@@ -25,7 +25,7 @@
     console.keyMap = "uk";
 
     # The XKB name for the same layout, for the login screen. It cannot be
-    # derived from `console.keyMap` above — that is a kbd keymap name, and
+    # derived from `console.keyMap` above. That is a kbd keymap name, and
     # "uk" is not an XKB layout.
     programs.noctalia-greeter.settings.keyboard.layout = "gb";
 

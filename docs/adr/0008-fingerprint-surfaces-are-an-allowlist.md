@@ -14,13 +14,13 @@ A fingerprint here is an alternative to the password, never a second factor: `pa
 
 **Rejected: mapping over `config.security.pam.services`.** The obvious spelling of "set this on every service" is infinite recursion: the names of the merged attrset would depend on a definition computed from those same names. Redeclaring the option's submodule type is what works.
 
-**Rejected: `login`.** The lock screen does not reach PAM for a fingerprint, so opting `login` in buys nothing there — and `login` is also what agetty uses, so it would put a blocking sensor prompt in front of every TTY login. Same reason `sudo` is absent.
+**Rejected: `login`.** The lock screen does not reach PAM for a fingerprint, so opting `login` in buys nothing there. `login` is also what agetty uses, so it would put a blocking sensor prompt in front of every TTY login. Same reason `sudo` is absent.
 
 **Rejected: the greeter.** This one was built, worked, and was reverted, and the obstacle is not fingerprints at all.
 
 `fprintAuth` on `greetd` is inert to begin with: the greetd module sets `useDefaultRules = false` and replaces the whole auth stack with `auth substack login`, and `fprintAuth` acts only through the default rules that disables. Adding a `pam_fprintd` rule to greetd's own stack ahead of the substack does work, and leaves `login` untouched so TTY logins keep their password.
 
-What kills it is the keyring. `pam_gnome_keyring` sits inside the `login` substack and unlocks the keyring with the password `pam_unix` just took. A `sufficient` fingerprint rule short-circuits PAM before the substack runs, so neither module ever sees a password — and the keyring is encrypted with that password, so a fingerprint cannot derive its key even in principle. Logging in with a finger therefore lands in a session that immediately asks for the password anyway, which is worse than typing it once. The ways round it blank the keyring password or store it on disk, and both give away more than the keystroke they save.
+What kills it is the keyring. `pam_gnome_keyring` sits inside the `login` substack and unlocks the keyring with the password `pam_unix` just took. A `sufficient` fingerprint rule short-circuits PAM before the substack runs, so neither module ever sees a password. The keyring is encrypted with that password, so a fingerprint cannot derive its key even in principle. Logging in with a finger therefore lands in a session that immediately asks for the password anyway, which is worse than typing it once. The ways round it blank the keyring password or store it on disk, and both give away more than the keystroke they save.
 
 ## Consequences
 

@@ -38,7 +38,7 @@
           ${pkgs.noctalia}/bin/noctalia config validate "$f" 2>&1 | tee out.txt
 
           # A bad value or broken syntax exits non-zero and is already fatal
-          # above. An *unknown* setting only warns and exits 0 — which is
+          # above. An *unknown* setting only warns and exits 0, which is
           # precisely the renamed-key case this check exists for, so the
           # warning has to be promoted to a failure by hand.
           if grep -qE "WARN|unknown setting" out.txt; then

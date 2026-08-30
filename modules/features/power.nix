@@ -1,8 +1,8 @@
 { ... }:
 {
   # Power policy: everything that decides how the machine spends energy and
-  # how it stops. The seam against `desktop` is what the decision acts on —
-  # this module powers the machine down (charge thresholds, lid, thermal and
+  # how it stops. The seam against `desktop` is what the decision acts on.
+  # This module powers the machine down (charge thresholds, lid, thermal and
   # runtime tuning); the shell blanks and locks the screen. Both read the same
   # battery through upower, which is why upower stays next to noctalia rather
   # than moving here.
@@ -23,7 +23,7 @@
       # BAT0 is hardcoded. This machine has exactly one battery and two USB-C
       # source PSUs that must not be touched, and a threshold that silently
       # stops applying is worse than one that shows up red in `systemctl
-      # status` — hence `set -eu` and a bare redirect, which fails the unit if
+      # status`, hence `set -eu` and a bare redirect, which fails the unit if
       # the path is gone rather than skipping it.
       systemd.services.battery-charge-thresholds = {
         description = "Apply battery charge thresholds";
@@ -56,7 +56,7 @@
       # Hotplug only. `add` does fire for a battery inserted into a running
       # machine, and re-running the unit is how the numbers get reapplied to a
       # cell that arrives with the vendor's defaults. It is not load-bearing
-      # for boot — see the `wantedBy` above for why that was a mistake.
+      # for boot. See the `wantedBy` above for why that was a mistake.
       services.udev.extraRules = ''
         ACTION=="add", SUBSYSTEM=="power_supply", KERNEL=="BAT0", TAG+="systemd", ENV{SYSTEMD_WANTS}+="battery-charge-thresholds.service"
       '';
@@ -71,7 +71,7 @@
       # the one setting here with a known bite: `--auto-tune` enables
       # autosuspend on USB devices indiscriminately, which classically
       # manifests as a keyboard, mouse or dock port that needs a jiggle after
-      # a few seconds idle. Accepted knowingly — the symptom is recognisable
+      # a few seconds idle. Accepted knowingly. The symptom is recognisable
       # and this is one line to revert.
       powerManagement.powertop.enable = true;
 

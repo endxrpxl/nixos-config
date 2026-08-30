@@ -7,24 +7,14 @@
     ];
 
     # A graphical session is what needs the GPU drivers, so this belongs to
-    # the feature rather than to shared policy — the same reasoning that puts
+    # the feature rather than to shared policy. Same reasoning that puts
     # the 32-bit drivers in `gaming`.
     hardware.graphics.enable = true;
-
-    hardware.bluetooth = {
-      enable = true;
-      powerOnBoot = false;
-    };
 
     programs.noctalia = {
       enable = true;
       recommendedServices.enable = true;
     };
-
-    # Read by noctalia's battery, power-profile and lid widgets. Nothing else
-    # here needs it, which is why it sits next to the shell rather than in
-    # `base`.
-    services.upower.enable = true;
 
     # The login screen. Only the settings no machine can differ on live here;
     # `keyboard.layout` is host identity and each host adds its own.
@@ -65,8 +55,6 @@
       enable = true;
     };
 
-    services.power-profiles-daemon.enable = true;
-
     environment.systemPackages = with pkgs; [
       kitty
       spotify
@@ -90,7 +78,7 @@
       colloid-icon-theme
 
       # noctalia's GTK template sets gtk-theme to adw-gtk3/adw-gtk3-dark, but
-      # only `if theme_exists` — without this it silently applies its colors to
+      # only `if theme_exists`. Without this it silently applies its colours to
       # GTK4 apps and leaves default Adwaita around them, which reads as a bug
       # rather than as a missing package.
       adw-gtk3
@@ -105,6 +93,9 @@
 
       noto-fonts
     ];
+
+    # easyeffects reads dconf for its preset paths.
+    programs.dconf.enable = true;
   };
 
   flake.homeModules.desktop =
@@ -136,7 +127,7 @@
 
           # Only the config half of noctalia's split is linked. The settings UI
           # writes ~/.local/state/noctalia/settings.toml, which is runtime state
-          # and stays out of this repo — so a tweak in the UI no longer dirties
+          # and stays out of this repo, so a tweak in the UI no longer dirties
           # the working tree, and keeping one means copying it across by hand
           # with `noctalia config export merged`.
           #
@@ -174,5 +165,7 @@
         name = "Bibata-Modern-Ice";
         size = 20;
       };
+
+      services.easyeffects.enable = true;
     };
 }

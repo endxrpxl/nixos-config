@@ -5,7 +5,7 @@
   #
   # Declared as an option so each constant stays its own definition. Left
   # undeclared, flake-parts takes the whole attrset as one opaque value and
-  # property annotations inside it — `mkDefault` below — are never resolved,
+  # property annotations inside it (`mkDefault` below) are never resolved,
   # leaking into call sites as attrsets.
   options.flake.lib = lib.mkOption {
     type = lib.types.lazyAttrsOf lib.types.raw;
@@ -30,7 +30,7 @@
     #
     # The check and the link do not read the same thing: the assertion looks in
     # the flake source, the link points at `dotConfig` on disk. It therefore
-    # catches a wrong path, not a checkout in the wrong place — clone the repo
+    # catches a wrong path, not a checkout in the wrong place. Clone the repo
     # anywhere but `repoDir` and every link dangles with the check still green.
     #
     # `config` is the home-manager configuration.

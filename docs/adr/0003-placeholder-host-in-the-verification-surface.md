@@ -6,7 +6,7 @@ The `laptop` host was added before the machine existed. Its filesystem UUIDs and
 
 ## Considered Options
 
-**Rejected: keep the laptop out of `nixosConfigurations` until real hardware arrives.** The `base` extraction in ADR 0002 depends on a second host to prove it — a seam with one consumer is a guess, and an unbuilt second host verifies nothing. Admitting the placeholder is what makes the extraction real work rather than speculation.
+**Rejected: keep the laptop out of `nixosConfigurations` until real hardware arrives.** The `base` extraction in ADR 0002 depends on a second host to prove it. A seam with one consumer is a guess, and an unbuilt second host verifies nothing. Admitting the placeholder is what makes the extraction real work rather than speculation.
 
 **Rejected: plausible-looking placeholder values.** Copying UUIDs from another machine, or inventing realistic ones, would build green exactly the same way while looking like finished work. The point of the all-zero values is that nobody, including a future reader in a hurry, can mistake them for real.
 
