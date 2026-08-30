@@ -50,6 +50,7 @@
 
     programs.niri.enable = true;
     programs.firefox.enable = true;
+    programs.thunderbird.enable = true;
 
     programs.obs-studio = {
       enable = true;
