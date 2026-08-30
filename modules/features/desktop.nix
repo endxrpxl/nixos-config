@@ -137,6 +137,16 @@
           # autoloads the root of its config directory but not subdirectories.
           "noctalia/config.toml" = authored "noctalia/hosts/${host}.toml";
           "noctalia/shared/base.toml" = authored "noctalia/shared/base.toml";
+
+          # EasyEffects writes these itself, so this re-authors its runtime
+          # dumps. easyeffectsrc names the audio devices, which only the host
+          # knows; the rc format has no include, so the host half is selected
+          # by this symlink, noctalia-style. The plugin files are shared. See
+          # docs/adr/0005-per-host-dotfiles-through-native-includes.md.
+          "easyeffects/db/easyeffectsrc" = authored "easyeffects/db/hosts/${host}rc";
+          "easyeffects/db/bassEnhancerrc" = authored "easyeffects/db/bassEnhancerrc";
+          "easyeffects/db/deepfilternetrc" = authored "easyeffects/db/deepfilternetrc";
+          "easyeffects/db/rnnoiserc" = authored "easyeffects/db/rnnoiserc";
         };
 
         userDirs = {
