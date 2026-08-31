@@ -1,20 +1,24 @@
-# The shared half of umbriel's window and layer rules, translated from niri's
-# window-rule and layer-rule blocks. This sits in its own include, listed
-# before host.toml in config.toml, because umbriel replaces rule arrays
+# The shared half of umbriel's window, workspace, and layer rules, translated
+# from niri's window-rule and layer-rule blocks. This sits in its own include,
+# listed before host.toml in config.toml, because umbriel replaces rule arrays
 # wholesale when merging includes: a host that needs to add a window rule
 # (only tower does) redefines the whole window_rule array in its host file,
 # and a rule array in the main config.toml could never be extended at all.
-# The layer rules are identical on every host, so no host file restates them.
+# The layer and workspace rules are identical on every host, so no host file
+# restates them.
 #
 # The window rules carry two jobs: the geometry rules translated from niri
 # (floating, blur), and the workspace routing that lands each installed app
 # on its labeled workspace. default_workspace counts positions on the output
 # the window is sent to — on laptop, the single static list in
-# hosts/laptop.toml, where 1..4 are web/code/chat/media; on tower the whole
+# hosts/laptop.toml, where 1..3 are web/code/chat+media; on tower the whole
 # array is restated in hosts/tower.toml with default_output added, because
 # the labels are split across the two monitors there. Every matching rule
 # contributes its settings, so the Picture-in-Picture rule floats a zen
-# window while the zen routing rule still sends it to web.
+# window while the zen routing rule still sends it to web. The [[workspace]]
+# rules carry the third job: the three labeled workspaces override the
+# scrolling base from config.toml to master, while the free spare workspaces
+# keep scrolling.
 
 # niri's firefox Picture-in-Picture rule, retargeted at zen: firefox is not
 # installed here and zen is this config's browser, and its PiP window
@@ -24,7 +28,8 @@ match.app_id = "^zen$"
 match.title = "^Picture-in-Picture$"
 default_floating = true
 
-# web: the browser and its vault.
+# web: the browser and its vault, which floats centered at a third of the
+# screen's width and half its height (fractions of the usable area).
 [[window_rule]]
 match.app_id = "^zen$"
 default_workspace = 1
@@ -32,6 +37,10 @@ default_workspace = 1
 [[window_rule]]
 match.app_id = "^bitwarden$"
 default_workspace = 1
+default_floating = true
+default_width = 0.333
+default_height = 0.5
+default_position = { x = 0, y = 0 }
 
 # code: the terminal, the editor, and emacs.
 [[window_rule]]
@@ -46,24 +55,18 @@ default_workspace = 2
 match.app_id = "^emacs$"
 default_workspace = 2
 
-# chat.
+# chat+media: Discord and Spotify share the one workspace, as they sat side
+# by side on niri. Spotify is matched by title, as niri matched it.
 [[window_rule]]
 match.app_id = "^discord$"
 default_workspace = 3
 
-# media: Spotify by title, as niri matched it, and VLC — the latter through
-# xwayland, so if its app_id arrives spelled differently the window simply
-# follows focus instead.
 [[window_rule]]
 match.title = "^Spotify$"
-default_workspace = 4
+default_workspace = 3
 
-[[window_rule]]
-match.app_id = "^vlc$"
-default_workspace = 4
-
-# The utilities — nautilus, evince, loupe, file-roller, libreoffice — are
-# deliberately unrouted: they open wherever the focus already is.
+# The utilities — nautilus, evince, loupe, file-roller, libreoffice, and
+# VLC — are deliberately unrouted: they open wherever the focus already is.
 
 # niri's catch-all `window-rule { background-effect { blur true; xray false } }`:
 # blur behind every window, of the real window stack rather than the
@@ -71,6 +74,22 @@ default_workspace = 4
 [[window_rule]]
 blur = true
 blur_optimized = false
+
+# The three labeled workspaces are master; every other workspace — the free
+# digit spares 4/5/6 — inherits the scrolling base from config.toml's
+# [layout]. The names are unique across outputs on every host, so no rule
+# needs an output restriction.
+[[workspace]]
+name = "\uF0AC"
+layout.mode = "master"
+
+[[workspace]]
+name = "\uF121"
+layout.mode = "master"
+
+[[workspace]]
+name = "\uF086"
+layout.mode = "master"
 
 # Noctalia's shell surfaces, blurred the way its own umbriel example tunes
 # them: the namespace regex is niri's, blur_optimized = false is niri's

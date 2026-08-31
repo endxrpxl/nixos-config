@@ -18,39 +18,32 @@ layout = "de"
 tap = true
 natural_scroll = true
 
-# The four labeled workspaces, as Nerd Font glyphs rather than words —
-# RobotoMono Nerd Font is installed (fonts.packages), so the bar and the
-# overview pick the icons up through font fallback. The legend:
-#   \uF0AC globe     — web:   zen, bitwarden
-#   \uF121 </>       — code:  kitty, zed, emacs
-#   \uF086 comments  — chat:  discord
-#   \uF001 music     — media: spotify, vlc
+# The three labeled workspaces plus two free spares, as Nerd Font glyphs for
+# the labels rather than words — RobotoMono Nerd Font is installed
+# (fonts.packages), so the bar and the overview pick the icons up through
+# font fallback. The legend:
+#   \uF0AC globe     — web:       zen, bitwarden (floating)
+#   \uF121 </>       — code:      kitty, zed, emacs
+#   \uF086 comments  — chat+media: discord, spotify
+#   4, 5             — free:      anything
 # The glyphs are the workspace names, unique across outputs on every host,
-# so config.toml's Mod+1..4 select them from any monitor by the same
-# escapes; rules.toml's window rules land the apps on positions 1..4 and
-# never name the workspaces at all. Only the list is set: the panel's mode
-# and scale are probed, and a single output needs no position. The static
-# list replaces the dynamic numbered strip, so there is no trailing empty
-# workspace and workspace-next stops at the last label instead of opening
-# a fresh one.
+# so config.toml's Mod+1..3 select them from any monitor by the same
+# escapes; rules.toml's window rules land the apps on positions 1..3 and
+# never name the workspaces at all. The digits are plain names, so Mod+4 and
+# Mod+5 pick the spares by name. Only the list is set: the panel's mode and
+# scale are probed, and a single output needs no position. The static list
+# replaces the dynamic numbered strip, so there is no trailing empty
+# workspace and workspace-next stops at the last label instead of opening a
+# fresh one.
 [output."eDP-1"]
-workspaces = ["\uF0AC", "\uF121", "\uF086", "\uF001"]
+workspaces = ["\uF0AC", "\uF121", "\uF086", "4", "5"]
 
 # Host-specific because they name a backlight: only a machine with an internal
 # panel has one to dim. Both take noctalia's default monitor selector, which
 # on this host can only ever mean eDP-1. niri marked these
-# allow-when-locked=true; this umbriel version has no per-bind
-# allow-when-locked, so they are ordinary binds.
+# allow-when-locked=true, so they are too and stay reachable at a locked
+# session.
 [keybinds]
-"XF86AudioMute" = "spawn:noctalia msg volume-mute"
-"XF86MonBrightnessUp" = "spawn:noctalia msg brightness-up 5"
-"XF86MonBrightnessDown" = "spawn:noctalia msg brightness-down 5"
-
-# niri's `output "eDP-1" { focus-at-startup; layout { always-center-single-column } }`.
-# Umbriel has no focus-at-startup — and with only one output, nothing else
-# could be focused anyway — and no per-output layout section, so the centering
-# half lives in the global scrolling layout below.
-[layout.scrolling]
-# niri's always-center-single-column, approximated: center the whole strip
-# whenever it is narrower than the viewport, which is what a lone column is.
-center_underfull_strip = true
+"XF86AudioMute" = { action = "spawn:noctalia msg volume-mute", allow_when_locked = true }
+"XF86MonBrightnessUp" = { action = "spawn:noctalia msg brightness-up 5", allow_when_locked = true }
+"XF86MonBrightnessDown" = { action = "spawn:noctalia msg brightness-down 5", allow_when_locked = true }

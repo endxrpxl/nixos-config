@@ -76,21 +76,27 @@ contrast = 1.0
 saturation = 1.0
 
 # niri is a scrolling tiler, and umbriel's scrolling layout is its
-# counterpart. `gaps 8` maps straight over. width_presets is umbriel's name
-# for the preset column widths niri cycles through with Mod+R — and the same
-# presets the width-mode digits 1/2/3 jump to.
+# counterpart, so scrolling is the base mode every workspace inherits — the
+# free spare workspaces, and any future one, are scrolling by default. The
+# three labeled workspaces override to master through the [[workspace]]
+# rules in rules.toml. `gaps 8` maps straight over. width_presets is
+# umbriel's name for the preset column widths niri cycles through with Mod+R
+# — and the same presets the width-mode digits 1/2/3 jump to.
 [layout]
-mode = "dwindle"
+mode = "scrolling"
 gap = 8
 width_presets = [0.333, 0.5, 0.667]
 
 [keybinds]
 # A vim-style grammar rather than a translation of niri's binds. The home-row
 # letters act on the focused workspace — H/J/K/L focus, Shift+H/J/K/L moves —
-# the arrow keys reach the other monitor, U/I walks workspaces, and Shift
-# always turns "focus" into "take the window with you", so that no chord needs
-# Ctrl anywhere outside Ctrl+Alt+Delete. The one modal piece is width mode on
-# Mod+W, umbriel's answer to vim's operator-pending.
+# the arrow keys reach the other monitor, U/I move a window between the
+# master and stack areas, and Shift always turns "focus" into "take the
+# window with you", so that no chord needs Ctrl anywhere outside
+# Ctrl+Alt+Delete. The one modal piece is width mode on Mod+W, umbriel's
+# answer to vim's operator-pending. Every navigation bind is deterministic —
+# Mod+1..6 always land on the same workspace — so nothing scrolls through
+# the workspace stack.
 #
 # Umbriel's compiled-in defaults already speak much of this grammar —
 # Mod+Shift+H/J/K/L moves, Mod+Comma / Mod+Period consume and expel, Mod+P
@@ -100,8 +106,8 @@ width_presets = [0.333, 0.5, 0.667]
 # switch off, for the record: Mod+F1 focuses the next window, Mod+Ctrl+F
 # maximizes, Mod+WheelUp/Down focus the neighbouring columns (the old wheel
 # binds are gone; those two defaults are all that remains of the mouse
-# here), and the digit defaults past 4 are silent no-ops now that exactly
-# four labeled workspaces exist.
+# here), and the digit defaults past 6 are silent no-ops now that the
+# workspaces run web, code, chat+media, and the free spares 4 through 6.
 #
 # Chords are case-insensitive and match the raw level-0 key as a fallback, so
 # symbols reachable only through Shift on one layout still match on the
@@ -122,17 +128,16 @@ width_presets = [0.333, 0.5, 0.667]
 "Ctrl+Alt+Delete" = "session-quit"
 
 # Volume and media keys, noctalia-driven as on niri, and free to repeat so a
-# held key ramps the volume. niri marked these allow-when-locked=true; this
-# umbriel version still has no per-bind allow-when-locked (the table form
-# knows only `action` and `repeat` — the current docs describe a newer build),
-# so they are ordinary binds and stop at a locked session. XF86AudioMute is
-# deliberately absent: it toggles the *microphone* on tower and the speakers
-# on laptop, so it is host identity and lives in hosts/*.toml.
-"XF86AudioRaiseVolume" = "spawn:noctalia msg volume-up 5"
-"XF86AudioLowerVolume" = "spawn:noctalia msg volume-down 5"
-"XF86AudioPrev" = "spawn:noctalia msg media previous"
-"XF86AudioPlay" = "spawn:noctalia msg media toggle"
-"XF86AudioNext" = "spawn:noctalia msg media next"
+# held key ramps the volume. niri marked these allow-when-locked=true, so
+# they are too — volume, playback, and brightness stay reachable at a locked
+# session. XF86AudioMute is deliberately absent: it toggles the *microphone*
+# on tower and the speakers on laptop, so it is host identity and lives in
+# hosts/*.toml.
+"XF86AudioRaiseVolume" = { action = "spawn:noctalia msg volume-up 5", allow_when_locked = true }
+"XF86AudioLowerVolume" = { action = "spawn:noctalia msg volume-down 5", allow_when_locked = true }
+"XF86AudioPrev" = { action = "spawn:noctalia msg media previous", allow_when_locked = true }
+"XF86AudioPlay" = { action = "spawn:noctalia msg media toggle", allow_when_locked = true }
+"XF86AudioNext" = { action = "spawn:noctalia msg media next", allow_when_locked = true }
 
 # Umbriel's cheatsheet is niri's hotkey-overlay; one keystroke away. Overview
 # and close keep repeat=false so a held key cannot thrash them.
@@ -174,47 +179,49 @@ width_presets = [0.333, 0.5, 0.667]
 "Mod+Shift+Up" = "column-move-to-output-up"
 "Mod+Shift+Right" = "column-move-to-output-right"
 
-# Workspaces: U/I walk the focused output's stack. The labeled lists in the
-# host files are static, so there is no trailing empty workspace anymore —
-# U at the last label is a no-op rather than a fresh workspace, which makes
-# the digits below the primary navigation. niri's Page_Down / Page_Up pair
-# duplicated this and stays dropped. Shift carries the focused window along
-# (window-scoped; no column-scoped move exists at this umbriel version,
-# where niri moved the whole column).
-"Mod+U" = "workspace-next"
-"Mod+I" = "workspace-previous"
-"Mod+Shift+U" = "window-move-to-workspace-next"
-"Mod+Shift+I" = "window-move-to-workspace-previous"
+# Master layout: U and I move the focused window between the master and
+# stack areas one press at a time. U is window-consume-left — master sits on
+# the left, the default position, so a stack window moves into master — and
+# I is window-consume-right, which moves a master window back into the
+# stack; each is a no-op on a window already where it would send it. The
+# keys line up with the areas: U is left of I on the top row, master is left
+# of stack. Together they replace niri's workspace-next/previous pair, which
+# scrolled through the stack non-deterministically — the digits below are
+# the deterministic navigation now. repeat=false so a held key cannot thrash
+# windows between the areas.
+"Mod+U" = { action = "window-consume-left", repeat = false }
+"Mod+I" = { action = "window-consume-right", repeat = false }
 
-# The four labels, by name rather than by position: Nerd Font glyphs, the
-# same ones the host files' workspaces lists carry — \uF0AC globe is web,
-# \uF121 </> is code, \uF086 comments is chat, \uF001 music is media. The
-# names are unique across outputs on every host, so these pick the same
-# workspace from any monitor — on tower Mod+3 from DP-3 lands on HDMI-A-1's
-# chat, cursor and all. Shift carries the focused window along and follows
-# it there. These replace niri's index binds and their Mod+Ctrl+ move
-# forms; the digits past 4 are gone with the dynamic strip they numbered.
+# The three labels plus the free spares, by name rather than by position:
+# Nerd Font glyphs for the labels — \uF0AC globe is web, \uF121 </> is code,
+# \uF086 comments is chat+media (discord and Spotify share it) — and plain
+# digits for the spares, which are free for anything. The names are unique
+# across outputs on every host, so these pick the same workspace from any
+# monitor — on tower Mod+3 from DP-3 lands on HDMI-A-1's chat, cursor and
+# all. 4 and 5 live on DP-3, 6 on HDMI-A-1; on laptop there are no spares
+# past 5, so Mod+6 is a silent no-op there. Shift carries the focused window
+# along and follows it there. These replace niri's index binds and their
+# Mod+Ctrl+ move forms; the digits past 6 are gone with the strip they
+# numbered.
 "Mod+1" = "workspace-switch:\uF0AC"
 "Mod+2" = "workspace-switch:\uF121"
 "Mod+3" = "workspace-switch:\uF086"
-"Mod+4" = "workspace-switch:\uF001"
+"Mod+4" = "workspace-switch:4"
+"Mod+5" = "workspace-switch:5"
+"Mod+6" = "workspace-switch:6"
 "Mod+Shift+1" = "window-move-to-workspace:\uF0AC"
 "Mod+Shift+2" = "window-move-to-workspace:\uF121"
 "Mod+Shift+3" = "window-move-to-workspace:\uF086"
-"Mod+Shift+4" = "window-move-to-workspace:\uF001"
+"Mod+Shift+4" = "window-move-to-workspace:4"
+"Mod+Shift+5" = "window-move-to-workspace:5"
+"Mod+Shift+6" = "window-move-to-workspace:6"
 
-# Layout: toggle the focused workspace between the scrolling strip and a
-# dwindle tree, workspace by workspace. The override lasts until a config
-# reload reasserts the [layout] mode above.
+# Layout: toggle the focused workspace among scrolling, dwindle, and master,
+# workspace by workspace. The override lasts until a config reload reasserts
+# the [layout] mode above (scrolling, or the master override in rules.toml).
 "Mod+D" = "workspace-set-layout:toggle"
 
-# Column shape. Comma pulls the focused window into the column to the left,
-# Period pops it out to the right — together they cover niri's
-# consume-or-expel pair, and they are umbriel's own defaults, replacing the
-# old bracket binds (which on laptop's German layout sat behind AltGr
-# anyway). R cycles the width presets from [layout].
-"Mod+Comma" = "window-consume-left"
-"Mod+Period" = "window-expel-right"
+# R cycles the width presets from [layout].
 "Mod+R" = "window-cycle-width"
 
 # Window state. F maximizes the column and Shift+F is the stronger
@@ -241,18 +248,19 @@ width_presets = [0.333, 0.5, 0.667]
 
 # Width mode: the one modal piece, after vim's operator-pending. Mod+W
 # enters; then plain, unmodified keys act on the focused column's width —
-# 1/2/3 jump to a third/half/two-thirds, 4 to full width (the same presets
-# [layout] configures and R cycles), and C centers a floating window. The
-# mode holds until Escape, and every other key — Mod chords included —
-# falls through to the focused window, so a stray keystroke lands in the app
-# rather than the compositor. This umbriel version has no one-shot submap
-# exits (the table form knows only `action` and `repeat`), so sticky-until-
-# Escape is the design, not a compromise.
+# 1/2/3 jump to a third/half/two-thirds (the same presets [layout]
+# configures and R cycles), and C centers a floating window. Each is
+# one-shot: the post-action `submap = "reset"` drops the mode right after
+# the key fires, and a bind with a post-action transition never repeats, so
+# a single tap always does exactly one thing. Escape is the one key that
+# always leaves the mode without acting; every other key — Mod chords
+# included — falls through to the focused window, so a stray keystroke lands
+# in the app rather than the compositor.
 "Mod+W" = { action = "submap:width", repeat = false }
-"submap[width],1" = "window-set-width:0.333"
-"submap[width],2" = "window-set-width:0.5"
-"submap[width],3" = "window-set-width:0.667"
-"submap[width],C" = "window-center"
+"submap[width],1" = { action = "window-set-width:0.333", submap = "reset" }
+"submap[width],2" = { action = "window-set-width:0.5", submap = "reset" }
+"submap[width],3" = { action = "window-set-width:0.667", submap = "reset" }
+"submap[width],C" = { action = "window-center", submap = "reset" }
 
 # The emergency exit. A submap:reset bound here in the default context
 # matches inside every submap, and when no submap is active the action fails

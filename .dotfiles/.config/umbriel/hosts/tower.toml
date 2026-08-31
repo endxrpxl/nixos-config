@@ -17,33 +17,34 @@ layout = "gb,gb"
 variant = ",intl"
 
 # niri's tower bind: the mute key toggles the *microphone*, not the speakers.
-# niri marked it allow-when-locked=true; this umbriel version has no per-bind
-# allow-when-locked, so it is an ordinary bind.
+# niri marked it allow-when-locked=true, so it is too and stays reachable at
+# a locked session.
 [keybinds]
-"XF86AudioMute" = "spawn:noctalia msg mic-mute"
+"XF86AudioMute" = { action = "spawn:noctalia msg mic-mute", allow_when_locked = true }
 
 # niri's outputs, modes and positions carried over. Umbriel has no
 # focus-at-startup; DP-3 stays the primary by position in any case. The
-# workspace labels are glyphs — the legend lives in hosts/laptop.toml —
-# split the way the old window rules already shelved things: globe and </>
-# (web, code) on the ultrawide, comments and music (chat, media) on the
-# side screen, so Discord and Spotify keep landing where they always did.
-# Static lists mean no trailing empty workspace on either monitor, and
-# workspace-next stops at each output's last label.
+# labels are glyphs — the legend lives in hosts/laptop.toml — with the free
+# spares as plain digits, split the way the old window rules already shelved
+# things: globe and </> (web, code) plus the 4 and 5 spares on the
+# ultrawide, comments (chat+media, where Discord and Spotify already lived)
+# plus the 6 spare on the side screen. Static lists mean no trailing empty
+# workspace on either monitor, and workspace-next stops at each output's
+# last label.
 [output."DP-3"]
 mode = "3440x1440@165.001"
 scale = 1
 position = [0, 1080]
-workspaces = ["\uF0AC", "\uF121"]
+workspaces = ["\uF0AC", "\uF121", "4", "5"]
 
 [output."HDMI-A-1"]
 mode = "1920x1080@120.000"
 position = [771, 0]
-workspaces = ["\uF086", "\uF001"]
+workspaces = ["\uF086", "6"]
 
 # niri's DP-3 `always-center-single-column`; umbriel has no per-output layout
-# section, so this applies to both outputs. HDMI-A-1 only ever carries Spotify
-# and Discord, so the difference is invisible.
+# section, so this applies to both outputs. Only the free spares are
+# scrolling, so the difference only ever shows there.
 [layout.scrolling]
 center_underfull_strip = true
 
@@ -55,8 +56,9 @@ center_underfull_strip = true
 # The routing rules restate rules.toml's app routing with default_output
 # added, because the labels are split across monitors here: default_workspace
 # counts positions on the output the rule names, so 1..2 on DP-3 are
-# web/code and 1..2 on HDMI-A-1 are chat/media. The layer rules are not
-# restated because this file adds none.
+# web/code (with the 4 and 5 spares after them) and 1 on HDMI-A-1 is
+# chat+media (with the 6 spare after it). The layer rules are not restated
+# because this file adds none.
 
 # rules.toml's Picture-in-Picture rule, restated.
 [[window_rule]]
@@ -64,7 +66,7 @@ match.app_id = "^zen$"
 match.title = "^Picture-in-Picture$"
 default_floating = true
 
-# web, on the ultrawide.
+# web, on the ultrawide — bitwarden floating, as in rules.toml.
 [[window_rule]]
 match.app_id = "^zen$"
 default_output = "DP-3"
@@ -74,6 +76,10 @@ default_workspace = 1
 match.app_id = "^bitwarden$"
 default_output = "DP-3"
 default_workspace = 1
+default_floating = true
+default_width = 0.333
+default_height = 0.5
+default_position = { x = 0, y = 0 }
 
 # code, on the ultrawide.
 [[window_rule]]
@@ -91,24 +97,18 @@ match.app_id = "^emacs$"
 default_output = "DP-3"
 default_workspace = 2
 
-# chat, on the side screen, where Discord already lived — the old
-# output-only rule sent it to HDMI-A-1's active workspace; this one lands
-# it on the label.
+# chat+media, on the side screen, where Discord and Spotify already lived —
+# the old output-only rule sent them to HDMI-A-1's active workspace; this one
+# lands them on the label. Spotify is matched by title, as niri matched it.
 [[window_rule]]
 match.app_id = "^discord$"
 default_output = "HDMI-A-1"
 default_workspace = 1
 
-# media, on the side screen: Spotify by title, as niri matched it, and VLC.
 [[window_rule]]
 match.title = "^Spotify$"
 default_output = "HDMI-A-1"
-default_workspace = 2
-
-[[window_rule]]
-match.app_id = "^vlc$"
-default_output = "HDMI-A-1"
-default_workspace = 2
+default_workspace = 1
 
 # rules.toml's catch-all blur, restated.
 [[window_rule]]
