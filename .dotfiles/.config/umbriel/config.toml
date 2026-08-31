@@ -80,7 +80,7 @@ saturation = 1.0
 # for the preset column widths niri cycles through with Mod+R — and the same
 # presets the width-mode digits 1/2/3 jump to.
 [layout]
-mode = "scrolling"
+mode = "dwindle"
 gap = 8
 width_presets = [0.333, 0.5, 0.667]
 
@@ -109,11 +109,9 @@ width_presets = [0.333, 0.5, 0.667]
 
 # Programs. Tapping Super alone opens the launcher: the bind fires on key
 # release, and any other key, button, or scroll while it is held cancels it,
-# so no chord is disturbed. Mod+Space stays as the two-handed spelling, and
-# Mod+T keeps niri's terminal bind.
+# so no chord is disturbed. Mod+T keeps niri's terminal bind.
 "Mod" = "spawn:noctalia msg panel-toggle launcher"
 "Mod+T" = { action = "spawn:kitty", repeat = false }
-"Mod+Space" = { action = "spawn:noctalia msg panel-toggle launcher", repeat = false }
 
 # Lock and logout live in noctalia's session panel rather than a wall of
 # chords: the panel's first button is the lock niri's Mod+Alt+L reached, and
@@ -122,9 +120,6 @@ width_presets = [0.333, 0.5, 0.667]
 # keyboard-only quit with its confirmation dialog.
 "Mod+Escape" = { action = "spawn:noctalia msg panel-toggle session", repeat = false }
 "Ctrl+Alt+Delete" = "session-quit"
-
-# Powers off the monitors; any input turns them back on, as on niri.
-"Mod+Shift+P" = "dpms-off"
 
 # Volume and media keys, noctalia-driven as on niri, and free to repeat so a
 # held key ramps the volume. niri marked these allow-when-locked=true; this
@@ -222,13 +217,6 @@ width_presets = [0.333, 0.5, 0.667]
 "Mod+Period" = "window-expel-right"
 "Mod+R" = "window-cycle-width"
 
-# Fine width adjustments, niri's ±10%. Minus sits unshifted on both layouts;
-# the equal key does not (it is Shift+0 on the German laptop), so the grow
-# bind takes the Shift+Equal spelling, which matches the = key on gb through
-# the raw-key fallback and on de through the effective symbol.
-"Mod+Minus" = "window-modify-width:-0.1"
-"Mod+Shift+Equal" = "window-modify-width:0.1"
-
 # Window state. F maximizes the column and Shift+F is the stronger
 # fullscreen; V floats; P pins (above fullscreen, visible on every
 # workspace); M fills the screen edge to edge with no gaps or struts. P and
@@ -264,7 +252,6 @@ width_presets = [0.333, 0.5, 0.667]
 "submap[width],1" = "window-set-width:0.333"
 "submap[width],2" = "window-set-width:0.5"
 "submap[width],3" = "window-set-width:0.667"
-"submap[width],4" = "window-set-width:1.0"
 "submap[width],C" = "window-center"
 
 # The emergency exit. A submap:reset bound here in the default context

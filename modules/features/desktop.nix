@@ -4,6 +4,7 @@
       self.nixosModules.zen
       inputs.nix-flatpak.nixosModules.nix-flatpak
       inputs.noctalia-greeter.nixosModules.default
+      inputs.umbriel.nixosModules.default
     ];
 
     # A graphical session is what needs the GPU drivers, so this belongs to
