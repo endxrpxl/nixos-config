@@ -220,7 +220,6 @@ width_presets = [0.333, 0.5, 0.667]
 "Mod+Shift+F" = "window-toggle-fullscreen"
 "Mod+V" = "window-toggle-floating"
 "Mod+P" = "window-toggle-pinned"
-"Mod+M" = "window-toggle-maximize-to-edges"
 
 # Scratchpads: Tab shows and hides the stash — the alternate buffer, in vim
 # terms — Shift+Tab cycles through it once it is visible, S stashes the
