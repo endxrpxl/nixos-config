@@ -1,0 +1,281 @@
+# The shared half of the umbriel configuration. Everything only one machine can
+# know — keyboard layout, outputs, host-only keybinds — lives in the per-host
+# file, hosts/<host>.toml, linked to ~/.config/umbriel/host.toml.
+#
+# Everything here except the keybinds is a translation of niri's config.kdl;
+# the keybinds are a vim-style redesign of their own, and their section comment
+# tells that story.
+#
+# Include order is the reverse of niri's: includes load first, in list order,
+# and everything in this file overrides all of them. A host file can therefore
+# only add keys this file does not set, never override them. It is also why
+# the shared window and layer rules live in rules.toml rather than here:
+# umbriel merges tables key-by-key but replaces arrays wholesale, so tower's
+# host file replaces rules.toml's window_rule array with its own complete
+# list. A rule array defined in this main file could never be extended at all.
+#
+# "noctalia.toml" is listed for the same reason niri's config.kdl carries its
+# own `include "noctalia.kdl"`: noctalia's umbriel template rewrites the files
+# line to keep "noctalia.toml" last, and config.toml is a symlink into this
+# repo, so letting it write would dirty the working tree at runtime. The line
+# below is already in the exact shape that template's apply.sh produces —
+# single line, one space after each comma, no space before the closing
+# bracket, noctalia.toml last — so its rewrite is a byte-identical no-op.
+# Keep it that way. noctalia.toml itself is seeded empty by home activation
+# and written for real by the template on every theme change.
+
+[include]
+files = ["rules.toml", "host.toml", "noctalia.toml"]
+
+[general]
+# niri's `spawn-at-startup "noctalia"`. Tray apps stay in noctalia's
+# hooks.started for the same ordering reason as on niri; see
+# .dotfiles/.config/noctalia/hosts/*.toml.
+autostart = ["noctalia"]
+
+# niri's `hotkey-overlay { skip-at-startup }`. The cheatsheet is still one
+# keystroke away on Mod+Shift+Slash.
+show_cheatsheet = false
+
+# niri's `debug { honor-xdg-activation-with-invalid-serial }` has no
+# counterpart and needs none: umbriel validates activation tokens itself and
+# honours the ones its own spawn: actions issue.
+
+# niri's `input { mouse { accel-speed 0.0; accel-profile "flat" } }`.
+# sensitivity 0.0 is umbriel's neutral pointer speed, niri's accel-speed 0.0.
+[input.mouse]
+accel_profile = "flat"
+sensitivity = 0.0
+
+# 20 to match `home.pointerCursor` and the greeter's `cursor.size`.
+[input.cursor]
+theme = "Bibata-Modern-Ice"
+size = 20
+# The pointer has no role in the keybind grammar below, so it steps aside
+# while typing and returns on the first move.
+hide_when_typing = true
+
+[appearance]
+# niri's `prefer-no-csd` (umbriel's default too; written out to stay literal)
+# and its `geometry-corner-radius 12` with `clip-to-geometry`.
+prefer_no_csd = true
+corner_radius = 12
+# niri's focus-ring `width 2`; umbriel's window border plays that role.
+border_width = 2
+
+# niri's global `blur` block: passes 2, offset 3.0, noise 0.02, saturation
+# 1.0. Umbriel's `radius` is niri's `offset`; brightness and contrast are set
+# neutral because niri's blur applies no such adjustments.
+[appearance.blur]
+enabled = true
+passes = 2
+radius = 3
+noise = 0.02
+brightness = 1.0
+contrast = 1.0
+saturation = 1.0
+
+# niri is a scrolling tiler, and umbriel's scrolling layout is its
+# counterpart. `gaps 8` maps straight over. width_presets is umbriel's name
+# for the preset column widths niri cycles through with Mod+R — and the same
+# presets the width-mode digits 1/2/3 jump to.
+[layout]
+mode = "scrolling"
+gap = 8
+width_presets = [0.333, 0.5, 0.667]
+
+[keybinds]
+# A vim-style grammar rather than a translation of niri's binds. The home-row
+# letters act on the focused workspace — H/J/K/L focus, Shift+H/J/K/L moves —
+# the arrow keys reach the other monitor, U/I walks workspaces, and Shift
+# always turns "focus" into "take the window with you", so that no chord needs
+# Ctrl anywhere outside Ctrl+Alt+Delete. The one modal piece is width mode on
+# Mod+W, umbriel's answer to vim's operator-pending.
+#
+# Umbriel's compiled-in defaults already speak much of this grammar —
+# Mod+Shift+H/J/K/L moves, Mod+Comma / Mod+Period consume and expel, Mod+P
+# pins, Mod+M maximizes to the edges — and those defaults stay live on every
+# chord this file leaves unset, so the binds below restate them where they
+# carry the grammar and let the rest ride along. Leftovers no config can
+# switch off, for the record: Mod+F1 focuses the next window, Mod+Ctrl+F
+# maximizes, Mod+WheelUp/Down focus the neighbouring columns (the old wheel
+# binds are gone; those two defaults are all that remains of the mouse
+# here), and the digit defaults past 4 are silent no-ops now that exactly
+# four labeled workspaces exist.
+#
+# Chords are case-insensitive and match the raw level-0 key as a fallback, so
+# symbols reachable only through Shift on one layout still match on the
+# other; Mod+Shift+Equal below is the deliberate example. Mod is Super.
+
+# Programs. Tapping Super alone opens the launcher: the bind fires on key
+# release, and any other key, button, or scroll while it is held cancels it,
+# so no chord is disturbed. Mod+Space stays as the two-handed spelling, and
+# Mod+T keeps niri's terminal bind.
+"Mod" = "spawn:noctalia msg panel-toggle launcher"
+"Mod+T" = { action = "spawn:kitty", repeat = false }
+"Mod+Space" = { action = "spawn:noctalia msg panel-toggle launcher", repeat = false }
+
+# Lock and logout live in noctalia's session panel rather than a wall of
+# chords: the panel's first button is the lock niri's Mod+Alt+L reached, and
+# its power entries replace niri's Mod+Shift+E quit. This bind replaces
+# umbriel's own built-in Mod+Escape session-quit; Ctrl+Alt+Delete keeps a
+# keyboard-only quit with its confirmation dialog.
+"Mod+Escape" = { action = "spawn:noctalia msg panel-toggle session", repeat = false }
+"Ctrl+Alt+Delete" = "session-quit"
+
+# Powers off the monitors; any input turns them back on, as on niri.
+"Mod+Shift+P" = "dpms-off"
+
+# Volume and media keys, noctalia-driven as on niri, and free to repeat so a
+# held key ramps the volume. niri marked these allow-when-locked=true; this
+# umbriel version still has no per-bind allow-when-locked (the table form
+# knows only `action` and `repeat` — the current docs describe a newer build),
+# so they are ordinary binds and stop at a locked session. XF86AudioMute is
+# deliberately absent: it toggles the *microphone* on tower and the speakers
+# on laptop, so it is host identity and lives in hosts/*.toml.
+"XF86AudioRaiseVolume" = "spawn:noctalia msg volume-up 5"
+"XF86AudioLowerVolume" = "spawn:noctalia msg volume-down 5"
+"XF86AudioPrev" = "spawn:noctalia msg media previous"
+"XF86AudioPlay" = "spawn:noctalia msg media toggle"
+"XF86AudioNext" = "spawn:noctalia msg media next"
+
+# Umbriel's cheatsheet is niri's hotkey-overlay; one keystroke away. Overview
+# and close keep repeat=false so a held key cannot thrash them.
+"Mod+Shift+Slash" = "cheatsheet-toggle"
+"Mod+O" = { action = "overview-toggle", repeat = false }
+"Mod+Q" = { action = "window-close", repeat = false }
+
+# Focus: the home row walks the focused workspace — H/L across columns,
+# J/K within one. window-focus-left/right walk the row, which in the
+# scrolling layout is the column-to-column motion of niri's
+# focus-column-left/right. The arrow keys no longer duplicate this: they
+# belong to the monitors now.
+"Mod+H" = "window-focus-left"
+"Mod+J" = "window-focus-down"
+"Mod+K" = "window-focus-up"
+"Mod+L" = "window-focus-right"
+
+# Move: Shift means "take the window with you", the same shape as focus —
+# H/L move the whole column, J/K move the window within it. These restate
+# umbriel's own defaults, written out to stay literal. niri's Mod+Ctrl block
+# and its Mod+Shift+Ctrl quadruple-bind for monitors collapse into this and
+# the arrow block below.
+"Mod+Shift+H" = "column-move-left"
+"Mod+Shift+J" = "window-move-down"
+"Mod+Shift+K" = "window-move-up"
+"Mod+Shift+L" = "column-move-right"
+
+# Monitors: arrows focus the adjacent output, Shift+arrows send the focused
+# column there. On tower DP-3 sits below HDMI-A-1, so Up/Down do the real
+# work; on laptop these are silent no-ops with a single panel. These are
+# niri's focus-monitor-* and move-column-to-monitor-* directions, at two
+# modifiers instead of three.
+"Mod+Left" = "output-focus-left"
+"Mod+Down" = "output-focus-down"
+"Mod+Up" = "output-focus-up"
+"Mod+Right" = "output-focus-right"
+"Mod+Shift+Left" = "column-move-to-output-left"
+"Mod+Shift+Down" = "column-move-to-output-down"
+"Mod+Shift+Up" = "column-move-to-output-up"
+"Mod+Shift+Right" = "column-move-to-output-right"
+
+# Workspaces: U/I walk the focused output's stack. The labeled lists in the
+# host files are static, so there is no trailing empty workspace anymore —
+# U at the last label is a no-op rather than a fresh workspace, which makes
+# the digits below the primary navigation. niri's Page_Down / Page_Up pair
+# duplicated this and stays dropped. Shift carries the focused window along
+# (window-scoped; no column-scoped move exists at this umbriel version,
+# where niri moved the whole column).
+"Mod+U" = "workspace-next"
+"Mod+I" = "workspace-previous"
+"Mod+Shift+U" = "window-move-to-workspace-next"
+"Mod+Shift+I" = "window-move-to-workspace-previous"
+
+# The four labels, by name rather than by position: Nerd Font glyphs, the
+# same ones the host files' workspaces lists carry — \uF0AC globe is web,
+# \uF121 </> is code, \uF086 comments is chat, \uF001 music is media. The
+# names are unique across outputs on every host, so these pick the same
+# workspace from any monitor — on tower Mod+3 from DP-3 lands on HDMI-A-1's
+# chat, cursor and all. Shift carries the focused window along and follows
+# it there. These replace niri's index binds and their Mod+Ctrl+ move
+# forms; the digits past 4 are gone with the dynamic strip they numbered.
+"Mod+1" = "workspace-switch:\uF0AC"
+"Mod+2" = "workspace-switch:\uF121"
+"Mod+3" = "workspace-switch:\uF086"
+"Mod+4" = "workspace-switch:\uF001"
+"Mod+Shift+1" = "window-move-to-workspace:\uF0AC"
+"Mod+Shift+2" = "window-move-to-workspace:\uF121"
+"Mod+Shift+3" = "window-move-to-workspace:\uF086"
+"Mod+Shift+4" = "window-move-to-workspace:\uF001"
+
+# Layout: toggle the focused workspace between the scrolling strip and a
+# dwindle tree, workspace by workspace. The override lasts until a config
+# reload reasserts the [layout] mode above.
+"Mod+D" = "workspace-set-layout:toggle"
+
+# Column shape. Comma pulls the focused window into the column to the left,
+# Period pops it out to the right — together they cover niri's
+# consume-or-expel pair, and they are umbriel's own defaults, replacing the
+# old bracket binds (which on laptop's German layout sat behind AltGr
+# anyway). R cycles the width presets from [layout].
+"Mod+Comma" = "window-consume-left"
+"Mod+Period" = "window-expel-right"
+"Mod+R" = "window-cycle-width"
+
+# Fine width adjustments, niri's ±10%. Minus sits unshifted on both layouts;
+# the equal key does not (it is Shift+0 on the German laptop), so the grow
+# bind takes the Shift+Equal spelling, which matches the = key on gb through
+# the raw-key fallback and on de through the effective symbol.
+"Mod+Minus" = "window-modify-width:-0.1"
+"Mod+Shift+Equal" = "window-modify-width:0.1"
+
+# Window state. F maximizes the column and Shift+F is the stronger
+# fullscreen; V floats; P pins (above fullscreen, visible on every
+# workspace); M fills the screen edge to edge with no gaps or struts. P and
+# M restate umbriel's defaults. niri's Mod+C center-column moves into width
+# mode below, where this umbriel version's window-center (floating-only)
+# belongs.
+"Mod+F" = "window-toggle-maximize"
+"Mod+Shift+F" = "window-toggle-fullscreen"
+"Mod+V" = "window-toggle-floating"
+"Mod+P" = "window-toggle-pinned"
+"Mod+M" = "window-toggle-maximize-to-edges"
+
+# Scratchpads: Tab shows and hides the stash — the alternate buffer, in vim
+# terms — Shift+Tab cycles through it once it is visible, S stashes the
+# focused window into it, and Shift+S puts the focused scratchpad window
+# back where it came from. All four are safe only as single presses, so they
+# never repeat.
+"Mod+Tab" = { action = "scratchpad-toggle", repeat = false }
+"Mod+Shift+Tab" = { action = "scratchpad-focus-next", repeat = false }
+"Mod+S" = { action = "window-move-to-scratchpad", repeat = false }
+"Mod+Shift+S" = { action = "window-restore-from-scratchpad", repeat = false }
+
+# Width mode: the one modal piece, after vim's operator-pending. Mod+W
+# enters; then plain, unmodified keys act on the focused column's width —
+# 1/2/3 jump to a third/half/two-thirds, 4 to full width (the same presets
+# [layout] configures and R cycles), and C centers a floating window. The
+# mode holds until Escape, and every other key — Mod chords included —
+# falls through to the focused window, so a stray keystroke lands in the app
+# rather than the compositor. This umbriel version has no one-shot submap
+# exits (the table form knows only `action` and `repeat`), so sticky-until-
+# Escape is the design, not a compromise.
+"Mod+W" = { action = "submap:width", repeat = false }
+"submap[width],1" = "window-set-width:0.333"
+"submap[width],2" = "window-set-width:0.5"
+"submap[width],3" = "window-set-width:0.667"
+"submap[width],4" = "window-set-width:1.0"
+"submap[width],C" = "window-center"
+
+# The emergency exit. A submap:reset bound here in the default context
+# matches inside every submap, and when no submap is active the action fails
+# and the key falls through to the application untouched — so a bare Escape
+# is safe to bind globally and is the one key that always leaves a mode.
+"Escape" = "submap:reset"
+
+# Screenshots, noctalia-driven as on niri; its settings own the save path.
+# Print selects a region, Shift+Print takes the whole screen — Shift in
+# place of niri's Ctrl, per the grammar. niri's Alt+Print window shot has no
+# noctalia counterpart and stays dropped.
+"Print" = { action = "spawn:noctalia msg screenshot-region", repeat = false }
+"Shift+Print" = { action = "spawn:noctalia msg screenshot-fullscreen", repeat = false }

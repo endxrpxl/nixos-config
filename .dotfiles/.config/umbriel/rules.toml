@@ -1,0 +1,90 @@
+# The shared half of umbriel's window and layer rules, translated from niri's
+# window-rule and layer-rule blocks. This sits in its own include, listed
+# before host.toml in config.toml, because umbriel replaces rule arrays
+# wholesale when merging includes: a host that needs to add a window rule
+# (only tower does) redefines the whole window_rule array in its host file,
+# and a rule array in the main config.toml could never be extended at all.
+# The layer rules are identical on every host, so no host file restates them.
+#
+# The window rules carry two jobs: the geometry rules translated from niri
+# (floating, blur), and the workspace routing that lands each installed app
+# on its labeled workspace. default_workspace counts positions on the output
+# the window is sent to — on laptop, the single static list in
+# hosts/laptop.toml, where 1..4 are web/code/chat/media; on tower the whole
+# array is restated in hosts/tower.toml with default_output added, because
+# the labels are split across the two monitors there. Every matching rule
+# contributes its settings, so the Picture-in-Picture rule floats a zen
+# window while the zen routing rule still sends it to web.
+
+# niri's firefox Picture-in-Picture rule, retargeted at zen: firefox is not
+# installed here and zen is this config's browser, and its PiP window
+# carries the same title.
+[[window_rule]]
+match.app_id = "^zen$"
+match.title = "^Picture-in-Picture$"
+default_floating = true
+
+# web: the browser and its vault.
+[[window_rule]]
+match.app_id = "^zen$"
+default_workspace = 1
+
+[[window_rule]]
+match.app_id = "^bitwarden$"
+default_workspace = 1
+
+# code: the terminal, the editor, and emacs.
+[[window_rule]]
+match.app_id = "^kitty$"
+default_workspace = 2
+
+[[window_rule]]
+match.app_id = "^dev\\.zed\\.Zed$"
+default_workspace = 2
+
+[[window_rule]]
+match.app_id = "^emacs$"
+default_workspace = 2
+
+# chat.
+[[window_rule]]
+match.app_id = "^discord$"
+default_workspace = 3
+
+# media: Spotify by title, as niri matched it, and VLC — the latter through
+# xwayland, so if its app_id arrives spelled differently the window simply
+# follows focus instead.
+[[window_rule]]
+match.title = "^Spotify$"
+default_workspace = 4
+
+[[window_rule]]
+match.app_id = "^vlc$"
+default_workspace = 4
+
+# The utilities — nautilus, evince, loupe, file-roller, libreoffice — are
+# deliberately unrouted: they open wherever the focus already is.
+
+# niri's catch-all `window-rule { background-effect { blur true; xray false } }`:
+# blur behind every window, of the real window stack rather than the
+# background-only optimized mode.
+[[window_rule]]
+blur = true
+blur_optimized = false
+
+# Noctalia's shell surfaces, blurred the way its own umbriel example tunes
+# them: the namespace regex is niri's, blur_optimized = false is niri's
+# `xray false`, and blur_ignore_alpha keeps fully transparent regions of the
+# bar unblurred.
+[[layer_rule]]
+match.namespace = "^noctalia-(bar-[^\"]+|notification|dock|panel|attached-panel|osd)$"
+blur = true
+blur_ignore_alpha = 0.5
+blur_optimized = false
+
+# Blur on noctalia's window switcher too, niri's second layer rule.
+[[layer_rule]]
+match.namespace = "^noctalia-window-switcher$"
+blur = true
+blur_ignore_alpha = 0.5
+blur_optimized = false

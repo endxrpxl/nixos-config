@@ -73,7 +73,7 @@ source = "wallpaper"
 wallpaper_scheme = "m3-content"
 
 [theme.templates]
-builtin_ids = [ "gtk3", "gtk4", "kitty", "niri", "starship" ]
+builtin_ids = [ "gtk3", "gtk4", "kitty", "niri", "starship", "umbriel" ]
 community_ids = [ "opencode", "pi-agent", "zen-browser", "discord", "zed", "fastfetch", "zathura", "yazi" ]
 
 [wallpaper]

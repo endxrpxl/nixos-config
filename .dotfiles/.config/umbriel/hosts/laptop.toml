@@ -1,0 +1,56 @@
+# Everything in umbriel's configuration that only this machine can know,
+# translated from niri's hosts/laptop.kdl. Linked to ~/.config/umbriel/host.toml,
+# which the shared config.toml includes after rules.toml and before
+# noctalia.toml.
+#
+# This file can only add keys the shared files do not set: everything in
+# config.toml overrides every include.
+
+# The XKB spelling of the `console.keyMap = "de"` in this host's
+# configuration.nix. Keep the two in step — neither can be derived from the
+# other.
+[input.keyboard]
+layout = "de"
+
+# niri's `touchpad { tap; natural-scroll; }`. tap is umbriel's default too;
+# written out to stay literal.
+[input.touchpad]
+tap = true
+natural_scroll = true
+
+# The four labeled workspaces, as Nerd Font glyphs rather than words —
+# RobotoMono Nerd Font is installed (fonts.packages), so the bar and the
+# overview pick the icons up through font fallback. The legend:
+#   \uF0AC globe     — web:   zen, bitwarden
+#   \uF121 </>       — code:  kitty, zed, emacs
+#   \uF086 comments  — chat:  discord
+#   \uF001 music     — media: spotify, vlc
+# The glyphs are the workspace names, unique across outputs on every host,
+# so config.toml's Mod+1..4 select them from any monitor by the same
+# escapes; rules.toml's window rules land the apps on positions 1..4 and
+# never name the workspaces at all. Only the list is set: the panel's mode
+# and scale are probed, and a single output needs no position. The static
+# list replaces the dynamic numbered strip, so there is no trailing empty
+# workspace and workspace-next stops at the last label instead of opening
+# a fresh one.
+[output."eDP-1"]
+workspaces = ["\uF0AC", "\uF121", "\uF086", "\uF001"]
+
+# Host-specific because they name a backlight: only a machine with an internal
+# panel has one to dim. Both take noctalia's default monitor selector, which
+# on this host can only ever mean eDP-1. niri marked these
+# allow-when-locked=true; this umbriel version has no per-bind
+# allow-when-locked, so they are ordinary binds.
+[keybinds]
+"XF86AudioMute" = "spawn:noctalia msg volume-mute"
+"XF86MonBrightnessUp" = "spawn:noctalia msg brightness-up 5"
+"XF86MonBrightnessDown" = "spawn:noctalia msg brightness-down 5"
+
+# niri's `output "eDP-1" { focus-at-startup; layout { always-center-single-column } }`.
+# Umbriel has no focus-at-startup — and with only one output, nothing else
+# could be focused anyway — and no per-output layout section, so the centering
+# half lives in the global scrolling layout below.
+[layout.scrolling]
+# niri's always-center-single-column, approximated: center the whole strip
+# whenever it is narrower than the viewport, which is what a lone column is.
+center_underfull_strip = true

@@ -145,7 +145,8 @@ Edit `modules/hosts/laptop/configuration.nix`:
 
 - Set `console.keyMap` to the machine's real layout.
 - Set `programs.noctalia-greeter.settings.keyboard.layout` to the same layout,
-  and keep `.dotfiles/.config/niri/hosts/laptop.kdl` in step with it.
+  and keep `.dotfiles/.config/niri/hosts/laptop.kdl` and
+  `.dotfiles/.config/umbriel/hosts/laptop.toml` in step with it.
 - Set `system.stateVersion` to the release actually being installed
   (`nixos-version` inside the installer), then never change it.
 

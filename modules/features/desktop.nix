@@ -39,7 +39,11 @@
       };
     };
 
+    # The second compositor, installed beside niri and selectable at the
+    # greeter; niri stays the default session. Its config mirrors niri's
+    # split — see the umbriel entries in the home module below.
     programs.niri.enable = true;
+    programs.umbriel.enable = true;
     programs.firefox.enable = true;
     programs.thunderbird.enable = true;
 
@@ -126,6 +130,17 @@
           "niri/config.kdl" = authored "niri/config.kdl";
           "niri/host.kdl" = authored "niri/hosts/${host}.kdl";
 
+          # The umbriel pair, same trick: config.toml is shared and includes
+          # host.toml by name, so every host reads the same config.toml. The
+          # shared window and layer rules sit in their own include because
+          # umbriel replaces rule arrays wholesale when merging includes, so
+          # they must live in a file the host file can override — and cannot
+          # live in config.toml itself, which wins over every include. See the
+          # comments in the umbriel files for the full story.
+          "umbriel/config.toml" = authored "umbriel/config.toml";
+          "umbriel/rules.toml" = authored "umbriel/rules.toml";
+          "umbriel/host.toml" = authored "umbriel/hosts/${host}.toml";
+
           # Only the config half of noctalia's split is linked. The settings UI
           # writes ~/.local/state/noctalia/settings.toml, which is runtime state
           # and stays out of this repo, so a tweak in the UI no longer dirties
@@ -156,14 +171,16 @@
         };
       };
 
-      # noctalia rewrites both of these whenever the theme changes, so they are
-      # runtime output and are not linked. Their includes are authored into
-      # config.kdl and kitty.conf, which read them before noctalia has ever run:
-      # niri refuses to start on a missing include, kitty only complains.
-      # Keep in step with those two include lines.
+      # noctalia rewrites all three of these whenever the theme changes, so
+      # they are runtime output and are not linked. Their includes are
+      # authored into config.kdl, kitty.conf, and umbriel's config.toml, which
+      # read them before noctalia has ever run: niri refuses to start on a
+      # missing include, kitty only complains, and umbriel waits for one.
+      # Keep in step with those three include entries.
       home.activation.seedNoctaliaTemplateTargets = self.lib.seedFiles lib [
         ".config/niri/noctalia.kdl"
         ".config/kitty/themes/noctalia.conf"
+        ".config/umbriel/noctalia.toml"
       ];
 
       # 20 to match niri's `xcursor-size` and the greeter's `cursor.size`.
