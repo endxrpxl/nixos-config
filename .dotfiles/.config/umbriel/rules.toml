@@ -17,7 +17,7 @@
 # contributes its settings, so the Picture-in-Picture rule floats a zen
 # window while the zen routing rule still sends it to web. The [[workspace]]
 # rules carry the third job: the three labeled workspaces override the
-# scrolling base from config.toml to master, while the free spare workspaces
+# scrolling base from config.toml to dwindle, while the free spare workspaces
 # keep scrolling.
 
 # niri's firefox Picture-in-Picture rule, retargeted at zen: firefox is not
@@ -28,31 +28,22 @@ match.app_id = "^zen$"
 match.title = "^Picture-in-Picture$"
 default_floating = true
 
-# web: the browser and its vault, which floats centered at a third of the
-# screen's width and half its height (fractions of the usable area).
+# The vault floats centered at a third of the screen's width and half its
+# height (fractions of the usable area).
+[[window_rule]]
+match.app_id = "^bitwarden$"
+default_floating = true
+default_width = 0.333
+default_height = 0.5
+
+# web: the browser.
 [[window_rule]]
 match.app_id = "^zen$"
 default_workspace = 1
 
-[[window_rule]]
-match.app_id = "^bitwarden$"
-default_workspace = 1
-default_floating = true
-default_width = 0.333
-default_height = 0.5
-default_position = { x = 0, y = 0 }
-
-# code: the terminal, the editor, and emacs.
-[[window_rule]]
-match.app_id = "^kitty$"
-default_workspace = 2
-
+# code: the editor.
 [[window_rule]]
 match.app_id = "^dev\\.zed\\.Zed$"
-default_workspace = 2
-
-[[window_rule]]
-match.app_id = "^emacs$"
 default_workspace = 2
 
 # chat+media: Discord and Spotify share the one workspace, as they sat side
@@ -75,21 +66,21 @@ default_workspace = 3
 blur = true
 blur_optimized = false
 
-# The three labeled workspaces are master; every other workspace — the free
+# The three labeled workspaces are dwindle; every other workspace — the free
 # digit spares 4/5/6 — inherits the scrolling base from config.toml's
 # [layout]. The names are unique across outputs on every host, so no rule
 # needs an output restriction.
 [[workspace]]
 name = "\uF0AC"
-layout.mode = "master"
+layout.mode = "dwindle"
 
 [[workspace]]
 name = "\uF121"
-layout.mode = "master"
+layout.mode = "dwindle"
 
 [[workspace]]
 name = "\uF086"
-layout.mode = "master"
+layout.mode = "dwindle"
 
 # Noctalia's shell surfaces, blurred the way its own umbriel example tunes
 # them: the namespace regex is niri's, blur_optimized = false is niri's

@@ -78,7 +78,7 @@ saturation = 1.0
 # niri is a scrolling tiler, and umbriel's scrolling layout is its
 # counterpart, so scrolling is the base mode every workspace inherits — the
 # free spare workspaces, and any future one, are scrolling by default. The
-# three labeled workspaces override to master through the [[workspace]]
+# three labeled workspaces override to dwindle through the [[workspace]]
 # rules in rules.toml. `gaps 8` maps straight over. width_presets is
 # umbriel's name for the preset column widths niri cycles through with Mod+R
 # — and the same presets the width-mode digits 1/2/3 jump to.
@@ -90,9 +90,8 @@ width_presets = [0.333, 0.5, 0.667]
 [keybinds]
 # A vim-style grammar rather than a translation of niri's binds. The home-row
 # letters act on the focused workspace — H/J/K/L focus, Shift+H/J/K/L moves —
-# the arrow keys reach the other monitor, U/I move a window between the
-# master and stack areas, and Shift always turns "focus" into "take the
-# window with you", so that no chord needs Ctrl anywhere outside
+# the arrow keys reach the other monitor, and Shift always turns "focus" into
+# "take the window with you", so that no chord needs Ctrl anywhere outside
 # Ctrl+Alt+Delete. The one modal piece is width mode on Mod+W, umbriel's
 # answer to vim's operator-pending. Every navigation bind is deterministic —
 # Mod+1..6 always land on the same workspace — so nothing scrolls through
@@ -179,19 +178,6 @@ width_presets = [0.333, 0.5, 0.667]
 "Mod+Shift+Up" = "column-move-to-output-up"
 "Mod+Shift+Right" = "column-move-to-output-right"
 
-# Master layout: U and I move the focused window between the master and
-# stack areas one press at a time. U is window-consume-left — master sits on
-# the left, the default position, so a stack window moves into master — and
-# I is window-consume-right, which moves a master window back into the
-# stack; each is a no-op on a window already where it would send it. The
-# keys line up with the areas: U is left of I on the top row, master is left
-# of stack. Together they replace niri's workspace-next/previous pair, which
-# scrolled through the stack non-deterministically — the digits below are
-# the deterministic navigation now. repeat=false so a held key cannot thrash
-# windows between the areas.
-"Mod+U" = { action = "window-consume-left", repeat = false }
-"Mod+I" = { action = "window-consume-right", repeat = false }
-
 # The three labels plus the free spares, by name rather than by position:
 # Nerd Font glyphs for the labels — \uF0AC globe is web, \uF121 </> is code,
 # \uF086 comments is chat+media (discord and Spotify share it) — and plain
@@ -218,7 +204,7 @@ width_presets = [0.333, 0.5, 0.667]
 
 # Layout: toggle the focused workspace among scrolling, dwindle, and master,
 # workspace by workspace. The override lasts until a config reload reasserts
-# the [layout] mode above (scrolling, or the master override in rules.toml).
+# the [layout] mode above (scrolling, or the dwindle override in rules.toml).
 "Mod+D" = "workspace-set-layout:toggle"
 
 # R cycles the width presets from [layout].

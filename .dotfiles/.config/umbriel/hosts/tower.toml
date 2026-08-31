@@ -52,13 +52,13 @@ center_underfull_strip = true
 # anything on a machine that has a DP-3 and an HDMI-A-1.
 #
 # This array replaces the shared rules from rules.toml wholesale, so it
-# restates them — keep the geometry entries and the app set in step with it.
-# The routing rules restate rules.toml's app routing with default_output
-# added, because the labels are split across monitors here: default_workspace
-# counts positions on the output the rule names, so 1..2 on DP-3 are
-# web/code (with the 4 and 5 spares after them) and 1 on HDMI-A-1 is
-# chat+media (with the 6 spare after it). The layer rules are not restated
-# because this file adds none.
+# restates them — keep the geometry entries in step with it; the app set is
+# a superset, adding kitty and emacs to code. The routing rules restate
+# rules.toml's app routing with default_output added, because the labels are
+# split across monitors here: default_workspace counts positions on the
+# output the rule names, so 1..2 on DP-3 are web/code (with the 4 and 5
+# spares after them) and 1 on HDMI-A-1 is chat+media (with the 6 spare
+# after it). The layer rules are not restated because this file adds none.
 
 # rules.toml's Picture-in-Picture rule, restated.
 [[window_rule]]
@@ -66,20 +66,18 @@ match.app_id = "^zen$"
 match.title = "^Picture-in-Picture$"
 default_floating = true
 
-# web, on the ultrawide — bitwarden floating, as in rules.toml.
+# rules.toml's bitwarden float, restated.
+[[window_rule]]
+match.app_id = "^bitwarden$"
+default_floating = true
+default_width = 0.333
+default_height = 0.5
+
+# web, on the ultrawide.
 [[window_rule]]
 match.app_id = "^zen$"
 default_output = "DP-3"
 default_workspace = 1
-
-[[window_rule]]
-match.app_id = "^bitwarden$"
-default_output = "DP-3"
-default_workspace = 1
-default_floating = true
-default_width = 0.333
-default_height = 0.5
-default_position = { x = 0, y = 0 }
 
 # code, on the ultrawide.
 [[window_rule]]

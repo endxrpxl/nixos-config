@@ -22,8 +22,8 @@ natural_scroll = true
 # the labels rather than words — RobotoMono Nerd Font is installed
 # (fonts.packages), so the bar and the overview pick the icons up through
 # font fallback. The legend:
-#   \uF0AC globe     — web:       zen, bitwarden (floating)
-#   \uF121 </>       — code:      kitty, zed, emacs
+#   \uF0AC globe     — web:       zen
+#   \uF121 </>       — code:      zed
 #   \uF086 comments  — chat+media: discord, spotify
 #   4, 5             — free:      anything
 # The glyphs are the workspace names, unique across outputs on every host,
