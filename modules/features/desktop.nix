@@ -71,6 +71,8 @@
       vlc
       file-roller
 
+      eduvpn-client
+
       xwayland-satellite
 
       bibata-cursors
