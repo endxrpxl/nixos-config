@@ -28,14 +28,19 @@ output "HDMI-A-1" {
     position x=771 y=-1080
 }
 
-// Host-specific because they name a connector: these only mean anything on a
-// machine that has an HDMI-A-1.
-window-rule {
-    match title="^Spotify$"
-    open-on-output "HDMI-A-1"
-}
+// The labeled workspaces split across the two monitors: web, code, and the 4
+// and 5 spares on the ultrawide, chat and the 6 spare on the side screen.
+// Legend in hosts/laptop.kdl.
+workspace "\u{F0AC}" { open-on-output "DP-3"; }
+workspace "\u{F121}" { open-on-output "DP-3"; }
+workspace "4" { open-on-output "DP-3"; }
+workspace "5" { open-on-output "DP-3"; }
+workspace "\u{F086}" { open-on-output "HDMI-A-1"; }
+workspace "6" { open-on-output "HDMI-A-1"; }
 
+// This host also sends the terminal and emacs to code.
 window-rule {
-    match app-id="^discord$"
-    open-on-output "HDMI-A-1"
+    match app-id="^kitty$"
+    match app-id="^emacs$"
+    open-on-workspace "\u{F121}"
 }
