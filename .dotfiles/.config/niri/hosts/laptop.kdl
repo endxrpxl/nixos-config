@@ -33,15 +33,3 @@ output "eDP-1" {
         always-center-single-column
     }
 }
-
-// The labeled workspaces, as Nerd Font glyphs (RobotoMono Nerd Font is
-// installed, so the bar picks them up through font fallback):
-//   \u{F0AC} globe    web:        zen
-//   \u{F121} </>      code:       zed
-//   \u{F086} comments chat+media: discord, spotify
-//   4, 5, 6           free:       anything (6 exists on tower only)
-workspace "\u{F0AC}"
-workspace "\u{F121}"
-workspace "\u{F086}"
-workspace "4"
-workspace "5"
