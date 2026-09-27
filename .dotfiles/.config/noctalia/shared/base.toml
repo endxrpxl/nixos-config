@@ -19,8 +19,8 @@
 enable_sounds = true
 
 [bar.default]
-background_opacity = 0.5
-capsule_opacity = 0.5
+background_opacity = 1.0
+capsule_opacity = 1.0
 center = [ "clock", "control-center" ]
 end = [
     "media",
@@ -35,7 +35,9 @@ end = [
     "session"
 ]
 margin_edge = 0
-margin_ends = 3
+margin_ends = 0
+radius_top_left = 0
+radius_top_right = 0
 start = [ "workspaces" ]
 widget_spacing = 8
 
@@ -99,7 +101,7 @@ polkit_agent = true
     open_near_click_control_center = true
     open_near_click_session = true
     open_near_click_wallpaper = true
-    transparency_mode = "glass"
+    transparency_mode = "solid"
 
 [widget.control-center]
 glyph = "home"
