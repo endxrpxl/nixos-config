@@ -263,15 +263,24 @@ binds {
 }
 
 layout {
+    // About 8px, the margin macOS Sequoia leaves around tiled windows.
     gaps 8
 
     focus-ring {
         width 2
     }
+
+    shadow {
+        on
+        softness 30
+        spread 2
+        offset x=0 y=8
+        color "#00000066"
+    }
 }
 
 window-rule {
-    geometry-corner-radius 12
+    geometry-corner-radius 16
     clip-to-geometry true
     tiled-state true
     draw-border-with-background false
@@ -279,7 +288,7 @@ window-rule {
 
 window-rule {
   background-effect {
-    blur true
+    blur false
     xray false
   }
 }
@@ -288,15 +297,15 @@ layer-rule {
   match namespace="^noctalia-(bar-[^\"]+|notification|dock|panel|attached-panel|osd)$"
   background-effect {
     xray false
-    // blur false
+    blur false
   }
 }
 
-/* Enable blur on noctalia's window switcher and disable xray. */
+/* No blur on noctalia's window switcher either. */
 layer-rule {
     match namespace="noctalia-window-switcher"
     background-effect {
-        blur true
+        blur false
         xray false
     }
 }
@@ -309,9 +318,64 @@ blur {
   saturation 1.0  // color saturation boost (default: 1.5)
 }
 
+// Motion after Apple's HIG: springs sized by response time, the way SwiftUI
+// sizes them. For a response of r seconds, stiffness = (2 * pi / r)^2.
+// Critically damped for navigation, a touch of bounce (0.9) when windows move.
+animations {
+    workspace-switch {
+        spring damping-ratio=1.0 stiffness=500 epsilon=0.0001
+    }
+    horizontal-view-movement {
+        spring damping-ratio=0.9 stiffness=690 epsilon=0.0001
+    }
+    window-movement {
+        spring damping-ratio=0.9 stiffness=690 epsilon=0.0001
+    }
+    window-resize {
+        spring damping-ratio=1.0 stiffness=690 epsilon=0.0001
+    }
+    overview-open-close {
+        spring damping-ratio=1.0 stiffness=390 epsilon=0.0001
+    }
+
+    // Windows zoom in from 92% and fade, like a macOS window opening.
+    window-open {
+        duration-ms 200
+        curve "cubic-bezier" 0.2 0.9 0.3 1.0
+        custom-shader r"
+            vec4 open_color(vec3 coords_geo, vec3 size_geo) {
+                float p = niri_clamped_progress;
+                float scale = mix(0.92, 1.0, p);
+                vec3 coords = vec3((coords_geo.xy - 0.5) / scale + 0.5, 1.0);
+                if (coords.x < 0.0 || coords.x > 1.0 || coords.y < 0.0 || coords.y > 1.0)
+                    return vec4(0.0);
+                vec3 coords_tex = niri_geo_to_tex * coords;
+                return texture2D(niri_tex, coords_tex.st) * p;
+            }
+        "
+    }
+
+    // And shrink to 95% while fading out when they close.
+    window-close {
+        duration-ms 150
+        curve "ease-out-quad"
+        custom-shader r"
+            vec4 close_color(vec3 coords_geo, vec3 size_geo) {
+                float p = niri_clamped_progress;
+                float scale = mix(1.0, 0.95, p);
+                vec3 coords = vec3((coords_geo.xy - 0.5) / scale + 0.5, 1.0);
+                if (coords.x < 0.0 || coords.x > 1.0 || coords.y < 0.0 || coords.y > 1.0)
+                    return vec4(0.0);
+                vec3 coords_tex = niri_geo_to_tex * coords;
+                return texture2D(niri_tex, coords_tex.st) * (1.0 - p);
+            }
+        "
+    }
+}
+
 recent-windows {
     highlight {
-        corner-radius 12
+        corner-radius 16
     }
 }
 

@@ -93,6 +93,7 @@
     fonts.packages = with pkgs; [
       roboto
       roboto-mono
+      inter
       nerd-fonts.roboto-mono
 
       noto-fonts
@@ -143,6 +144,7 @@
           # autoloads the root of its config directory but not subdirectories.
           "noctalia/config.toml" = authored "noctalia/hosts/${host}.toml";
           "noctalia/shared/base.toml" = authored "noctalia/shared/base.toml";
+          "noctalia/palettes/apple.json" = authored "noctalia/palettes/apple.json";
 
           # EasyEffects writes these itself, so this re-authors its runtime
           # dumps. easyeffectsrc names the audio devices, which only the host
@@ -169,8 +171,8 @@
       gtk = {
         enable = true;
         iconTheme = {
-          package = pkgs.papirus-icon-theme;
-          name = "Papirus-Dark";
+          package = pkgs.whitesur-icon-theme;
+          name = "WhiteSur-dark";
         };
         gtk2.force = true;
       };

@@ -15,34 +15,65 @@
 #
 # `noctalia config validate` checks this file.
 
+# The look follows Apple's HIG as of macOS 26 Tahoe, minus the glass: solid
+# surfaces, borderless controls and a floating dock. Colours come
+# from palettes/apple.json, the Apple system colours.
+
 [audio]
 enable_sounds = true
 
+# A Tahoe-style menu bar, but opaque: no shadow and no capsules. Its bottom
+# corners curve inward where it meets the screen edges.
+# Workspaces on the left, the clock centred, status items on the
+# right with Control Center last.
 [bar.default]
 background_opacity = 1.0
-capsule_opacity = 1.0
-center = [ "clock", "control-center" ]
+capsule = false
+center = [ "clock" ]
+concave_edge_corners = true
 end = [
     "media",
     "tray",
-    "notifications",
+    "keyboard_layout",
     "clipboard",
     "network",
     "bluetooth",
     "volume",
     "brightness",
     "battery",
-    "session"
+    "notifications",
+    "control-center"
 ]
+font_weight = 500
 margin_edge = 0
 margin_ends = 0
+radius_bottom_left = 12
+radius_bottom_right = 12
 radius_top_left = 0
 radius_top_right = 0
+shadow = false
 start = [ "workspaces" ]
+thickness = 28
 widget_spacing = 8
 
 [desktop_widgets]
 enabled = false
+
+# Floating dock. `monitors` names a connector, so it stays per host.
+[dock]
+background_opacity = 1.0
+border_width = 0.0
+enabled = true
+magnification = true
+margin_edge = 8
+position = "bottom"
+radius = 24
+radius_bottom_left = 24
+radius_bottom_right = 24
+radius_top_left = 24
+radius_top_right = 24
+show_dots = true
+show_running = true
 
 [idle]
 behavior_order = [ "screen-off", "lock", "lock-and-suspend" ]
@@ -68,22 +99,31 @@ auto_locate = true
 [nightlight]
 enabled = true
 
+[notification]
+background_opacity = 1.0
+border = false
+
+[osd]
+background_opacity = 1.0
+border = false
+
 [theme]
-builtin = "Gruvbox"
+custom_palette = "apple"
 mode = "dark"
-source = "builtin"
+source = "custom"
 wallpaper_scheme = "m3-content"
 
     [theme.templates]
     builtin_ids = [ "gtk3", "gtk4", "kitty", "niri", "qt", "starship" ]
     community_ids = [
+        "opencode",
+        "pi-agent",
         "zen-browser",
         "discord",
         "vscode",
         "zed",
         "fastfetch",
         "zathura",
-        "papirus-icons",
         "whitesur-icons",
         "yazi"
     ]
@@ -94,24 +134,36 @@ directory = "~/nixos-config/.dotfiles/wallpapers"
     [wallpaper.default]
     path = "/home/ansgar/nixos-config/.dotfiles/wallpapers/daniel-leone.jpg"
 
+# macOS controls are borderless fills, so every outline is off.
 [shell]
 avatar_path = "~/nixos-config/.dotfiles/avatar.png"
-font_family = "Roboto"
+button_borders = false
+card_borders = false
+corner_radius_scale = 1.4
+font_family = "Inter"
+input_borders = false
 launch_apps_as_systemd_services = true
 niri_overview_type_to_launch_enabled = true
 polkit_agent = true
+popup_borders = false
 
     [shell.greeter_sync]
     auto_sync = false
 
     [shell.panel]
+    borders = false
     clipboard_placement = "attached"
     clipboard_position = "auto"
+    list_item_background = true
     open_near_click_clipboard = true
     open_near_click_control_center = true
     open_near_click_session = true
     open_near_click_wallpaper = true
     transparency_mode = "solid"
+
+    [shell.shadow]
+    alpha = 0.35
+    direction = "down"
 
 [widget.control-center]
 glyph = "home"
