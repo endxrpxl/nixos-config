@@ -18,7 +18,7 @@
 
     # The login screen. Only the settings no machine can differ on live here;
     # `keyboard.layout` is host identity and each host adds its own.
-    programs.noctalia-greeter = {
+    services.displayManager.noctalia-greeter = {
       enable = true;
       settings = {
         session.default = "niri";
@@ -65,11 +65,12 @@
         withVencord = true;
       })
 
-      nautilus
       loupe
       evince
       vlc
       file-roller
+      nemo-with-extensions
+      pinta
 
       inputs.zen-browser.packages."${pkgs.system}".default
 
@@ -161,6 +162,14 @@
           createDirectories = true;
           music = null;
           templates = null;
+        };
+      };
+
+      dconf = {
+        settings = {
+          "org/cinnamon/desktop/applications/terminal" = {
+            exec = "kitty";
+          };
         };
       };
 
