@@ -59,22 +59,6 @@ widget_spacing = 8
 [desktop_widgets]
 enabled = false
 
-# Floating dock. `monitors` names a connector, so it stays per host.
-[dock]
-background_opacity = 1.0
-border_width = 0.0
-enabled = true
-magnification = true
-margin_edge = 8
-position = "bottom"
-radius = 24
-radius_bottom_left = 24
-radius_bottom_right = 24
-radius_top_left = 24
-radius_top_right = 24
-show_dots = true
-show_running = true
-
 [idle]
 behavior_order = [ "screen-off", "lock", "lock-and-suspend" ]
 
