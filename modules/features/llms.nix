@@ -3,7 +3,6 @@
 
     environment.systemPackages = with pkgs; [
       opencode
-      code-cursor
       claude-code
     ];
   };
