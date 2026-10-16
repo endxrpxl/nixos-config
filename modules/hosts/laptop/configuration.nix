@@ -16,9 +16,11 @@
       self.nixosModules.fingerprint
       self.nixosModules.power
       self.nixosModules.printing
+      self.nixosModules.gaming
       self.nixosModules.vm
       self.nixosModules.emacs
       self.nixosModules.llms
+      self.nixosModules.easyroam
     ];
 
     networking.hostName = "laptop";
