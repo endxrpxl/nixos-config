@@ -1,7 +1,6 @@
 { self, inputs, ... }: {
   flake.nixosModules.desktop = { pkgs, ... }: {
     imports = [
-      self.nixosModules.zen
       inputs.nix-flatpak.nixosModules.nix-flatpak
       inputs.noctalia-greeter.nixosModules.default
     ];
@@ -71,6 +70,8 @@
       evince
       vlc
       file-roller
+
+      inputs.zen-browser.packages."${pkgs.system}".default
 
       eduvpn-client
 
