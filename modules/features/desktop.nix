@@ -3,6 +3,7 @@
     imports = [
       inputs.nix-flatpak.nixosModules.nix-flatpak
       inputs.noctalia-greeter.nixosModules.default
+      inputs.umbriel.nixosModules.default
     ];
 
     # A graphical session is what needs the GPU drivers, so this belongs to
@@ -39,6 +40,18 @@
     };
 
     programs.niri.enable = true;
+
+    # A second compositor beside niri, picked at the greeter. niri stays the
+    # default session. The cache serves the `cachix` branch the flake input
+    # tracks, so umbriel and its portal are not compiled locally.
+    programs.umbriel.enable = true;
+    nix.settings = {
+      extra-substituters = [ "https://umbriel.cachix.org" ];
+      extra-trusted-public-keys = [
+        "umbriel.cachix.org-1:JfNq/2yg2S6D6z4Z2dVSZrZlDPQTKtexB6GAVLD98nw="
+      ];
+    };
+
     programs.firefox.enable = true;
     programs.thunderbird.enable = true;
 
@@ -133,6 +146,12 @@
           # every host reads the same config.kdl.
           "niri/config.kdl" = authored "niri/config.kdl";
           "niri/host.kdl" = authored "niri/hosts/${host}.kdl";
+
+          # Same split for umbriel: config.toml is shared and includes
+          # host.toml by name. noctalia.toml is theme output and not linked;
+          # config.toml includes it as optional, so no seed file is needed.
+          "umbriel/config.toml" = authored "umbriel/config.toml";
+          "umbriel/host.toml" = authored "umbriel/hosts/${host}.toml";
 
           # Only the config half of noctalia's split is linked. The settings UI
           # writes ~/.local/state/noctalia/settings.toml, which is runtime state

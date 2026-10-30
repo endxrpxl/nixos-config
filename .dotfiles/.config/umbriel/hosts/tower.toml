@@ -1,0 +1,52 @@
+# Everything in umbriel's configuration that only this machine can know,
+# translated from niri's hosts/tower.kdl. Linked to ~/.config/umbriel/host.toml,
+# which the shared config.toml includes. config.toml wins every plain key, so
+# this file only adds keys it leaves unset. Rule lists collect from both files.
+
+[input.keyboard]
+layout = "gb,gb"
+variant = ",intl"
+
+# niri's outputs and modes. Positions are shifted down by 1080 so neither
+# is negative; the arrangement is the same. The ultrawide holds the named
+# workspaces and two spares, the side screen two more spares. config.toml's
+# [[workspace]] rules set each name's layout.
+[output."DP-3"]
+mode = "3440x1440@165.001"
+scale = 1
+position = [0, 1080]
+workspaces = ["Browsing", "Coding", "Gaming", "4", "5"]
+
+[output."HDMI-A-1"]
+mode = "1920x1080@120.000"
+scale = 1
+position = [771, 0]
+workspaces = ["1", "2"]
+
+# The named workspaces exist on DP-3 only, so the routed apps open there.
+# config.toml's routing rules still pick the workspace.
+[[window_rule]]
+match.app_id = [
+    "^zen$",
+    "^dev\\.zed\\.Zed$",
+    "^emacs$",
+    "^steam$",
+    "^steam_app_[0-9]+$",
+    "^gamescope$",
+    "^heroic$",
+    "^net\\.lutris\\.Lutris$",
+    "^org\\.prismlauncher\\.PrismLauncher$",
+    "^com\\.usebottles\\.bottles$",
+    "^net\\.davidotek\\.pupgui2$",
+]
+default_output = "DP-3"
+
+# Host-specific because they name a connector. As on niri, these open on the
+# side screen's active workspace.
+[[window_rule]]
+match.title = "^Spotify$"
+default_output = "HDMI-A-1"
+
+[[window_rule]]
+match.app_id = "^discord$"
+default_output = "HDMI-A-1"

@@ -32,6 +32,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak";
+    # The `cachix` branch only carries commits upstream CI has already pushed
+    # to umbriel.cachix.org. No nixpkgs follows: the cached store paths are
+    # built against umbriel's own locked nixpkgs and would not match ours.
+    umbriel.url = "github:noctalia-dev/umbriel/cachix";
   };
 
   outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);

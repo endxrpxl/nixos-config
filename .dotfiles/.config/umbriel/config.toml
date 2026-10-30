@@ -1,0 +1,297 @@
+# The shared half of the umbriel configuration, translated from niri's
+# config.kdl. Everything only one machine can know, such as keyboard layout,
+# outputs and the workspace list per output, lives in the per-host file,
+# hosts/<host>.toml, linked to ~/.config/umbriel/host.toml.
+#
+# Includes load first, in list order, and this file loads last and wins every
+# conflict on a plain key. The host file can therefore only add keys this file
+# leaves unset. Rule lists ([[window_rule]], [[workspace]], [[layer_rule]])
+# collect entries from every file instead, so a host file can add rules.
+#
+# noctalia's umbriel template writes noctalia.toml on every theme change, then
+# runs apply.sh, which rewrites the [include.optional] files line unless it
+# already reads exactly `files = ["noctalia.toml"]`. config.toml is a symlink
+# into this repo, so keep that line byte for byte as it is, or the first theme
+# change rewrites a tracked file. Because the include is optional, umbriel
+# starts fine before noctalia has ever written the file.
+#
+# Check edits with `umbriel config validate`.
+
+[include]
+files = ["host.toml"]
+
+[include.optional]
+files = ["noctalia.toml"]
+
+[general]
+autostart = ["noctalia"]
+# niri's `hotkey-overlay { skip-at-startup }`.
+show_cheatsheet = false
+
+[input.mouse]
+accel_profile = "flat"
+sensitivity = 0.0
+
+# 20 to match `home.pointerCursor` and the greeter's `cursor.size`.
+[input.cursor]
+theme = "Bibata-Modern-Ice"
+size = 20
+
+[appearance]
+prefer_no_csd = true
+corner_radius = 16
+# niri's focus ring width.
+border_width = 2
+
+# niri turns blur off for every window and noctalia surface, so the master
+# switch is off here too and no rule opts in.
+[appearance.blur]
+enabled = false
+
+# niri's shadow: softness 30, offset y=8, color #00000066.
+[appearance.shadow]
+enabled = true
+softness = 30
+offset_x = 0
+offset_y = 8
+
+[colors]
+shadow = "#00000066"
+
+# niri opens the overview from the top-left hot corner.
+[hot_corners.top_left]
+enabled = true
+action = "overview-open"
+
+# Scrolling is niri's model, and the default for any workspace no rule below
+# names. The workspace rules give each named workspace its own layout.
+[layout]
+mode = "scrolling"
+gap = 8
+extent_presets = [0.333, 0.5, 0.667]
+
+[layout.scrolling]
+center_underfull_strip = true
+
+# Workspaces. The names come from each host's output list. Browsing scrolls
+# like niri, Coding keeps the editor in the master area, and Gaming and the
+# spare workspaces stack, so launchers and games float freely. "4" and "5"
+# are the spares on the main output; tower's second output adds "1" and "2".
+[[workspace]]
+name = "Browsing"
+layout.mode = "scrolling"
+
+[[workspace]]
+name = "Coding"
+layout.mode = "master"
+
+[[workspace]]
+name = "Gaming"
+layout.mode = "stacking"
+
+[[workspace]]
+name = "4"
+layout.mode = "stacking"
+
+[[workspace]]
+name = "5"
+layout.mode = "stacking"
+
+[[workspace]]
+name = "1"
+layout.mode = "stacking"
+
+[[workspace]]
+name = "2"
+layout.mode = "stacking"
+
+# Window rules. The routing rules name workspaces as strings, which umbriel
+# reads as exact names rather than positions. Tower adds default_output to
+# them in its host file, because there the names live on DP-3 only.
+[[window_rule]]
+match.app_id = "^zen-beta$"
+default_workspace = "Browsing"
+
+[[window_rule]]
+match.app_id = ["^dev\\.zed\\.Zed$", "^emacs$"]
+default_workspace = "Coding"
+
+[[window_rule]]
+match.app_id = [
+    "^steam$",
+    "^steam_app_[0-9]+$",
+    "^gamescope$",
+    "^heroic$",
+    "^net\\.lutris\\.Lutris$",
+    "^org\\.prismlauncher\\.PrismLauncher$",
+    "^com\\.usebottles\\.bottles$",
+    "^net\\.davidotek\\.pupgui2$",
+]
+default_workspace = "Gaming"
+
+# Title bars for floating windows. Window rules cannot match a workspace, but
+# every window on a stacking workspace floats, so this gives them a bar to
+# drag and close by. Floated windows on tiling workspaces get one too. "on"
+# leaves out apps that ask to draw their own decorations.
+[[window_rule]]
+match.is_floating = true
+title_bar = "on"
+
+# Later rules override earlier ones, so the floating rules come after the
+# routing: zen's Picture-in-Picture window still lands on Browsing, floating,
+# and without the title bar from the rule above.
+[[window_rule]]
+match.app_id = "^zen$"
+match.title = "^Picture-in-Picture$"
+default_floating = true
+title_bar = "off"
+
+# The vault floats at a third of the screen's width and half its height.
+[[window_rule]]
+match.app_id = "^bitwarden$"
+default_floating = true
+default_floating_size = { width = 0.33, height = 0.5 }
+
+# Defining this table replaces umbriel's built-in binds, so every bind below
+# is niri's, mapped to the closest umbriel action. Mod is Super. niri binds
+# with no umbriel counterpart are listed at the end.
+[keybinds]
+"Mod+Shift+Slash" = "cheatsheet-toggle"
+
+"Mod+T" = { action = "spawn kitty", repeat = false }
+"Mod+Alt+L" = { action = "spawn noctalia msg session lock", repeat = false }
+"Mod+Space" = { action = "spawn noctalia msg panel-toggle launcher", repeat = false }
+
+# XF86AudioMute toggles the microphone, not the speakers, on every host, as
+# on niri. The brightness keys are laptop-only and live in its host file.
+"XF86AudioMute" = { action = "spawn noctalia msg mic-mute", allow_when_locked = true, repeat = false }
+"XF86AudioRaiseVolume" = { action = "spawn noctalia msg volume-up 5", allow_when_locked = true }
+"XF86AudioLowerVolume" = { action = "spawn noctalia msg volume-down 5", allow_when_locked = true }
+"XF86AudioPrev" = { action = "spawn noctalia msg media previous", allow_when_locked = true }
+"XF86AudioPlay" = { action = "spawn noctalia msg media toggle", allow_when_locked = true, repeat = false }
+"XF86AudioNext" = { action = "spawn noctalia msg media next", allow_when_locked = true }
+
+"Mod+O" = { action = "overview-toggle", repeat = false }
+"Mod+Q" = { action = "window-close", repeat = false }
+
+"Mod+Left" = "window-focus-left"
+"Mod+Down" = "window-focus-down"
+"Mod+Up" = "window-focus-up"
+"Mod+Right" = "window-focus-right"
+"Mod+H" = "window-focus-left"
+"Mod+J" = "window-focus-down"
+"Mod+K" = "window-focus-up"
+"Mod+L" = "window-focus-right"
+
+"Mod+Ctrl+Left" = "column-move-left"
+"Mod+Ctrl+Down" = "window-move-down"
+"Mod+Ctrl+Up" = "window-move-up"
+"Mod+Ctrl+Right" = "column-move-right"
+"Mod+Ctrl+H" = "column-move-left"
+"Mod+Ctrl+J" = "window-move-down"
+"Mod+Ctrl+K" = "window-move-up"
+"Mod+Ctrl+L" = "column-move-right"
+
+"Mod+Home" = "column-focus-first"
+"Mod+End" = "column-focus-last"
+"Mod+Ctrl+Home" = "column-move-to-first"
+"Mod+Ctrl+End" = "column-move-to-last"
+
+"Mod+Shift+Left" = "output-focus-left"
+"Mod+Shift+Down" = "output-focus-down"
+"Mod+Shift+Up" = "output-focus-up"
+"Mod+Shift+Right" = "output-focus-right"
+"Mod+Shift+H" = "output-focus-left"
+"Mod+Shift+J" = "output-focus-down"
+"Mod+Shift+K" = "output-focus-up"
+"Mod+Shift+L" = "output-focus-right"
+
+"Mod+Shift+Ctrl+Left" = "column-move-to-output-left"
+"Mod+Shift+Ctrl+Down" = "column-move-to-output-down"
+"Mod+Shift+Ctrl+Up" = "column-move-to-output-up"
+"Mod+Shift+Ctrl+Right" = "column-move-to-output-right"
+"Mod+Shift+Ctrl+H" = "column-move-to-output-left"
+"Mod+Shift+Ctrl+J" = "column-move-to-output-down"
+"Mod+Shift+Ctrl+K" = "column-move-to-output-up"
+"Mod+Shift+Ctrl+L" = "column-move-to-output-right"
+
+"Mod+Page_Down" = "workspace-next"
+"Mod+Page_Up" = "workspace-previous"
+"Mod+U" = "workspace-next"
+"Mod+I" = "workspace-previous"
+"Mod+Ctrl+Page_Down" = "column-move-to-workspace-next"
+"Mod+Ctrl+Page_Up" = "column-move-to-workspace-previous"
+"Mod+Ctrl+U" = "column-move-to-workspace-next"
+"Mod+Ctrl+I" = "column-move-to-workspace-previous"
+
+"Mod+Shift+Page_Down" = "workspace-move-down"
+"Mod+Shift+Page_Up" = "workspace-move-up"
+"Mod+Shift+U" = "workspace-move-down"
+"Mod+Shift+I" = "workspace-move-up"
+
+"Mod+WheelDown" = { action = "workspace-next", cooldown_ms = 150 }
+"Mod+WheelUp" = { action = "workspace-previous", cooldown_ms = 150 }
+"Mod+Ctrl+WheelDown" = { action = "column-move-to-workspace-next", cooldown_ms = 150 }
+"Mod+Ctrl+WheelUp" = { action = "column-move-to-workspace-previous", cooldown_ms = 150 }
+
+"Mod+WheelRight" = "window-focus-right"
+"Mod+WheelLeft" = "window-focus-left"
+"Mod+Ctrl+WheelRight" = "column-move-right"
+"Mod+Ctrl+WheelLeft" = "column-move-left"
+
+"Mod+Shift+WheelDown" = "window-focus-right"
+"Mod+Shift+WheelUp" = "window-focus-left"
+"Mod+Ctrl+Shift+WheelDown" = "column-move-right"
+"Mod+Ctrl+Shift+WheelUp" = "column-move-left"
+
+# Digits select by position on the focused output. Each output has at most
+# five workspaces, so niri's 6 to 9 are left out.
+"Mod+1" = "workspace-switch 1"
+"Mod+2" = "workspace-switch 2"
+"Mod+3" = "workspace-switch 3"
+"Mod+4" = "workspace-switch 4"
+"Mod+5" = "workspace-switch 5"
+"Mod+Shift+1" = "column-move-to-workspace 1"
+"Mod+Shift+2" = "column-move-to-workspace 2"
+"Mod+Shift+3" = "column-move-to-workspace 3"
+"Mod+Shift+4" = "column-move-to-workspace 4"
+"Mod+Shift+5" = "column-move-to-workspace 5"
+
+"Mod+BracketLeft" = "window-consume-or-expel-left"
+"Mod+BracketRight" = "window-consume-or-expel-right"
+
+# niri's consume-window-into-column. umbriel has no action that expels the
+# bottom window of a column, so Mod+Period expels the focused window instead.
+"Mod+Comma" = "window-consume-from-right"
+"Mod+Period" = "window-consume-or-expel-right"
+
+"Mod+R" = "window-cycle-primary-extent"
+"Mod+Shift+R" = "window-cycle-secondary-extent"
+"Mod+F" = { action = "window-toggle-maximize", repeat = false }
+"Mod+Shift+F" = { action = "window-toggle-fullscreen", repeat = false }
+
+"Mod+C" = "column-center"
+
+"Mod+Minus" = "window-modify-primary-extent -0.1"
+"Mod+Equal" = "window-modify-primary-extent 0.1"
+"Mod+Shift+Minus" = "window-modify-secondary-extent -0.1"
+"Mod+Shift+Equal" = "window-modify-secondary-extent 0.1"
+
+"Mod+V" = { action = "window-toggle-floating", repeat = false }
+"Mod+Shift+V" = { action = "window-focus-switch-floating", repeat = false }
+
+"Mod+W" = { action = "column-toggle-tabbed", repeat = false }
+
+# umbriel has no screenshot action, so noctalia takes them. Print selects a
+# region and Ctrl+Print takes the focused monitor.
+"Print" = { action = "spawn noctalia msg screenshot-region", repeat = false }
+"Ctrl+Print" = { action = "spawn noctalia msg screenshot-fullscreen", repeat = false }
+
+"Mod+Escape" = { action = "shortcuts-inhibit-toggle", allow_when_inhibited = true, repeat = false }
+
+# session-quit asks for confirmation, like niri's quit.
+"Mod+Shift+E" = "session-quit"
+"Ctrl+Alt+Delete" = "session-quit"
+
+# Any input wakes the monitors again.
+"Mod+Shift+P" = { action = "dpms-off", repeat = false }

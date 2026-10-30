@@ -1,0 +1,24 @@
+# Everything in umbriel's configuration that only this machine can know,
+# translated from niri's hosts/laptop.kdl. Linked to ~/.config/umbriel/host.toml,
+# which the shared config.toml includes. config.toml wins every plain key, so
+# this file only adds keys it leaves unset.
+
+# The XKB spelling of the `console.keyMap = "de"` in this host's
+# configuration.nix. Keep the two in step, because neither can be derived from
+# the other.
+[input.keyboard]
+layout = "de"
+
+[input.touchpad]
+tap = true
+natural_scroll = true
+
+# config.toml's [[workspace]] rules set each name's layout.
+[output."eDP-1"]
+workspaces = ["Browsing", "Coding", "Gaming", "4", "5"]
+
+# Host-specific because they name a backlight: only a machine with an internal
+# panel has one to dim.
+[keybinds]
+"XF86MonBrightnessUp" = { action = "spawn noctalia msg brightness-up 5", allow_when_locked = true }
+"XF86MonBrightnessDown" = { action = "spawn noctalia msg brightness-down 5", allow_when_locked = true }
