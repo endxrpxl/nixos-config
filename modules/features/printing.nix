@@ -19,7 +19,7 @@
     # cups-browsed finds printers, sane-airscan finds scanners. Nothing else in
     # the repo needs mDNS today, so a module named `printing` is its only
     # honest owner. A future consumer can declare `services.avahi.enable`
-    # itself — `enable = true` merges, so a second declaration is not a
+    # itself. `enable = true` merges, so a second declaration is not a
     # conflict.
     services.avahi = {
       enable = true;

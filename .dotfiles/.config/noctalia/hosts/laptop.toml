@@ -7,7 +7,7 @@ files = [ "shared/base.toml" ]
 
 [hooks]
 # Tray apps autostart here rather than from niri's spawn-at-startup, which fires
-# every entry at once — including noctalia itself. All three of these register a
+# every entry at once, noctalia itself included. Both of these register a
 # tray icon and start minimised, so racing the shell's StatusNotifierWatcher
 # leaves them running with no icon and no window. `started` fires after noctalia
 # has initialised, which orders them behind the tray host.
@@ -21,11 +21,11 @@ started = "setsid -f bitwarden; setsid -f discord --start-minimized"
 # default for a single-display machine anyway.
 
 # This machine has a fingerprint reader and tower does not, so this sits here
-# rather than in the shared half — on tower it would start a scan for a device
+# rather than in the shared half. On tower it would start a scan for a device
 # that will never answer.
 #
 # Noctalia talks to fprintd over D-Bus directly rather than through PAM, so the
-# lock screen needs nothing from `security.pam.services`; the fingerprint half
-# of the `fingerprint` feature module is just the daemon.
+# lock screen needs only the daemon from the `fingerprint` feature module. The
+# module's PAM setting covers polkit prompts, not this.
 [lockscreen]
 fingerprint = true

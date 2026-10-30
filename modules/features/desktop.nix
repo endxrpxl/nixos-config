@@ -173,11 +173,11 @@
         };
       };
 
-      # Home Manager owns the GTK settings files here. They were left behind
-      # as plain files by the previous dms-shell/matugen theming, and its gtk
-      # template writes gtk.css + dconf rather than settings.ini, so home-manager
-      # is the only writer now. `force` is required: those files already exist
-      # and would otherwise make activation refuse to clobber them.
+      # Home Manager owns the GTK settings files here. noctalia's GTK template
+      # writes gtk.css and dconf rather than settings.ini, so home-manager is
+      # the only writer. `force` is required because the previous
+      # dms-shell/matugen theming left those files behind as plain files, and
+      # activation would otherwise refuse to clobber them.
       gtk = {
         enable = true;
         iconTheme = {

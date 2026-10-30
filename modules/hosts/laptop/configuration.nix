@@ -27,7 +27,7 @@
 
     console.keyMap = "de";
 
-    programs.noctalia-greeter.settings.keyboard.layout = "de";
+    services.displayManager.noctalia-greeter.settings.keyboard.layout = "de";
 
     home-manager.users.${self.lib.username} = self.homeModules.laptop;
 

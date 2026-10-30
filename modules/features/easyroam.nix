@@ -2,14 +2,14 @@
   flake.nixosModules.easyroam =
     { pkgs, ... }:
 
-    # easyroam on NixOS: declarative NM profile + renewal script + expiry reminder.
+    # easyroam (eduroam via DFN) with a declarative NetworkManager profile, a
+    # renewal script and an expiry reminder.
     #
-    # First time / every renewal:
-    #   1. download a new PKCS12 from https://www.easyroam.de ("Manuelle Optionen" -> PKCS12)
+    # First time and every renewal:
+    #   1. download a new PKCS12 from https://www.easyroam.de ("Manuelle Optionen", then PKCS12)
     #   2. sudo easyroam-renew ~/Downloads/<date>.p12
     #
-    # Import this file in configuration.nix:  imports = [ ./easyroam.nix ];
-    # Requires networking.networkmanager.enable = true;
+    # Needs NetworkManager, which `base` enables.
 
     let
       stateDir = "/etc/easyroam";

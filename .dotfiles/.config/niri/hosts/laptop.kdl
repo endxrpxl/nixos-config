@@ -4,8 +4,8 @@
 // the end.
 
 // The XKB spelling of the `console.keyMap = "de"` in this host's
-// configuration.nix. Keep the two in step — neither can be derived from the
-// other.
+// configuration.nix. Keep the two in step, because neither can be derived from
+// the other.
 input {
     keyboard {
         xkb {

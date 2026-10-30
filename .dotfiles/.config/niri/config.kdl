@@ -1,6 +1,6 @@
 // The shared half of the niri configuration. Everything only one machine can
-// know — keyboard layout, outputs — lives in the per-host file included at the
-// bottom of this file.
+// know, such as keyboard layout and outputs, lives in the per-host file included
+// at the bottom of this file.
 
 input {
     mouse {
@@ -14,7 +14,7 @@ spawn-at-startup "noctalia"
 prefer-no-csd
 
 hotkey-overlay {
-    // Uncomment this line to disable the "Important Hotkeys" pop-up at startup.
+    // Disables the "Important Hotkeys" pop-up at startup.
     skip-at-startup
 }
 
@@ -391,7 +391,7 @@ debug {
 
 // noctalia regenerates this on every theme change, and its templates/niri/apply.sh
 // greps THIS file for the include line, appending it if absent. It does not follow
-// includes, so moving this line into host.kdl would not satisfy it — and since
+// includes, so moving this line into host.kdl would not satisfy it. Since
 // config.kdl is a symlink into the repo, apply.sh would then append to a tracked
 // file at runtime. It stays here for that reason alone.
 include "noctalia.kdl"
