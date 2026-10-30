@@ -15,7 +15,7 @@ natural_scroll = true
 
 # config.toml's [[workspace]] rules set each name's layout.
 [output."eDP-1"]
-workspaces = ["Browsing", "Coding", "Gaming", "4", "5"]
+workspaces = ["\uF0AC", "\uF121", "\uF11B", "4", "5"]
 
 # Host-specific because they name a backlight: only a machine with an internal
 # panel has one to dim.

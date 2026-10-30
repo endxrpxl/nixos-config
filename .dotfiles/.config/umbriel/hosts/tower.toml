@@ -15,7 +15,7 @@ variant = ",intl"
 mode = "3440x1440@165.001"
 scale = 1
 position = [0, 1080]
-workspaces = ["Browsing", "Coding", "Gaming", "4", "5"]
+workspaces = ["\uF0AC", "\uF121", "\uF11B", "4", "5"]
 
 [output."HDMI-A-1"]
 mode = "1920x1080@120.000"

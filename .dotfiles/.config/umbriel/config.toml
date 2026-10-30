@@ -77,16 +77,22 @@ center_underfull_strip = true
 # like niri, Coding keeps the editor in the master area, and Gaming and the
 # spare workspaces stack, so launchers and games float freely. "4" and "5"
 # are the spares on the main output; tower's second output adds "1" and "2".
+#
+# The three named workspaces are Nerd Font glyphs (RobotoMono Nerd Font is
+# installed), so the bar shows icons:
+#   \uF0AC globe    Browsing
+#   \uF121 </>      Coding
+#   \uF11B gamepad  Gaming
 [[workspace]]
-name = "Browsing"
+name = "\uF0AC"
 layout.mode = "scrolling"
 
 [[workspace]]
-name = "Coding"
+name = "\uF121"
 layout.mode = "master"
 
 [[workspace]]
-name = "Gaming"
+name = "\uF11B"
 layout.mode = "stacking"
 
 [[workspace]]
@@ -110,11 +116,11 @@ layout.mode = "stacking"
 # them in its host file, because there the names live on DP-3 only.
 [[window_rule]]
 match.app_id = "^zen-beta$"
-default_workspace = "Browsing"
+default_workspace = "\uF0AC"
 
 [[window_rule]]
 match.app_id = ["^dev\\.zed\\.Zed$", "^emacs$"]
-default_workspace = "Coding"
+default_workspace = "\uF121"
 
 [[window_rule]]
 match.app_id = [
@@ -127,7 +133,7 @@ match.app_id = [
     "^com\\.usebottles\\.bottles$",
     "^net\\.davidotek\\.pupgui2$",
 ]
-default_workspace = "Gaming"
+default_workspace = "\uF11B"
 
 # Title bars for floating windows. Window rules cannot match a workspace, but
 # every window on a stacking workspace floats, so this gives them a bar to
