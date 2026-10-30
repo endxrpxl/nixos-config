@@ -1,7 +1,6 @@
 { self, inputs, ... }: {
   flake.nixosModules.desktop = { pkgs, ... }: {
     imports = [
-      self.nixosModules.zen
       inputs.nix-flatpak.nixosModules.nix-flatpak
       inputs.noctalia-greeter.nixosModules.default
     ];
@@ -15,10 +14,11 @@
       enable = true;
       recommendedServices.enable = true;
     };
+    hardware.bluetooth.powerOnBoot = false;
 
     # The login screen. Only the settings no machine can differ on live here;
     # `keyboard.layout` is host identity and each host adds its own.
-    programs.noctalia-greeter = {
+    services.displayManager.noctalia-greeter = {
       enable = true;
       settings = {
         session.default = "niri";
@@ -65,11 +65,14 @@
         withVencord = true;
       })
 
-      nautilus
       loupe
       evince
       vlc
       file-roller
+      nemo-with-extensions
+      pinta
+
+      inputs.zen-browser.packages."${pkgs.system}".default
 
       eduvpn-client
 
@@ -78,6 +81,7 @@
       bibata-cursors
       whitesur-icon-theme
       colloid-icon-theme
+      papirus-icon-theme
 
       # noctalia's GTK template sets gtk-theme to adw-gtk3/adw-gtk3-dark, but
       # only `if theme_exists`. Without this it silently applies its colours to
@@ -91,6 +95,7 @@
     fonts.packages = with pkgs; [
       roboto
       roboto-mono
+      inter
       nerd-fonts.roboto-mono
 
       noto-fonts
@@ -98,6 +103,8 @@
 
     # easyeffects reads dconf for its preset paths.
     programs.dconf.enable = true;
+
+    services.udev.packages = [ pkgs.wooting-udev-rules ];
   };
 
   flake.homeModules.desktop =
@@ -139,6 +146,7 @@
           # autoloads the root of its config directory but not subdirectories.
           "noctalia/config.toml" = authored "noctalia/hosts/${host}.toml";
           "noctalia/shared/base.toml" = authored "noctalia/shared/base.toml";
+          "noctalia/palettes/apple.json" = authored "noctalia/palettes/apple.json";
 
           # EasyEffects writes these itself, so this re-authors its runtime
           # dumps. easyeffectsrc names the audio devices, which only the host
@@ -156,6 +164,31 @@
           templates = null;
         };
       };
+
+      dconf = {
+        settings = {
+          "org/cinnamon/desktop/applications/terminal" = {
+            exec = "kitty";
+          };
+        };
+      };
+
+      # Home Manager owns the GTK settings files here. They were left behind
+      # as plain files by the previous dms-shell/matugen theming, and its gtk
+      # template writes gtk.css + dconf rather than settings.ini, so home-manager
+      # is the only writer now. `force` is required: those files already exist
+      # and would otherwise make activation refuse to clobber them.
+      gtk = {
+        enable = true;
+        iconTheme = {
+          package = pkgs.whitesur-icon-theme;
+          name = "WhiteSur-dark";
+        };
+        gtk2.force = true;
+      };
+
+      xdg.configFile."gtk-3.0/settings.ini".force = true;
+      xdg.configFile."gtk-4.0/settings.ini".force = true;
 
       # noctalia rewrites both of these whenever the theme changes, so they are
       # runtime output and are not linked. Their includes are authored into

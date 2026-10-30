@@ -25,8 +25,16 @@ screenshot-path "~/Pictures/Screenshots/%Y-%m-%d %H-%M-%S.png"
 
 
 window-rule {
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    match app-id="^zen$" title="^Picture-in-Picture$"
     open-floating true
+}
+
+// The vault floats at a third of the screen's width and half its height.
+window-rule {
+    match app-id="^bitwarden$"
+    open-floating true
+    default-column-width { proportion 0.33; }
+    default-window-height { proportion 0.5; }
 }
 
 
@@ -58,9 +66,9 @@ binds {
     // The allow-when-locked=true property makes them work even when the session is locked.
     // Using spawn-sh allows to pass multiple arguments together with the command.
     //
-    // XF86AudioMute toggles the *microphone*, not the speakers, because that is
-    // what the DMS bind did. Preserved deliberately, so the swap changes only
-    // the shell.
+    // XF86AudioMute toggles the *microphone*, not the speakers, on every host,
+    // so it is shared rather than host identity.
+    XF86AudioMute        allow-when-locked=true { spawn-sh "noctalia msg mic-mute"; }
     XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "noctalia msg volume-up 5"; }
     XF86AudioLowerVolume allow-when-locked=true { spawn-sh "noctalia msg volume-down 5"; }
     XF86AudioPrev        allow-when-locked=true { spawn-sh "noctalia msg media previous"; }
@@ -169,15 +177,15 @@ binds {
     Mod+7 { focus-workspace 7; }
     Mod+8 { focus-workspace 8; }
     Mod+9 { focus-workspace 9; }
-    Mod+Ctrl+1 { move-column-to-workspace 1; }
-    Mod+Ctrl+2 { move-column-to-workspace 2; }
-    Mod+Ctrl+3 { move-column-to-workspace 3; }
-    Mod+Ctrl+4 { move-column-to-workspace 4; }
-    Mod+Ctrl+5 { move-column-to-workspace 5; }
-    Mod+Ctrl+6 { move-column-to-workspace 6; }
-    Mod+Ctrl+7 { move-column-to-workspace 7; }
-    Mod+Ctrl+8 { move-column-to-workspace 8; }
-    Mod+Ctrl+9 { move-column-to-workspace 9; }
+    Mod+Shift+1 { move-column-to-workspace 1; }
+    Mod+Shift+2 { move-column-to-workspace 2; }
+    Mod+Shift+3 { move-column-to-workspace 3; }
+    Mod+Shift+4 { move-column-to-workspace 4; }
+    Mod+Shift+5 { move-column-to-workspace 5; }
+    Mod+Shift+6 { move-column-to-workspace 6; }
+    Mod+Shift+7 { move-column-to-workspace 7; }
+    Mod+Shift+8 { move-column-to-workspace 8; }
+    Mod+Shift+9 { move-column-to-workspace 9; }
 
     // The following binds move the focused window in and out of a column.
     // If the window is alone, they will consume it into the nearby column to the side.
@@ -255,15 +263,24 @@ binds {
 }
 
 layout {
+    // About 8px, the margin macOS Sequoia leaves around tiled windows.
     gaps 8
 
     focus-ring {
         width 2
     }
+
+    shadow {
+        on
+        softness 30
+        spread 2
+        offset x=0 y=8
+        color "#00000066"
+    }
 }
 
 window-rule {
-    geometry-corner-radius 12
+    geometry-corner-radius 16
     clip-to-geometry true
     tiled-state true
     draw-border-with-background false
@@ -271,7 +288,7 @@ window-rule {
 
 window-rule {
   background-effect {
-    blur true
+    blur false
     xray false
   }
 }
@@ -280,15 +297,15 @@ layer-rule {
   match namespace="^noctalia-(bar-[^\"]+|notification|dock|panel|attached-panel|osd)$"
   background-effect {
     xray false
-    // blur false
+    blur false
   }
 }
 
-/* Enable blur on noctalia's window switcher and disable xray. */
+/* No blur on noctalia's window switcher either. */
 layer-rule {
     match namespace="noctalia-window-switcher"
     background-effect {
-        blur true
+        blur false
         xray false
     }
 }
@@ -301,9 +318,64 @@ blur {
   saturation 1.0  // color saturation boost (default: 1.5)
 }
 
+// Motion after Apple's HIG: springs sized by response time, the way SwiftUI
+// sizes them. For a response of r seconds, stiffness = (2 * pi / r)^2.
+// Critically damped for navigation, a touch of bounce (0.9) when windows move.
+animations {
+    workspace-switch {
+        spring damping-ratio=1.0 stiffness=500 epsilon=0.0001
+    }
+    horizontal-view-movement {
+        spring damping-ratio=0.9 stiffness=690 epsilon=0.0001
+    }
+    window-movement {
+        spring damping-ratio=0.9 stiffness=690 epsilon=0.0001
+    }
+    window-resize {
+        spring damping-ratio=1.0 stiffness=690 epsilon=0.0001
+    }
+    overview-open-close {
+        spring damping-ratio=1.0 stiffness=390 epsilon=0.0001
+    }
+
+    // Windows zoom in from 92% and fade, like a macOS window opening.
+    window-open {
+        duration-ms 200
+        curve "cubic-bezier" 0.2 0.9 0.3 1.0
+        custom-shader r"
+            vec4 open_color(vec3 coords_geo, vec3 size_geo) {
+                float p = niri_clamped_progress;
+                float scale = mix(0.92, 1.0, p);
+                vec3 coords = vec3((coords_geo.xy - 0.5) / scale + 0.5, 1.0);
+                if (coords.x < 0.0 || coords.x > 1.0 || coords.y < 0.0 || coords.y > 1.0)
+                    return vec4(0.0);
+                vec3 coords_tex = niri_geo_to_tex * coords;
+                return texture2D(niri_tex, coords_tex.st) * p;
+            }
+        "
+    }
+
+    // And shrink to 95% while fading out when they close.
+    window-close {
+        duration-ms 150
+        curve "ease-out-quad"
+        custom-shader r"
+            vec4 close_color(vec3 coords_geo, vec3 size_geo) {
+                float p = niri_clamped_progress;
+                float scale = mix(1.0, 0.95, p);
+                vec3 coords = vec3((coords_geo.xy - 0.5) / scale + 0.5, 1.0);
+                if (coords.x < 0.0 || coords.x > 1.0 || coords.y < 0.0 || coords.y > 1.0)
+                    return vec4(0.0);
+                vec3 coords_tex = niri_geo_to_tex * coords;
+                return texture2D(niri_tex, coords_tex.st) * (1.0 - p);
+            }
+        "
+    }
+}
+
 recent-windows {
     highlight {
-        corner-radius 12
+        corner-radius 16
     }
 }
 
