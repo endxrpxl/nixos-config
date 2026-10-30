@@ -27,7 +27,7 @@ workspaces = ["1", "2"]
 # config.toml's routing rules still pick the workspace.
 [[window_rule]]
 match.app_id = [
-    "^zen$",
+    "^zen-beta$",
     "^dev\\.zed\\.Zed$",
     "^emacs$",
     "^steam$",

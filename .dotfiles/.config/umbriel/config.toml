@@ -141,7 +141,7 @@ title_bar = "on"
 # routing: zen's Picture-in-Picture window still lands on Browsing, floating,
 # and without the title bar from the rule above.
 [[window_rule]]
-match.app_id = "^zen$"
+match.app_id = "^zen-beta$"
 match.title = "^Picture-in-Picture$"
 default_floating = true
 title_bar = "off"
