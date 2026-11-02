@@ -41,12 +41,8 @@ match.app_id = [
 ]
 default_output = "DP-3"
 
-# Host-specific because they name a connector. As on niri, these open on the
-# side screen's active workspace.
-[[window_rule]]
-match.title = "^Spotify$"
-default_output = "HDMI-A-1"
-
+# Host-specific because it names a connector. As on niri, Discord opens on the
+# side screen's active workspace. Spotify lives in config.toml's scratchpad.
 [[window_rule]]
 match.app_id = "^discord$"
 default_output = "HDMI-A-1"

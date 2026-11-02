@@ -158,9 +158,27 @@ match.app_id = "^bitwarden$"
 default_floating = true
 default_floating_size = { width = 0.33, height = 0.5 }
 
+# Spotify lives in its own scratchpad, shown and hidden with Mod+M. Toggling
+# the empty pad launches Spotify. A window that opens into a scratchpad
+# ignores default_maximize, so it is sized to the whole usable area instead,
+# which leaves the bar visible the way Mod+F does. It matches on app_id and,
+# as niri does, on the title, in case the app_id is missing at startup.
+[[scratchpad]]
+name = "music"
+spawn_when_empty = "spotify"
+
+[[window_rule]]
+match.app_id = "^spotify$"
+default_scratchpad = "music"
+default_floating_size = { width = 1.0, height = 1.0 }
+
+[[window_rule]]
+match.title = "^Spotify$"
+default_scratchpad = "music"
+default_floating_size = { width = 1.0, height = 1.0 }
+
 # Defining this table replaces umbriel's built-in binds, so every bind below
-# is niri's, mapped to the closest umbriel action. Mod is Super. niri binds
-# with no umbriel counterpart are listed at the end.
+# is niri's, mapped to the closest umbriel action. Mod is Super.
 [keybinds]
 "Mod+Shift+Slash" = "cheatsheet-toggle"
 
@@ -288,6 +306,8 @@ default_floating_size = { width = 0.33, height = 0.5 }
 
 "Mod+W" = { action = "column-toggle-tabbed", repeat = false }
 
+"Mod+M" = { action = "scratchpad-toggle music", repeat = false }
+
 # umbriel has no screenshot action, so noctalia takes them. Print selects a
 # region and Ctrl+Print takes the focused monitor.
 "Print" = { action = "spawn noctalia msg screenshot-region", repeat = false }
@@ -296,7 +316,6 @@ default_floating_size = { width = 0.33, height = 0.5 }
 "Mod+Escape" = { action = "shortcuts-inhibit-toggle", allow_when_inhibited = true, repeat = false }
 
 # session-quit asks for confirmation, like niri's quit.
-"Mod+Shift+E" = "session-quit"
 "Ctrl+Alt+Delete" = "session-quit"
 
 # Any input wakes the monitors again.
