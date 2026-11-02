@@ -79,7 +79,7 @@ center_underfull_strip = true
 # Workspaces. The names come from each host's output list. Browsing scrolls,
 # Coding keeps the editor in the master area, and Gaming and the spare
 # workspaces stack, so launchers and games float freely. "4" and "5"
-# are the spares on the main output; tower's second output adds "1" and "2".
+# are the spares.
 #
 # The three named workspaces are Nerd Font glyphs (RobotoMono Nerd Font is
 # installed), so the bar shows icons:
@@ -177,6 +177,16 @@ default_floating_size = { width = 1.0, height = 1.0 }
 [[window_rule]]
 match.title = "^Spotify$"
 default_scratchpad = "music"
+default_floating_size = { width = 1.0, height = 1.0 }
+
+# Discord gets the same treatment in its own scratchpad, toggled with Mod+N.
+[[scratchpad]]
+name = "chat"
+spawn_when_empty = "discord"
+
+[[window_rule]]
+match.app_id = "^discord$"
+default_scratchpad = "chat"
 default_floating_size = { width = 1.0, height = 1.0 }
 
 # Defining this table replaces umbriel's built-in binds, so every bind must be
@@ -310,6 +320,7 @@ default_floating_size = { width = 1.0, height = 1.0 }
 "Mod+W" = { action = "column-toggle-tabbed", repeat = false }
 
 "Mod+M" = { action = "scratchpad-toggle music", repeat = false }
+"Mod+N" = { action = "scratchpad-toggle chat", repeat = false }
 
 # umbriel has no screenshot action, so noctalia takes them. Print selects a
 # region and Ctrl+Print takes the focused monitor.

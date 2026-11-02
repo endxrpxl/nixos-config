@@ -8,24 +8,9 @@
 # this host's configuration.nix. That setting is the only place the layout is
 # written.
 
-# Outputs and modes. HDMI-A-1 sits above DP-3, so DP-3 starts at y=1080 and
-# no coordinate is negative. The ultrawide holds the named
-# workspaces and two spares, the side screen two more spares. config.toml's
+# The ultrawide holds the named workspaces and two spares. config.toml's
 # [[workspace]] rules set each name's layout.
 [output."DP-3"]
 mode = "3440x1440@165.001"
 scale = 1
-position = [0, 1080]
 workspaces = ["\uF0AC", "\uF121", "\uF11B", "4", "5"]
-
-[output."HDMI-A-1"]
-mode = "1920x1080@120.000"
-scale = 1
-position = [771, 0]
-workspaces = ["1", "2"]
-
-# Host-specific because it names a connector. Discord opens on the side
-# screen's active workspace. Spotify lives in config.toml's scratchpad.
-[[window_rule]]
-match.app_id = "^discord$"
-default_output = "HDMI-A-1"
