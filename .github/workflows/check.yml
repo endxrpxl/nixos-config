@@ -1,0 +1,17 @@
+# Evaluates every host and checks formatting, the same `nix flake check` the
+# README runs locally. Nothing is built beyond the formatter check.
+name: check
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  flake-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: cachix/install-nix-action@v31
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      - run: nix flake check
