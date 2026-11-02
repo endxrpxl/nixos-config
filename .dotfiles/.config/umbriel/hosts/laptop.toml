@@ -1,13 +1,11 @@
-# Everything in umbriel's configuration that only this machine can know,
-# translated from niri's hosts/laptop.kdl. Linked to ~/.config/umbriel/host.toml,
-# which the shared config.toml includes. config.toml wins every plain key, so
-# this file only adds keys it leaves unset.
-
-# The XKB spelling of the `console.keyMap = "de"` in this host's
-# configuration.nix. Keep the two in step, because neither can be derived from
-# the other.
-[input.keyboard]
-layout = "de"
+# Everything in umbriel's configuration that only this machine can know. Linked
+# to ~/.config/umbriel/host.toml, which the shared config.toml includes.
+# config.toml wins every plain key, so this file only adds keys it leaves unset.
+#
+# No [input.keyboard] here. With none of its keys set, umbriel reads the X11
+# keymap from systemd-localed, which NixOS fills from services.xserver.xkb in
+# this host's configuration.nix. That setting is the only place the layout is
+# written.
 
 [input.touchpad]
 tap = true

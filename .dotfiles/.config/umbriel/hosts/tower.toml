@@ -1,14 +1,15 @@
-# Everything in umbriel's configuration that only this machine can know,
-# translated from niri's hosts/tower.kdl. Linked to ~/.config/umbriel/host.toml,
-# which the shared config.toml includes. config.toml wins every plain key, so
-# this file only adds keys it leaves unset. Rule lists collect from both files.
+# Everything in umbriel's configuration that only this machine can know. Linked
+# to ~/.config/umbriel/host.toml, which the shared config.toml includes.
+# config.toml wins every plain key, so this file only adds keys it leaves unset.
+# Rule lists collect from both files.
+#
+# No [input.keyboard] here. With none of its keys set, umbriel reads the X11
+# keymap from systemd-localed, which NixOS fills from services.xserver.xkb in
+# this host's configuration.nix. That setting is the only place the layout is
+# written.
 
-[input.keyboard]
-layout = "gb,gb"
-variant = ",intl"
-
-# niri's outputs and modes. Positions are shifted down by 1080 so neither
-# is negative; the arrangement is the same. The ultrawide holds the named
+# Outputs and modes. HDMI-A-1 sits above DP-3, so DP-3 starts at y=1080 and
+# no coordinate is negative. The ultrawide holds the named
 # workspaces and two spares, the side screen two more spares. config.toml's
 # [[workspace]] rules set each name's layout.
 [output."DP-3"]
@@ -23,26 +24,8 @@ scale = 1
 position = [771, 0]
 workspaces = ["1", "2"]
 
-# The named workspaces exist on DP-3 only, so the routed apps open there.
-# config.toml's routing rules still pick the workspace.
-[[window_rule]]
-match.app_id = [
-    "^zen-beta$",
-    "^dev\\.zed\\.Zed$",
-    "^emacs$",
-    "^steam$",
-    "^steam_app_[0-9]+$",
-    "^gamescope$",
-    "^heroic$",
-    "^net\\.lutris\\.Lutris$",
-    "^org\\.prismlauncher\\.PrismLauncher$",
-    "^com\\.usebottles\\.bottles$",
-    "^net\\.davidotek\\.pupgui2$",
-]
-default_output = "DP-3"
-
-# Host-specific because it names a connector. As on niri, Discord opens on the
-# side screen's active workspace. Spotify lives in config.toml's scratchpad.
+# Host-specific because it names a connector. Discord opens on the side
+# screen's active workspace. Spotify lives in config.toml's scratchpad.
 [[window_rule]]
 match.app_id = "^discord$"
 default_output = "HDMI-A-1"

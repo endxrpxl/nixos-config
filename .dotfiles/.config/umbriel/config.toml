@@ -1,7 +1,6 @@
-# The shared half of the umbriel configuration, translated from niri's
-# config.kdl. Everything only one machine can know, such as keyboard layout,
-# outputs and the workspace list per output, lives in the per-host file,
-# hosts/<host>.toml, linked to ~/.config/umbriel/host.toml.
+# The shared half of the umbriel configuration. Everything only one machine can
+# know, such as outputs and the workspace list per output, lives in the
+# per-host file, hosts/<host>.toml, linked to ~/.config/umbriel/host.toml.
 #
 # Includes load first, in list order, and this file loads last and wins every
 # conflict on a plain key. The host file can therefore only add keys this file
@@ -25,7 +24,7 @@ files = ["noctalia.toml"]
 
 [general]
 autostart = ["noctalia"]
-# niri's `hotkey-overlay { skip-at-startup }`.
+# Do not show the cheatsheet at startup.
 show_cheatsheet = false
 
 [input.mouse]
@@ -40,19 +39,19 @@ size = 20
 [appearance]
 prefer_no_csd = true
 corner_radius = 16
-# niri's focus ring width.
+# Width of the focus border around the active window.
 border_width = 2
 
 # disable minimize button
 [appearance.title_bar]
 buttons = ["maximize", "close"]
 
-# niri turns blur off for every window and noctalia surface, so the master
-# switch is off here too and no rule opts in.
+# Blur stays off for every window and noctalia surface. The master switch is
+# off here, so no rule opts in.
 [appearance.blur]
 enabled = false
 
-# niri's shadow: softness 30, offset y=8, color #00000066.
+# Shadow: softness 30, offset y=8, color #00000066.
 [appearance.shadow]
 enabled = true
 softness = 30
@@ -62,13 +61,13 @@ offset_y = 8
 [colors]
 shadow = "#00000066"
 
-# niri opens the overview from the top-left hot corner.
+# Moving the pointer into the top-left corner opens the overview.
 [hot_corners.top_left]
 enabled = true
 action = "overview-open"
 
-# Scrolling is niri's model, and the default for any workspace no rule below
-# names. The workspace rules give each named workspace its own layout.
+# Scrolling is the default for any workspace no rule below names. The
+# workspace rules give each named workspace its own layout.
 [layout]
 mode = "scrolling"
 gap = 8
@@ -77,9 +76,9 @@ extent_presets = [0.333, 0.5, 0.667]
 [layout.scrolling]
 center_underfull_strip = true
 
-# Workspaces. The names come from each host's output list. Browsing scrolls
-# like niri, Coding keeps the editor in the master area, and Gaming and the
-# spare workspaces stack, so launchers and games float freely. "4" and "5"
+# Workspaces. The names come from each host's output list. Browsing scrolls,
+# Coding keeps the editor in the master area, and Gaming and the spare
+# workspaces stack, so launchers and games float freely. "4" and "5"
 # are the spares on the main output; tower's second output adds "1" and "2".
 #
 # The three named workspaces are Nerd Font glyphs (RobotoMono Nerd Font is
@@ -116,8 +115,7 @@ name = "2"
 layout.mode = "stacking"
 
 # Window rules. The routing rules name workspaces as strings, which umbriel
-# reads as exact names rather than positions. Tower adds default_output to
-# them in its host file, because there the names live on DP-3 only.
+# reads as exact names rather than positions.
 [[window_rule]]
 match.app_id = "^zen-beta$"
 default_workspace = "\uF0AC"
@@ -165,8 +163,8 @@ default_floating_size = { width = 0.33, height = 0.5 }
 # Spotify lives in its own scratchpad, shown and hidden with Mod+M. Toggling
 # the empty pad launches Spotify. A window that opens into a scratchpad
 # ignores default_maximize, so it is sized to the whole usable area instead,
-# which leaves the bar visible the way Mod+F does. It matches on app_id and,
-# as niri does, on the title, in case the app_id is missing at startup.
+# which leaves the bar visible the way Mod+F does. It matches on app_id and
+# also on the title, in case the app_id is missing at startup.
 [[scratchpad]]
 name = "music"
 spawn_when_empty = "spotify"
@@ -181,8 +179,8 @@ match.title = "^Spotify$"
 default_scratchpad = "music"
 default_floating_size = { width = 1.0, height = 1.0 }
 
-# Defining this table replaces umbriel's built-in binds, so every bind below
-# is niri's, mapped to the closest umbriel action. Mod is Super.
+# Defining this table replaces umbriel's built-in binds, so every bind must be
+# listed here. Mod is Super.
 [keybinds]
 "Mod+Shift+Slash" = "cheatsheet-toggle"
 
@@ -190,8 +188,8 @@ default_floating_size = { width = 1.0, height = 1.0 }
 "Mod+Alt+L" = { action = "spawn noctalia msg session lock", repeat = false }
 "Mod+Space" = { action = "spawn noctalia msg panel-toggle launcher", repeat = false }
 
-# XF86AudioMute toggles the microphone, not the speakers, on every host, as
-# on niri. The brightness keys are laptop-only and live in its host file.
+# XF86AudioMute toggles the microphone, not the speakers, on every host. The
+# brightness keys are laptop-only and live in its host file.
 "XF86AudioMute" = { action = "spawn noctalia msg mic-mute", allow_when_locked = true, repeat = false }
 "XF86AudioRaiseVolume" = { action = "spawn noctalia msg volume-up 5", allow_when_locked = true }
 "XF86AudioLowerVolume" = { action = "spawn noctalia msg volume-down 5", allow_when_locked = true }
@@ -273,7 +271,7 @@ default_floating_size = { width = 1.0, height = 1.0 }
 "Mod+Ctrl+Shift+WheelUp" = "column-move-left"
 
 # Digits select by position on the focused output. Each output has at most
-# five workspaces, so niri's 6 to 9 are left out.
+# five workspaces, so digits 6 to 9 are left out.
 "Mod+1" = "workspace-switch 1"
 "Mod+2" = "workspace-switch 2"
 "Mod+3" = "workspace-switch 3"
@@ -288,8 +286,9 @@ default_floating_size = { width = 1.0, height = 1.0 }
 "Mod+BracketLeft" = "window-consume-or-expel-left"
 "Mod+BracketRight" = "window-consume-or-expel-right"
 
-# niri's consume-window-into-column. umbriel has no action that expels the
-# bottom window of a column, so Mod+Period expels the focused window instead.
+# Mod+Comma pulls the window on the right into this column. umbriel has no
+# action that expels the bottom window of a column, so Mod+Period expels the
+# focused window instead.
 "Mod+Comma" = "window-consume-from-right"
 "Mod+Period" = "window-consume-or-expel-right"
 
@@ -319,7 +318,7 @@ default_floating_size = { width = 1.0, height = 1.0 }
 
 "Mod+Escape" = { action = "shortcuts-inhibit-toggle", allow_when_inhibited = true, repeat = false }
 
-# session-quit asks for confirmation, like niri's quit.
+# session-quit asks for confirmation.
 "Ctrl+Alt+Delete" = "session-quit"
 
 # Any input wakes the monitors again.

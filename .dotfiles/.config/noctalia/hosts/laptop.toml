@@ -6,14 +6,14 @@
 files = ["shared/base.toml"]
 
 [hooks]
-# Tray apps autostart here rather than from niri's spawn-at-startup, which fires
-# every entry at once, noctalia itself included. Both of these register a
-# tray icon and start minimised, so racing the shell's StatusNotifierWatcher
-# leaves them running with no icon and no window. `started` fires after noctalia
-# has initialised, which orders them behind the tray host.
+# Tray apps start here rather than from umbriel's autostart list, which would
+# launch them alongside noctalia. Bitwarden registers a tray icon and starts
+# minimised, so racing the shell's StatusNotifierWatcher leaves it running with
+# no icon and no window. `started` fires after noctalia has initialised, which
+# orders it behind the tray host.
 #
-# setsid detaches each app from noctalia's process group, so restarting the
-# shell does not take them down with it.
+# setsid detaches the app from noctalia's process group, so restarting the
+# shell does not take it down with it.
 started = "setsid -f bitwarden"
 battery_charging = "noctalia msg power-set performance"
 battery_discharging = "noctalia msg power-set balanced"

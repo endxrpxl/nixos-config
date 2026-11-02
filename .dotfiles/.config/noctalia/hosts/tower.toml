@@ -9,11 +9,11 @@
 files = ["shared/base.toml"]
 
 [hooks]
-# Tray apps autostart here rather than from niri's spawn-at-startup, which fires
-# every entry at once, noctalia itself included. All three of these register a
-# tray icon and start minimised, so racing the shell's StatusNotifierWatcher
-# leaves them running with no icon and no window. `started` fires after noctalia
-# has initialised, which orders them behind the tray host.
+# Tray apps start here rather than from umbriel's autostart list, which would
+# launch them alongside noctalia. All three register a tray icon and start
+# minimised, so racing the shell's StatusNotifierWatcher leaves them running
+# with no icon and no window. `started` fires after noctalia has initialised,
+# which orders them behind the tray host.
 #
 # setsid detaches each app from noctalia's process group, so restarting the
 # shell does not take them down with it.
@@ -30,7 +30,6 @@ schema_version = 2
 widget_order = [
     "lockscreen-login-box@HDMI-A-1",
     "lockscreen-login-box@DP-3",
-    "lockscreen-login-box@HEADLESS-1",
     "lockscreen-widget-0000000000000001",
 ]
 
@@ -75,31 +74,6 @@ rotation = 0.0
 type = "login_box"
 
 [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1".settings]
-background_color = "surface_variant"
-background_opacity = 1.0
-background_radius = 12.0
-center_password_text = false
-input_opacity = 1.0
-input_radius = 6.0
-layout = "regular"
-show_caps_lock = true
-show_keyboard_layout = true
-show_login_button = true
-show_media = true
-show_session_buttons = true
-show_unlock_hint = true
-show_weather = true
-
-[lockscreen_widgets.widget."lockscreen-login-box@HEADLESS-1"]
-box_height = 196.0
-box_width = 810.0
-cx = 640.0
-cy = 538.0
-output = "HEADLESS-1"
-rotation = 0.0
-type = "login_box"
-
-[lockscreen_widgets.widget."lockscreen-login-box@HEADLESS-1".settings]
 background_color = "surface_variant"
 background_opacity = 1.0
 background_radius = 12.0

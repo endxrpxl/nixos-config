@@ -16,8 +16,7 @@
 # `noctalia config validate` checks this file.
 
 # The look follows Apple's HIG as of macOS 26 Tahoe, minus the glass: solid
-# surfaces and borderless controls. Colours come from palettes/apple.json, the
-# Apple system colours.
+# surfaces and borderless controls.
 
 [audio]
 enable_sounds = true
@@ -97,7 +96,7 @@ mode = "dark"
 source = "builtin"
 
 [theme.templates]
-builtin_ids = ["gtk3", "gtk4", "kitty", "niri", "qt", "starship", "umbriel"]
+builtin_ids = ["gtk3", "gtk4", "kitty", "qt", "starship", "umbriel"]
 community_ids = [
     "zen-browser",
     "discord",
@@ -122,7 +121,6 @@ corner_radius_scale = 1.4
 font_family = "Inter"
 input_borders = false
 launch_apps_as_systemd_services = true
-niri_overview_type_to_launch_enabled = true
 polkit_agent = true
 popup_borders = false
 
