@@ -29,7 +29,7 @@ enable_sounds = true
 [bar.default]
 background_opacity = 1.0
 capsule = false
-center = [ "clock" ]
+center = ["clock"]
 concave_edge_corners = true
 end = [
     "media",
@@ -42,7 +42,7 @@ end = [
     "brightness",
     "battery",
     "notifications",
-    "control-center"
+    "control-center",
 ]
 font_weight = 500
 margin_edge = 0
@@ -52,7 +52,7 @@ radius_bottom_right = 12
 radius_top_left = 0
 radius_top_right = 0
 shadow = false
-start = [ "workspaces" ]
+start = ["workspaces"]
 thickness = 28
 widget_spacing = 8
 
@@ -60,22 +60,22 @@ widget_spacing = 8
 enabled = false
 
 [idle]
-behavior_order = [ "screen-off", "lock", "lock-and-suspend" ]
+behavior_order = ["screen-off", "lock", "lock-and-suspend"]
 
-    [idle.behavior.lock]
-    action = "lock"
-    enabled = true
-    timeout = 600.0
+[idle.behavior.lock]
+action = "lock"
+enabled = true
+timeout = 600.0
 
-    [idle.behavior.lock-and-suspend]
-    action = "lock_and_suspend"
-    enabled = true
-    timeout = 900.0
+[idle.behavior.lock-and-suspend]
+action = "lock_and_suspend"
+enabled = true
+timeout = 900.0
 
-    [idle.behavior.screen-off]
-    action = "screen_off"
-    enabled = true
-    timeout = 300.0
+[idle.behavior.screen-off]
+action = "screen_off"
+enabled = true
+timeout = 300.0
 
 [location]
 auto_locate = true
@@ -92,31 +92,26 @@ background_opacity = 1.0
 border = false
 
 [theme]
-custom_palette = "apple"
+builtin = "Catppuccin"
 mode = "dark"
-source = "custom"
-wallpaper_scheme = "m3-content"
+source = "builtin"
 
-    [theme.templates]
-    builtin_ids = [ "gtk3", "gtk4", "kitty", "niri", "qt", "starship", "umbriel" ]
-    community_ids = [
-        "opencode",
-        "pi-agent",
-        "zen-browser",
-        "discord",
-        "vscode",
-        "zed",
-        "fastfetch",
-        "zathura",
-        "whitesur-icons",
-        "yazi"
-    ]
+[theme.templates]
+builtin_ids = ["gtk3", "gtk4", "kitty", "niri", "qt", "starship", "umbriel"]
+community_ids = [
+    "zen-browser",
+    "discord",
+    "zed",
+    "whitesur-icons",
+    "papirus-icons",
+    "claude-code",
+]
 
 [wallpaper]
 directory = "~/nixos-config/.dotfiles/wallpapers"
 
-    [wallpaper.default]
-    path = "/home/ansgar/nixos-config/.dotfiles/wallpapers/daniel-leone.jpg"
+[wallpaper.default]
+path = "~/nixos-config/.dotfiles/wallpapers/daniel-leone.jpg"
 
 # macOS controls are borderless fills, so every outline is off.
 [shell]
@@ -131,23 +126,23 @@ niri_overview_type_to_launch_enabled = true
 polkit_agent = true
 popup_borders = false
 
-    [shell.greeter_sync]
-    auto_sync = false
+[shell.greeter_sync]
+auto_sync = false
 
-    [shell.panel]
-    borders = false
-    clipboard_placement = "attached"
-    clipboard_position = "auto"
-    list_item_background = true
-    open_near_click_clipboard = true
-    open_near_click_control_center = true
-    open_near_click_session = true
-    open_near_click_wallpaper = true
-    transparency_mode = "solid"
+[shell.panel]
+borders = false
+clipboard_placement = "attached"
+clipboard_position = "auto"
+list_item_background = true
+open_near_click_clipboard = true
+open_near_click_control_center = true
+open_near_click_session = true
+open_near_click_wallpaper = true
+transparency_mode = "solid"
 
-    [shell.shadow]
-    alpha = 0.35
-    direction = "down"
+[shell.shadow]
+alpha = 0.35
+direction = "down"
 
 [widget.control-center]
 glyph = "home"

@@ -3,7 +3,7 @@
 # included rather than autoloaded.
 
 [include]
-files = [ "shared/base.toml" ]
+files = ["shared/base.toml"]
 
 [hooks]
 # Tray apps autostart here rather than from niri's spawn-at-startup, which fires
@@ -14,7 +14,10 @@ files = [ "shared/base.toml" ]
 #
 # setsid detaches each app from noctalia's process group, so restarting the
 # shell does not take them down with it.
-started = "setsid -f bitwarden; setsid -f discord --start-minimized"
+started = "setsid -f bitwarden"
+battery_charging = "noctalia msg power-set performance"
+battery_discharging = "noctalia msg power-set balanced"
+battery_plugged = "noctalia msg power-set performance"
 
 # No per-surface `monitors` lists: this machine's connectors have never been
 # enumerated, and an empty list means "every monitor", which is the right
@@ -29,3 +32,4 @@ started = "setsid -f bitwarden; setsid -f discord --start-minimized"
 # module's PAM setting covers polkit prompts, not this.
 [lockscreen]
 fingerprint = true
+transition = ["fade"]

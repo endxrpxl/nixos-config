@@ -43,6 +43,10 @@ corner_radius = 16
 # niri's focus ring width.
 border_width = 2
 
+# disable minimize button
+[appearance.title_bar]
+buttons = ["maximize", "close"]
+
 # niri turns blur off for every window and noctalia surface, so the master
 # switch is off here too and no rule opts in.
 [appearance.blur]
