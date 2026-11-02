@@ -22,7 +22,7 @@
     services.displayManager.noctalia-greeter = {
       enable = true;
       settings = {
-        session.default = "niri";
+        session.default = "umbriel";
 
         # The greeter runs as its own user and cannot see `home.pointerCursor`
         # below, so it is given the store path outright rather than relying on
