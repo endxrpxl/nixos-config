@@ -12,11 +12,8 @@
 
     programs.gamemode.enable = true;
 
-    programs.steam = {
-      enable = true;
-      remotePlay.openFirewall = true;
-      dedicatedServer.openFirewall = true;
-    };
+    # Firewall openings are per host, so this module opens no ports.
+    programs.steam.enable = true;
 
     programs.gamescope.enable = true;
 

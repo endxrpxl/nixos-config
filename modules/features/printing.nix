@@ -1,13 +1,9 @@
 { self, ... }: {
 
   flake.nixosModules.printing = { pkgs, ... }: {
-    services.printing = {
-      enable = true;
-      drivers = with pkgs; [
-        cups-filters
-        cups-browsed
-      ];
-    };
+    # No `drivers`: cups-filters is already on CUPS' path, and cups-browsed
+    # runs from `browsed.enable`, which defaults to on when avahi is.
+    services.printing.enable = true;
 
     hardware.sane = {
       enable = true;
