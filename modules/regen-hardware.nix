@@ -82,6 +82,9 @@
       };
     in
     {
-      apps.regen-hardware.program = lib.getExe regen-hardware;
+      apps.regen-hardware = {
+        program = lib.getExe regen-hardware;
+        meta.description = "Rescan this machine's hardware into its host's _hardware-generated.nix";
+      };
     };
 }
