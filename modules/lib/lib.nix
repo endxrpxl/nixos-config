@@ -21,7 +21,9 @@
 
     # Authored dotfiles only: files a human edits, linked out of the store so an
     # edit takes effect without a rebuild. Anything a running program writes is
-    # deliberately NOT linked, so it never reaches this repo.
+    # deliberately NOT linked, so it never reaches this repo. EasyEffects is the
+    # one exception: its GUI saves through the links on purpose, and those
+    # changes are meant to be committed.
     #
     # The path is checked against the flake source at eval time, so a typo fails
     # `nix flake check` instead of quietly producing a dangling symlink. That
@@ -30,8 +32,9 @@
     #
     # The check and the link do not read the same thing: the assertion looks in
     # the flake source, the link points at `dotConfig` on disk. It therefore
-    # catches a wrong path, not a checkout in the wrong place. Clone the repo
-    # anywhere but `repoDir` and every link dangles with the check still green.
+    # catches a wrong path, not a checkout in the wrong place. A checkout
+    # anywhere but `repoDir` passes this check, and the `requireCheckout`
+    # activation step in `desktop` fails instead.
     #
     # `config` is the home-manager configuration.
     authoredDotfile =
@@ -48,7 +51,7 @@
 
     # Files created empty on activation, and only if they do not already exist.
     # For paths a program writes at runtime that something else needs present
-    # before it has ever run: niri refuses to start when an `include` target is
+    # before it has ever run: kitty warns at startup when an `include` target is
     # missing, and on a fresh machine no shell has written one yet.
     #
     # Never touches an existing file, so runtime content survives a rebuild.

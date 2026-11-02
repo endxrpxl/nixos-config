@@ -13,6 +13,8 @@
       self.nixosModules.towerHardware
       self.nixosModules.base
       self.nixosModules.desktop
+      self.nixosModules.apps
+      self.nixosModules.dev
       self.nixosModules.printing
       self.nixosModules.gaming
       self.nixosModules.vm
@@ -22,12 +24,12 @@
 
     networking.hostName = "tower";
 
-    console.keyMap = "uk";
-
-    # The XKB name for the same layout, for the login screen. It cannot be
-    # derived from `console.keyMap` above. That is a kbd keymap name, and
-    # "uk" is not an XKB layout.
-    services.displayManager.noctalia-greeter.settings.keyboard.layout = "gb";
+    # The only place this host's keyboard layout is written. See
+    # `console.useXkbConfig` in `base` for who reads it.
+    services.xserver.xkb = {
+      layout = "gb,gb";
+      variant = ",intl";
+    };
 
     # This machine dual-boots Windows: the extra entry points at its
     # bootloader, and Windows expects the RTC in local time.
@@ -38,14 +40,14 @@
     '';
     time.hardwareClockInLocalTime = true;
 
-    home-manager.users.${self.lib.username} = self.homeModules.tower;
+    # Steam's ports open here only. The laptop joins public networks such as
+    # eduroam, and this machine stays on the home network.
+    programs.steam = {
+      remotePlay.openFirewall = true;
+      dedicatedServer.openFirewall = true;
+    };
 
-    # This value determines the NixOS release from which the default
-    # settings for stateful data, like file locations and database versions
-    # on your system were taken. It‘s perfectly fine and recommended to leave
-    # this value at the release version of the first install of this system.
-    # Before changing this value read the documentation for this option
-    # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-    system.stateVersion = "25.11"; # Did you read the comment?
+    # The release this host was first installed with. Never change it.
+    system.stateVersion = "25.11";
   };
 }

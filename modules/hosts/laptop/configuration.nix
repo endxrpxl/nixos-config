@@ -13,6 +13,8 @@
       self.nixosModules.laptopHardware
       self.nixosModules.base
       self.nixosModules.desktop
+      self.nixosModules.apps
+      self.nixosModules.dev
       self.nixosModules.fingerprint
       self.nixosModules.power
       self.nixosModules.printing
@@ -25,12 +27,11 @@
 
     networking.hostName = "laptop";
 
-    console.keyMap = "de";
+    # The only place this host's keyboard layout is written. See
+    # `console.useXkbConfig` in `base` for who reads it.
+    services.xserver.xkb.layout = "de";
 
-    services.displayManager.noctalia-greeter.settings.keyboard.layout = "de";
-
-    home-manager.users.${self.lib.username} = self.homeModules.laptop;
-
+    # The release this host was first installed with. Never change it.
     system.stateVersion = "26.05";
   };
 }

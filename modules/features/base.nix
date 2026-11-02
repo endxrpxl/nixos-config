@@ -6,18 +6,21 @@
         inputs.home-manager.nixosModules.default
       ];
 
-      nix.optimise.automatic = true;
-      nix.gc = {
-        automatic = true;
-        dates = "weekly";
-        options = "--delete-older-than 14d";
+      # Home Manager uses this system's nixpkgs, `allowUnfree` included,
+      # rather than evaluating a second copy. Each feature with a
+      # home half imports that half itself, so a host selects a feature once.
+      home-manager = {
+        useGlobalPkgs = true;
+        useUserPackages = true;
+        users.${self.lib.username}.imports = [ self.homeModules.base ];
       };
+
+      nix.optimise.automatic = true;
 
       nix.settings.experimental-features = [
         "nix-command"
         "flakes"
       ];
-      nixpkgs.overlays = [ self.overlays.default ];
       nixpkgs.config.allowUnfree = true;
 
       # Bootloader choice is shared: two hosts on two bootloaders would mean
@@ -32,6 +35,10 @@
         timeout = 1;
       };
 
+      # Compressed swap in RAM, up to half of it, for paging under memory
+      # pressure. Neither host hibernates, so neither needs swap on disk.
+      zramSwap.enable = true;
+
       # Tracks the newest kernel for hardware support. Laptop-era hardware in
       # particular is usually supported before it reaches the LTS series.
       boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -43,6 +50,11 @@
           "1.0.0.1"
         ];
       };
+
+      # Each host sets its layout once, in `services.xserver.xkb`. The console
+      # derives its keymap from that, the greeter reads it in `desktop`, and
+      # umbriel gets it from systemd-localed.
+      console.useXkbConfig = true;
 
       time.timeZone = "Europe/Berlin";
 
@@ -102,39 +114,31 @@
       programs.nh = {
         enable = true;
         flake = self.lib.repoDir;
+
+        # Garbage collection. `--keep 5` matches limine's `maxGenerations`, so
+        # cleaning never deletes a generation the boot menu still lists.
+        clean = {
+          enable = true;
+          dates = "weekly";
+          extraArgs = "--keep 5 --keep-since 14d";
+        };
       };
 
-      # nix-ld lets unpatched dynamically-linked binaries run. Language
-      # toolchain downloads, `devenv` shells, editor-installed LSP servers.
-      # The library list is the minimum such binaries reliably expect.
-      programs.nix-ld.enable = true;
-      programs.nix-ld.libraries = with pkgs; [
-        stdenv.cc.cc.lib
-        zlib
-        glibc
-      ];
-
+      # git because the flake only sees files in the git index, so working on
+      # this repo needs it on every host.
       environment.systemPackages = with pkgs; [
         git
-        gh
         neovim
-
-        nixfmt
-        nixd
-        nil
-        manix
-
-        devenv
       ];
     };
 
-  flake.homeModules.base = { ... }: {
-    programs.bash = {
-      enable = true;
-      bashrcExtra = ''
-        export SSH_AUTH_SOCK=${self.lib.homeDir}/.bitwarden-ssh-agent.sock
-        export PATH="$HOME/.config/emacs/bin:$PATH"
-      '';
+  flake.homeModules.base =
+    { osConfig, ... }:
+    {
+      programs.bash.enable = true;
+
+      # Always the system's value. The two are set at the same install and
+      # never change, so a second copy per host could only drift.
+      home.stateVersion = osConfig.system.stateVersion;
     };
-  };
 }

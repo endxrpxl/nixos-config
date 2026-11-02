@@ -1,10 +1,13 @@
 { self, inputs, ... }: {
-  flake.nixosModules.desktop = { pkgs, ... }: {
+  # The graphical session: login screen, compositor, shell, theming and fonts.
+  # The applications run inside it live in `apps`.
+  flake.nixosModules.desktop = { config, pkgs, ... }: {
     imports = [
-      inputs.nix-flatpak.nixosModules.nix-flatpak
       inputs.noctalia-greeter.nixosModules.default
       inputs.umbriel.nixosModules.default
     ];
+
+    home-manager.users.${self.lib.username}.imports = [ self.homeModules.desktop ];
 
     # A graphical session is what needs the GPU drivers, so this belongs to
     # the feature rather than to shared policy. Same reasoning that puts
@@ -17,12 +20,16 @@
     };
     hardware.bluetooth.powerOnBoot = false;
 
-    # The login screen. Only the settings no machine can differ on live here;
-    # `keyboard.layout` is host identity and each host adds its own.
+    # The login screen. Only the settings no machine can differ on live here.
     services.displayManager.noctalia-greeter = {
       enable = true;
       settings = {
         session.default = "umbriel";
+
+        # The host's layout, as set once in its `services.xserver.xkb`.
+        keyboard = {
+          inherit (config.services.xserver.xkb) layout variant;
+        };
 
         # The greeter runs as its own user and cannot see `home.pointerCursor`
         # below, so it is given the store path outright rather than relying on
@@ -39,11 +46,9 @@
       };
     };
 
-    programs.niri.enable = true;
-
-    # A second compositor beside niri, picked at the greeter. niri stays the
-    # default session. The cache serves the `cachix` branch the flake input
-    # tracks, so umbriel and its portal are not compiled locally.
+    # The compositor. The cache serves the `cachix` branch the flake input
+    # tracks, so umbriel and its portal are not compiled locally. umbriel
+    # brings its own Xwayland.
     programs.umbriel.enable = true;
     nix.settings = {
       extra-substituters = [ "https://umbriel.cachix.org" ];
@@ -52,44 +57,13 @@
       ];
     };
 
-    programs.firefox.enable = true;
-    programs.thunderbird.enable = true;
-
-    programs.obs-studio = {
-      enable = true;
-
-      plugins = with pkgs.obs-studio-plugins; [
-        obs-pipewire-audio-capture
-        obs-vaapi # optional AMD hardware acceleration
-      ];
-    };
-
-    services.flatpak = {
-      enable = true;
-    };
+    # The Secret Service that apps keep logins in, unlocked at login. The niri
+    # module used to enable it; umbriel's does not.
+    services.gnome.gnome-keyring.enable = true;
 
     environment.systemPackages = with pkgs; [
+      # The terminal umbriel's Mod+T opens.
       kitty
-      spotify
-      zed-editor
-      bitwarden-desktop
-      (discord.override {
-        withOpenASAR = true;
-        withVencord = true;
-      })
-
-      loupe
-      evince
-      vlc
-      file-roller
-      nemo-with-extensions
-      pinta
-
-      inputs.zen-browser.packages."${pkgs.system}".default
-
-      eduvpn-client
-
-      xwayland-satellite
 
       bibata-cursors
       whitesur-icon-theme
@@ -101,8 +75,6 @@
       # GTK4 apps and leaves default Adwaita around them, which reads as a bug
       # rather than as a missing package.
       adw-gtk3
-
-      libreoffice
     ];
 
     fonts.packages = with pkgs; [
@@ -131,9 +103,8 @@
     let
       authored = self.lib.authoredDotfile config;
 
-      # The per-host half of each config is selected by hostname rather than
-      # named in the host's home module: the hostname is the host's identity,
-      # and restating it here would be a second place to get it wrong.
+      # The hostname picks each program's per-host file, so no host has to
+      # name its files a second time and get it wrong.
       host = osConfig.networking.hostName;
     in
     {
@@ -141,15 +112,11 @@
         configFile = {
           "kitty/kitty.conf" = authored "kitty/kitty.conf";
 
-          # config.kdl is shared and ends with `include "host.kdl"`; the
-          # indirection lives in this symlink rather than in the file's text, so
-          # every host reads the same config.kdl.
-          "niri/config.kdl" = authored "niri/config.kdl";
-          "niri/host.kdl" = authored "niri/hosts/${host}.kdl";
-
-          # Same split for umbriel: config.toml is shared and includes
-          # host.toml by name. noctalia.toml is theme output and not linked;
-          # config.toml includes it as optional, so no seed file is needed.
+          # config.toml is shared and includes host.toml by name. The
+          # indirection lives in this symlink rather than in the file's text,
+          # so every host reads the same config.toml. noctalia.toml is theme
+          # output and not linked; config.toml includes it as optional, so no
+          # seed file is needed.
           "umbriel/config.toml" = authored "umbriel/config.toml";
           "umbriel/host.toml" = authored "umbriel/hosts/${host}.toml";
 
@@ -165,12 +132,13 @@
           # autoloads the root of its config directory but not subdirectories.
           "noctalia/config.toml" = authored "noctalia/hosts/${host}.toml";
           "noctalia/shared/base.toml" = authored "noctalia/shared/base.toml";
-          "noctalia/palettes/apple.json" = authored "noctalia/palettes/apple.json";
 
-          # EasyEffects writes these itself, so this re-authors its runtime
-          # dumps. easyeffectsrc names the audio devices, which only the host
-          # knows; the rc format has no include, so the host half is selected
-          # by this symlink, noctalia-style. The plugin files are shared.
+          # The one exception to linking only files a human writes. EasyEffects
+          # saves its settings through these links, so changes made in its GUI
+          # land in the repo as diffs to commit. easyeffectsrc names the audio
+          # devices, which only the host knows; the rc format has no include,
+          # so the host half is selected by this symlink, noctalia-style. The
+          # plugin files are shared.
           "easyeffects/db/easyeffectsrc" = authored "easyeffects/db/hosts/${host}rc";
           "easyeffects/db/bassEnhancerrc" = authored "easyeffects/db/bassEnhancerrc";
           "easyeffects/db/deepfilternetrc" = authored "easyeffects/db/deepfilternetrc";
@@ -181,14 +149,6 @@
           createDirectories = true;
           music = null;
           templates = null;
-        };
-      };
-
-      dconf = {
-        settings = {
-          "org/cinnamon/desktop/applications/terminal" = {
-            exec = "kitty";
-          };
         };
       };
 
@@ -206,20 +166,28 @@
         gtk2.force = true;
       };
 
+      # Every authored link points into the checkout at `dotConfig`. Without
+      # one there they would all dangle, so activation stops before writing
+      # any of them.
+      home.activation.requireCheckout = lib.hm.dag.entryBefore [ "writeBoundary" ] ''
+        if [ ! -d "${self.lib.dotConfig}" ]; then
+          errorEcho "No checkout at ${self.lib.repoDir}. The dotfile links point there, so clone the repo to that path."
+          exit 1
+        fi
+      '';
+
       xdg.configFile."gtk-3.0/settings.ini".force = true;
       xdg.configFile."gtk-4.0/settings.ini".force = true;
 
-      # noctalia rewrites both of these whenever the theme changes, so they are
-      # runtime output and are not linked. Their includes are authored into
-      # config.kdl and kitty.conf, which read them before noctalia has ever run:
-      # niri refuses to start on a missing include, kitty only complains.
-      # Keep in step with those two include lines.
+      # noctalia rewrites this whenever the theme changes, so it is runtime
+      # output and is not linked. kitty.conf includes it, and kitty warns at
+      # startup when the include is missing, which it is until noctalia has
+      # run once. Keep in step with that include line.
       home.activation.seedNoctaliaTemplateTargets = self.lib.seedFiles lib [
-        ".config/niri/noctalia.kdl"
         ".config/kitty/themes/noctalia.conf"
       ];
 
-      # 20 to match niri's `xcursor-size` and the greeter's `cursor.size`.
+      # 20 to match umbriel's `[input.cursor]` and the greeter's `cursor.size`.
       home.pointerCursor = {
         enable = true;
         gtk.enable = true;
