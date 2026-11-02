@@ -11,6 +11,30 @@ dotfiles.
 See [INSTALL.md](INSTALL.md) to install a host on a new machine or apply this
 config to an existing NixOS install.
 
+## Layout
+
+`modules/` loads entirely through import-tree, and each file there is a
+flake-parts module.
+
+- `modules/features/` holds one file per feature. Each file defines a NixOS
+  module and, where it needs one, a home-manager half that the NixOS half
+  imports itself.
+- `modules/hosts/<host>/` holds the host's identity (`configuration.nix`) and
+  its hardware (`hardware.nix` and the generated scan).
+- `modules/lib/` holds shared constants and helpers, exposed as `self.lib`.
+
+`.dotfiles/` holds hand-edited config. Most programs have a shared file plus a
+`hosts/<hostname>` file, and home-manager links the right host file by hostname.
+
+The links point out of the Nix store into this checkout, so an edit takes effect
+without a rebuild. That needs the repo at `~/nixos-config`.
+
+Files that programs write at runtime are not linked. EasyEffects is the
+exception. It writes its settings through the links, so changes made in its GUI
+show up as diffs in this repo, ready to commit.
+
+umbriel is the compositor. noctalia is the shell and the greeter.
+
 ## Day to day
 
 ```bash

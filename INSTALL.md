@@ -87,8 +87,8 @@ systemd-cryptenroll --recovery-key /dev/nvme0n1p2
 ```
 
 Mount `/` from the LUKS mapper and `/boot` from the ESP. There is no swap
-partition. `hardware.nix` declares a swapfile, and `mkswap-swapfile.service`
-creates it on first boot.
+partition or swapfile. The `base` module enables zram, which keeps compressed
+swap in RAM.
 
 ```bash
 mount /dev/mapper/cryptroot /mnt
@@ -122,19 +122,19 @@ Because the root is on LUKS, the generated file declares
 `boot.initrd.luks.devices."cryptroot"` and points `/` at
 `/dev/mapper/cryptroot`. You don't need to write any of that by hand.
 
-The script touches no other file. The `nixos-hardware` imports and the swapfile
-live in `modules/hosts/laptop/hardware.nix`, which a rescan leaves alone.
+The script touches no other file. The `nixos-hardware` imports live in
+`modules/hosts/laptop/hardware.nix`, which a rescan leaves alone.
 
 ### 5. Set what the scan cannot know
 
 Edit `modules/hosts/laptop/configuration.nix`:
 
-- Set `console.keyMap` to the machine's keyboard layout.
-- Set `services.displayManager.noctalia-greeter.settings.keyboard.layout` to the
-  XKB name of the same layout, and set the same layout in `.dotfiles/.config/niri/hosts/laptop.kdl`.
+- Set `services.xserver.xkb.layout` (and `variant` if needed) to the machine's
+  keyboard layout. That is the only place the layout is written: the console
+  derives its keymap from it through `console.useXkbConfig`, the greeter reads
+  it, and umbriel reads it from systemd-localed.
 - Set `system.stateVersion` to the release you are installing
-  (`nixos-version` inside the installer), then never change it. Set
-  `home.stateVersion` in `modules/hosts/laptop/home.nix` to the same value.
+  (`nixos-version` inside the installer), then never change it.
 
 Then stage everything. The flake only sees files in the git index, so an
 untracked file does not exist for evaluation:
@@ -250,8 +250,9 @@ nothing checks the resulting hardware file for that.
 The username is a global constant in `modules/lib/lib.nix`, not a host setting.
 Change `username` there to your login name.
 
-`.dotfiles/.config/noctalia/shared/base.toml` also hardcodes
-`/home/ansgar/...` in `wallpaper.default.path`. Update it too.
+The wallpaper and avatar paths in `.dotfiles/.config/noctalia/shared/base.toml`
+use `~/nixos-config`, so a username change needs nothing there. A clone outside
+`~/nixos-config` breaks them along with every dotfile link.
 
 ### 4. Build and switch
 
