@@ -44,7 +44,7 @@ border_width = 2
 
 # disable minimize button
 [appearance.title_bar]
-buttons = ["maximize", "close"]
+buttons = ["minimize", "close"]
 
 # Blur stays off for every window and noctalia surface. The master switch is
 # off here, so no rule opts in.
@@ -106,14 +106,6 @@ layout.mode = "stacking"
 name = "5"
 layout.mode = "stacking"
 
-[[workspace]]
-name = "1"
-layout.mode = "stacking"
-
-[[workspace]]
-name = "2"
-layout.mode = "stacking"
-
 # Window rules. The routing rules name workspaces as strings, which umbriel
 # reads as exact names rather than positions.
 [[window_rule]]
@@ -170,14 +162,9 @@ name = "music"
 spawn_when_empty = "spotify"
 
 [[window_rule]]
-match.app_id = "^spotify$"
+match.app_id = "^[Ss]potify$"
 default_scratchpad = "music"
-default_floating_size = { width = 1.0, height = 1.0 }
-
-[[window_rule]]
-match.title = "^Spotify$"
-default_scratchpad = "music"
-default_floating_size = { width = 1.0, height = 1.0 }
+default_maximize = true
 
 # Discord gets the same treatment in its own scratchpad, toggled with Mod+N.
 [[scratchpad]]
@@ -187,7 +174,7 @@ spawn_when_empty = "discord"
 [[window_rule]]
 match.app_id = "^discord$"
 default_scratchpad = "chat"
-default_floating_size = { width = 1.0, height = 1.0 }
+default_maximize = true
 
 # Defining this table replaces umbriel's built-in binds, so every bind must be
 # listed here. Mod is Super.
