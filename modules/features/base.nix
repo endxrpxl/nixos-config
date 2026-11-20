@@ -45,10 +45,6 @@
 
       networking = {
         networkmanager.enable = true;
-        nameservers = [
-          "1.1.1.1"
-          "1.0.0.1"
-        ];
       };
 
       # Each host sets its layout once, in `services.xserver.xkb`. The console

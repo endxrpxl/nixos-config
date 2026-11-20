@@ -35,6 +35,11 @@
     # to umbriel.cachix.org. No nixpkgs follows: the cached store paths are
     # built against umbriel's own locked nixpkgs and would not match ours.
     umbriel.url = "github:noctalia-dev/umbriel/cachix";
+
+    oneclient = {
+      url = "github:endxrpxl/OneClient-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);

@@ -29,9 +29,9 @@
       zed-editor
       bitwarden-desktop
       (discord.override {
-        withOpenASAR = true;
-        withVencord = true;
+        # withVencord = true;
       })
+
 
       loupe
       evince
@@ -41,6 +41,8 @@
       pinta
 
       inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
+
+      inputs.oneclient.packages.${pkgs.stdenv.hostPlatform.system}.default
 
       eduvpn-client
 

@@ -80,3 +80,7 @@ monitors = ["DP-3"]
 
 [osd]
 monitors = ["DP-3"]
+
+[input.keyboard]
+layout = "gb,gb"
+variant =",intl"

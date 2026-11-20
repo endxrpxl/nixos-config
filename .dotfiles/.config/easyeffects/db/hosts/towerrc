@@ -11,5 +11,6 @@ visiblePage=pluginsPage
 visiblePlugin=bass_enhancer#0
 
 [Window]
-height=1396
+height=1392
+visiblePage=inputPage
 width=1708
