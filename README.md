@@ -9,7 +9,8 @@ dotfiles.
 | `laptop` | ThinkPad T14 Gen 3 (Intel)  |
 
 See [INSTALL.md](INSTALL.md) to install a host on a new machine or apply this
-config to an existing NixOS install.
+config to an existing NixOS install, or [INSTALL-SSH.md](INSTALL-SSH.md) to run
+the fresh install over SSH from another machine.
 
 ## Layout
 

@@ -3,6 +3,9 @@
 Two paths: a fresh install onto a machine with no NixOS on it, and applying
 this config to a machine that already runs NixOS.
 
+To run the fresh install from a second machine over SSH, where you can paste
+the commands instead of typing them, follow [INSTALL-SSH.md](INSTALL-SSH.md).
+
 ## Installing onto a new machine
 
 These steps install the `laptop` host. For another host, substitute its name
