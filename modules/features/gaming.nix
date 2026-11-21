@@ -23,7 +23,6 @@
       protonup-qt
       mangohud
       prismlauncher
-      lutris
     ];
   };
 }
