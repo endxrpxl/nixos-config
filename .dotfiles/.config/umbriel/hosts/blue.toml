@@ -1,0 +1,14 @@
+# Everything in umbriel's configuration that only this machine can know. Linked
+# to ~/.config/umbriel/host.toml, which the shared config.toml includes.
+# config.toml wins every plain key, so this file only adds keys it leaves unset.
+# Rule lists collect from both files.
+#
+# No [input.keyboard] here. With none of its keys set, umbriel reads the X11
+# keymap from systemd-localed, which NixOS fills from services.xserver.xkb in
+# this host's configuration.nix. That setting is the only place the layout is
+# written.
+
+# The ultrawide holds the named workspaces and two spares. config.toml's
+# [[workspace]] rules set each name's layout.
+[output."HDMI-A-1"]
+workspaces = ["\uF0AC", "\uF121", "\uF11B", "4", "5"]
